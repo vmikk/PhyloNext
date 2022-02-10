@@ -2,7 +2,7 @@
 
 
 ## Create a temporary directory for the analysis
-## Copy test data and scripts into this direcory
+## Copy test data and scripts into this directory
 export INPDATAFLD="/tmp/biodivv"
 mkdir -p "$INPDATAFLD"
 cd "$INPDATAFLD"
@@ -23,11 +23,11 @@ run_in_docker(){
 
 ## 1. Prepare Biodiverse input file
 ## Parameters:
-# --csv_file  = File in CSV format conating the presence data with coordinates
+# --csv_file  = File in CSV format containing the presence data with coordinates
 # --out_file  = Output file in biodiverse basedata format (bds) that should be generated
 #   --label_column_number    = the column number for the labels, typically the taxon name
-#   --group_column_number_x  = the x co-ordinate column, could be latitude or metres
-#   --group_column_number_y  = the y co-ordinate column, could be longitude or metres
+#   --group_column_number_x  = the x co-ordinate column, could be latitude or meters
+#   --group_column_number_y  = the y co-ordinate column, could be longitude or meters
 #   --cell_size_x            = the x size of the group cell (in the same unit as the x co-ordinates)
 #   --cell_size_y            = the y size of the group cell (in the same unit as the y co-ordinates)
 
