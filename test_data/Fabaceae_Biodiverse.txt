@@ -1,0 +1,128 @@
+## Test Biodiverse with Fabaceae data
+
+
+## Create a temporary directory for the analysis
+## Copy test data and scripts into this direcory
+export INPDATAFLD="/tmp/biodivv"
+mkdir -p "$INPDATAFLD"
+cd "$INPDATAFLD"
+cp biodiverse-scripts/test_data/* .
+cp biodiverse-scripts/bin/*.pl .
+
+
+## Build Docker image with Biodiverse (image should be named `biodiverse`)
+## https://github.com/vmikk/biodiverse-docker
+# docker build --tag biodiverse .
+
+## Shortcut to run commands using the Docker container
+## Bind mount temporary directory with data and scripts into `/mnt/mydata` in the container
+run_in_docker(){
+  docker run -v "$INPDATAFLD":/mnt/mydata biodiverse "${@}"
+}
+
+
+## 1. Prepare Biodiverse input file
+## Parameters:
+# --csv_file  = File in CSV format conating the presence data with coordinates
+# --out_file  = Output file in biodiverse basedata format (bds) that should be generated
+#   --label_column_number    = the column number for the labels, typically the taxon name
+#   --group_column_number_x  = the x co-ordinate column, could be latitude or metres
+#   --group_column_number_y  = the y co-ordinate column, could be longitude or metres
+#   --cell_size_x            = the x size of the group cell (in the same unit as the x co-ordinates)
+#   --cell_size_y            = the y size of the group cell (in the same unit as the y co-ordinates)
+
+run_in_docker \
+perl "/mnt/mydata/00_create_bds.pl" \
+  --csv_file '/mnt/mydata/Fabaceae_AU_H3Grid.csv' \
+  --out_file '/mnt/mydata/Fabaceae_AU_H3Grid.bds' \
+  --label_column_number '0' \
+  --group_column_number_x '3' \
+  --group_column_number_y '4' \
+  --cell_size_x '10' \
+  --cell_size_y '10'
+
+
+## Prepare the tree for Biodiverse
+## Parameters:
+# --input_tree_file  = Phylogenetic tree in NEXUS format
+# --out_file         = Output file (bts)
+
+run_in_docker \
+perl "/mnt/mydata/00_create_bts.pl" \
+  --input_tree_file "/mnt/mydata/Fabaceae_AU_OpenTreeOfLife.nex" \
+  --out_file "/mnt/mydata/Fabaceae_AU_OpenTreeOfLife.bts"
+
+
+
+## Trim tree and presence-absence matrix  -- not needed now, as it was done beforehand in R!
+## Parameters:
+# --input_bds_file   # Basedata file (bds) produced by `00_create_bds.pl`
+# --input_bts_file   # Tree file (bts) produced by `00_create_bts.pl`
+# --output_bds_file  # Output trimmed bds
+# --output_bts_file  # Output trimmed bts
+#
+# run_in_docker \
+# perl "/mnt/mydata/01_trim_bds_and_bts.pl" \
+#   --input_bds_file '/mnt/mydata/Fabaceae_AU_H3Grid.bds' \
+#   --input_bts_file '/mnt/mydata/Fabaceae_AU_OpenTreeOfLife.bts' \
+#   --output_bds_file '/mnt/mydata/Fabaceae_AU_H3Grid_trimmed.bds' \
+#   --output_bts_file '/mnt/mydata/Fabaceae_AU_OpenTreeOfLife_trimmed.bts'
+
+
+
+## Run the analyses
+# Inputs:
+# --input_bds_file  = The full path to the biodiverse file to use (.bds)
+# --input_bds_file  = The full path to the tree file to use (.bts)
+# --calcs           = A comma delimited list of the analyses to run
+#                     E.g. 'calc_endemism_whole,calc_pd,calc_pe,calc_phylo_rpd1'
+# --output_bds_file = Names of the output file
+
+# The full list of `calc` names can be found on the Biodiverse indicies page:
+# https://github.com/shawnlaffan/biodiverse/wiki/IndicesDevVersion
+# E.g., "Subroutine: calc_endemism_central"
+
+run_in_docker \
+perl "/mnt/mydata/02_biodiverse_analyses.pl" \
+  --input_bds_file '/mnt/mydata/Fabaceae_AU_H3Grid.bds' \
+  --input_bts_file '/mnt/mydata/Fabaceae_AU_OpenTreeOfLife.bts' \
+  --calcs 'calc_endemism_whole,calc_pd,calc_pe,calc_phylo_rpd1,calc_phylo_rpd2,calc_phylo_rpe1,calc_phylo_rpe2'
+
+## these should create the following files:
+# `Fabaceae_AU_H3Grid.bds.csv`      - observed estimates of diversity indices
+# `Fabaceae_AU_H3Grid_analysed.bds` - serialized data will be used at the next step
+
+
+
+## Run randomisations to estimate standardized effect sizes
+## Parameteres:
+# --basedata     = Input .bds file
+# --rand_name    = Randomisation output name (e.g., 'rand')
+# --iterations   = Number of iterations (e.g., '100')
+# --args         = Additional arguments passed to Biodiverse, should be key=value pairs separated by spaces
+#                 (e.g., `function=rand_structured max_iters=100`)
+
+run_in_docker \
+perl "/mnt/mydata/03_run_randomisation.pl" \
+  --basedata '/mnt/mydata/Fabaceae_AU_H3Grid_analysed.bds' \
+  --rand_name 'rand' \
+  --iterations '100' \
+  --args function=rand_structured max_iters=100
+
+## At this step `Fabaceae_AU_H3Grid_analysed.bds` file is updated.
+
+
+
+## Output results as CSV
+## Parameters:
+# --input_bds_file     = The biodiverse file (.bds) to load and export results from
+# --output_csv_prefix  = The output file prefix
+
+run_in_docker \
+perl "/mnt/mydata/04_load_bds_and_export_results.pl" \
+  --input_bds_file '/mnt/mydata/Fabaceae_AU_H3Grid_analysed.bds' \
+  --output_csv_prefix '/mnt/mydata/Fabaceae_AU_H3Grid_analysed_output'
+
+
+## Results should be present in `Fabaceae_AU_H3Grid_analysed_output.csv`
+
