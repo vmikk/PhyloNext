@@ -38,8 +38,8 @@ perl "/mnt/mydata/00_create_bds.pl" \
   --label_column_number '0' \
   --group_column_number_x '3' \
   --group_column_number_y '4' \
-  --cell_size_x '10' \
-  --cell_size_y '10'
+  --cell_size_x '0.001' \
+  --cell_size_y '0.001'
 
 
 ## Prepare the tree for Biodiverse
