@@ -86,7 +86,7 @@ run_in_docker \
 perl "/mnt/mydata/02_biodiverse_analyses.pl" \
   --input_bds_file '/mnt/mydata/Fabaceae_AU_H3Grid.bds' \
   --input_bts_file '/mnt/mydata/Fabaceae_AU_OpenTreeOfLife.bts' \
-  --calcs 'calc_endemism_whole,calc_pd,calc_pe,calc_phylo_rpd1,calc_phylo_rpd2,calc_phylo_rpe1,calc_phylo_rpe2'
+  --calcs 'calc_richness,calc_simpson_shannon,calc_endemism_whole,calc_pd,calc_pe,calc_phylo_rpd1,calc_phylo_rpd2,calc_phylo_rpe1,calc_phylo_rpe2,calc_phylo_mpd_mntd2'
 
 ## these should create the following files:
 # `Fabaceae_AU_H3Grid.bds.csv`      - observed estimates of diversity indices
@@ -124,5 +124,4 @@ perl "/mnt/mydata/04_load_bds_and_export_results.pl" \
   --output_csv_prefix '/mnt/mydata/Fabaceae_AU_H3Grid_analysed_output'
 
 
-## Results should be present in `Fabaceae_AU_H3Grid_analysed_output.csv`
-
+## Results should be present in `Fabaceae_AU_H3Grid_analysed_output_*.csv`
