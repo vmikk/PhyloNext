@@ -2,6 +2,15 @@
 
 ## Filter GBIF occurrence data and perform spatial binning
 
+## Usage:
+# ./Filter_and_aggregate.R \
+#    --input "/mnt/GBIF/Parquet/2022-01-01/occurrence.parquet" \
+#    --family "Fabaceae" \
+#    --country "AU" \
+#    --resolution "4" \
+#    --output "Fabaceae_in_AU"
+
+
 ############################################## Parse input parameters
 
 cat("Parsing input options and arguments...\n")
