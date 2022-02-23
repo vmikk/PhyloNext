@@ -152,3 +152,23 @@ if(is.na(FAMILY)){
   dsf <- dsf %>% filter(family %in% FAMILY)
 }
 
+
+## Spatial filters
+if(is.na(COUNTRY)){
+  COUNTRY <- strsplit(x = COUNTRY, split = ",")[[1]]
+  dsf <- dsf %>% filter(countrycode %in% COUNTRY)
+}
+
+if(is.na(LATMIN)){
+  dsf <- dsf %>% filter(decimallatitude >= LATMIN)
+}
+if(is.na(LATMAX)){
+  dsf <- dsf %>% filter(decimallatitude <= LATMAX)
+}
+if(is.na(LONMIN)){
+  dsf <- dsf %>% filter(decimallongitude >= LONMIN)
+}
+if(is.na(LONMAX)){
+  dsf <- dsf %>% filter(decimallongitude <= LONMAX)
+}
+
