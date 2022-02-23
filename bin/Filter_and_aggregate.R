@@ -130,3 +130,25 @@ dsf <- ds %>%
   filter(!coordinateuncertaintyinmeters %in% c(301, 3036, 999, 9999))
 
 
+
+## Taxonomy filters
+if(is.na(PHYLUM)){
+  PHYLUM <- strsplit(x = PHYLUM, split = ",")[[1]]  # split multiple records
+  dsf <- dsf %>% filter(phylum %in% PHYLUM)
+}
+
+if(is.na(CLASS)){
+  CLASS <- strsplit(x = CLASS, split = ",")[[1]]
+  dsf <- dsf %>% filter(class %in% CLASS)
+}
+
+if(is.na(ORDER)){
+  ORDER <- strsplit(x = ORDER, split = ",")[[1]]
+  dsf <- dsf %>% filter(order %in% ORDER)
+}
+
+if(is.na(FAMILY)){
+  FAMILY <- strsplit(x = FAMILY, split = ",")[[1]]
+  dsf <- dsf %>% filter(family %in% FAMILY)
+}
+
