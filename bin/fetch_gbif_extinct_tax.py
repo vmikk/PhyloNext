@@ -23,12 +23,12 @@ if not highertaxon_key.isdigit():
 
 outfile = args.outfile
 
-# Search parameters (terget GBIF backbone taxonomy)
+# Search parameters (target GBIF backbone taxonomy)
 rank = "SPECIES"
 status = "ACCEPTED"
 is_extinct = True
 dataset_key = "d7dddbf4-2cf0-4f39-9b2a-bb099caae36c"
-limit = 100
+limit = 10
 offset = 0
 
 # Fetch the data
@@ -77,6 +77,7 @@ if response_ct.status_code == 200:
                     record_ct += total_count
                     if total_count < limit:
                         proceed = False
+                    else:
+                        o.write(",")
                 else:
                     sys.exit("Command exited with status code " + str(response.status_code))
-            o.write("\n")
