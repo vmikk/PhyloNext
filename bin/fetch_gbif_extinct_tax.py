@@ -28,7 +28,7 @@ rank = "SPECIES"
 status = "ACCEPTED"
 is_extinct = True
 dataset_key = "d7dddbf4-2cf0-4f39-9b2a-bb099caae36c"
-limit = 10
+limit = 1000
 offset = 0
 
 # Fetch the data
