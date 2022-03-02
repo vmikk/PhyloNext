@@ -79,6 +79,7 @@ LONMAX <- opt$lonmax
 MINYEAR <- opt$minyear
 EXTINCT <- opt$noextinct
 RESOLUTION <- opt$resolution
+CPUTHREADS <- opt$threads
 OUTPUT <- opt$output
 
 
@@ -118,6 +119,12 @@ load_pckg("dplyr")
 load_pckg("h3")
 
 cat("\n")
+
+## Set CPU thread pool
+cat("Number of available CPU threads: ", cpu_count(), "\n")
+cat("Setting number of CPU threads to: ", CPUTHREADS, "\n")
+set_cpu_count(CPUTHREADS)           # for libarrow
+setDTthreads(threads = CPUTHREADS)  # for data.table
 
 ############################################## Main pipeline
 
