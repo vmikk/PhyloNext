@@ -100,6 +100,7 @@ cat(paste("Maximum longitude: ", LONMAX, "\n", sep = ""))
 cat(paste("Minimum year of occurrence: ", MINYEAR, "\n", sep=""))
 cat(paste("List of extict species: ", EXTINCT, "\n", sep=""))
 cat(paste("Spatial resolution: ", RESOLUTION, "\n", sep=""))
+cat(paste("Number of CPU threads to use: ", CPUTHREADS, "\n", sep=""))
 cat(paste("Output file prefix: ", OUTPUT, "\n", sep=""))
 cat("\n")
 
