@@ -131,11 +131,13 @@ setDTthreads(threads = CPUTHREADS)  # for data.table
 
 
 ## Open dataset
+cat("Loading Parquet data\n")
 ds <- arrow::open_dataset(INPUT)
 
 ## General filtering pipeline
 ## Based on scipts by John Waller
 ## https://data-blog.gbif.org/post/gbif-filtering-guide/
+cat("General data filteing\n")
 dsf <- ds %>%
   select(-mediatype,-issue) %>%
   filter(!is.na(species)) %>%
@@ -156,21 +158,25 @@ dsf <- ds %>%
 
 ## Taxonomy filters
 if(is.na(PHYLUM)){
+  cat("Filtering by Phylum\n")
   PHYLUM <- strsplit(x = PHYLUM, split = ",")[[1]]  # split multiple records
   dsf <- dsf %>% filter(phylum %in% PHYLUM)
 }
 
 if(is.na(CLASS)){
+  cat("Filtering by Class\n")
   CLASS <- strsplit(x = CLASS, split = ",")[[1]]
   dsf <- dsf %>% filter(class %in% CLASS)
 }
 
 if(is.na(ORDER)){
+  cat("Filtering by Order\n")
   ORDER <- strsplit(x = ORDER, split = ",")[[1]]
   dsf <- dsf %>% filter(order %in% ORDER)
 }
 
 if(is.na(FAMILY)){
+  cat("Filtering by Family\n")
   FAMILY <- strsplit(x = FAMILY, split = ",")[[1]]
   dsf <- dsf %>% filter(family %in% FAMILY)
 }
@@ -178,20 +184,25 @@ if(is.na(FAMILY)){
 
 ## Spatial filters
 if(is.na(COUNTRY)){
+  cat("Filtering by Country\n")
   COUNTRY <- strsplit(x = COUNTRY, split = ",")[[1]]
   dsf <- dsf %>% filter(countrycode %in% COUNTRY)
 }
 
 if(is.na(LATMIN)){
+  cat("Filtering by min latitude\n")
   dsf <- dsf %>% filter(decimallatitude >= LATMIN)
 }
 if(is.na(LATMAX)){
+  cat("Filtering by max latitude\n")
   dsf <- dsf %>% filter(decimallatitude <= LATMAX)
 }
 if(is.na(LONMIN)){
+  cat("Filtering by min longitude\n")
   dsf <- dsf %>% filter(decimallongitude >= LONMIN)
 }
 if(is.na(LONMAX)){
+  cat("Filtering by max longitude\n")
   dsf <- dsf %>% filter(decimallongitude <= LONMAX)
 }
 
