@@ -50,6 +50,7 @@ option_list <- list(
   make_option("--terrestrial", action="store", default=FALSE, type='logical', help="Remove non-terrestrial occurrences"),
   make_option("--noextinct", action="store", default=NA, type='character', help="Remove extinct species (provide a file with extinct specieskeys)"),
 
+  make_option(c("-c", "--roundcoords"), action="store", default=TRUE, type='logical', help="Round spatial coordinates to two decimal places, to reduce the dataset size (default, TRUE)"),
   make_option(c("-t", "--threads"), action="store", default=4L, type='integer', help="Number of CPU threads for arrow, default 4"),
   make_option(c("-o", "--output"), action="store", default=NA, type='character', help="Output prefix")
 )
@@ -84,6 +85,7 @@ LONMAX <- opt$lonmax
 MINYEAR <- opt$minyear
 EXTINCT <- opt$noextinct
 CPUTHREADS <- opt$threads
+ROUNDCOORDS <- opt$roundcoords
 OUTPUT <- opt$output
 
 
@@ -103,6 +105,7 @@ cat(paste("Maximum longitude: ", LONMAX, "\n", sep = ""))
 
 cat(paste("Minimum year of occurrence: ", MINYEAR, "\n", sep=""))
 cat(paste("List of extict species: ", EXTINCT, "\n", sep=""))
+cat(paste("Round coordinates: ", ROUNDCOORDS, "\n", sep=""))
 cat(paste("Number of CPU threads to use: ", CPUTHREADS, "\n", sep=""))
 cat(paste("Output file prefix: ", OUTPUT, "\n", sep=""))
 cat("\n")
