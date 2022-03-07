@@ -5,7 +5,7 @@
 
 ## Input data could be located in the cloud.
 ## E.g., to query GBIF AWS snapshot use: 
-##  --input "s3://gbif-open-data-eu-central-1/occurrence/2021-11-01/occurrence.parquet"
+##  --input "s3://gbif-open-data-eu-central-1/occurrence/2022-01-01/occurrence.parquet"
 
 ## Usage:
 # ./Filter_and_aggregate.R \
