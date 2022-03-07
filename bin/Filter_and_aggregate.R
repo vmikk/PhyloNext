@@ -229,3 +229,12 @@ if(!is.na(EXTINCT)){
   dsf <- dsf %>% filter(!specieskey %in% EXTINCT$specieskey)
 }
 
+
+## Round coordiantes, to reduce the dataset size
+cat("Rounding coordinates\n")
+if(ROUNDCOORDS == TRUE){
+  dsf <- dsf %>%
+    mutate(
+      decimallatitude  = round(decimallatitude,  2),
+      decimallongitude = round(decimallongitude, 2))
+}
