@@ -130,6 +130,15 @@ cat("Setting number of CPU threads to: ", CPUTHREADS, "\n")
 set_cpu_count(CPUTHREADS)           # for libarrow
 setDTthreads(threads = CPUTHREADS)  # for data.table
 
+
+## Load extinct species list
+if(!is.na(EXTINCT)){
+  EXTINCT <- fread(file = EXTINCT, sep = "\t")
+  colnames(EXTINCT) <- "specieskey"
+  cat("Extinct species list loaded. Number of records: ", nrow(EXTINCT), "\n")
+}
+
+
 ############################################## Main pipeline
 
 
@@ -206,5 +215,12 @@ if(!is.na(LONMIN)){
 if(!is.na(LONMAX)){
   cat("Filtering by max longitude\n")
   dsf <- dsf %>% filter(decimallongitude <= LONMAX)
+}
+
+
+## Remove extinct species
+if(!is.na(EXTINCT)){
+  cat("Filtering extinct species longitude\n")
+  dsf <- dsf %>% filter(!specieskey %in% EXTINCT$specieskey)
 }
 
