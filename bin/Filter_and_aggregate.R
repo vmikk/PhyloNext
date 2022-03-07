@@ -1,6 +1,6 @@
 #!/usr/bin/Rscript
 
-## Filter GBIF occurrence data and perform spatial binning
+## Filter GBIF occurrence data
 
 
 ## Input data could be located in the cloud.
@@ -50,7 +50,6 @@ option_list <- list(
   make_option("--terrestrial", action="store", default=FALSE, type='logical', help="Remove non-terrestrial occurrences"),
   make_option("--noextinct", action="store", default=NA, type='character', help="Remove extinct species (provide a file with extinct specieskeys)"),
 
-  make_option(c("-r", "--resolution"), action="store", default=4L, type='integer', help="Spatial resolution of the H3 Geospatial Indexing System"),
   make_option(c("-t", "--threads"), action="store", default=4L, type='integer', help="Number of CPU threads for arrow, default 4"),
   make_option(c("-o", "--output"), action="store", default=NA, type='character', help="Output prefix")
 )
@@ -84,7 +83,6 @@ LONMAX <- opt$lonmax
 
 MINYEAR <- opt$minyear
 EXTINCT <- opt$noextinct
-RESOLUTION <- opt$resolution
 CPUTHREADS <- opt$threads
 OUTPUT <- opt$output
 
@@ -105,7 +103,6 @@ cat(paste("Maximum longitude: ", LONMAX, "\n", sep = ""))
 
 cat(paste("Minimum year of occurrence: ", MINYEAR, "\n", sep=""))
 cat(paste("List of extict species: ", EXTINCT, "\n", sep=""))
-cat(paste("Spatial resolution: ", RESOLUTION, "\n", sep=""))
 cat(paste("Number of CPU threads to use: ", CPUTHREADS, "\n", sep=""))
 cat(paste("Output file prefix: ", OUTPUT, "\n", sep=""))
 cat("\n")
