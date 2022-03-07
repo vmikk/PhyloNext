@@ -12,7 +12,13 @@
 #    --input "/mnt/GBIF/Parquet/2022-01-01/occurrence.parquet" \
 #    --family "Fabaceae" \
 #    --country "AU" \
-#    --resolution "4" \
+#    --latmin -55.3228175 \
+#    --latmax -9.0882278 \
+#    --lonmin 72.2460938 \
+#    --lonmax 168.2249543 \
+#    --minyear 1945 \
+#    --threads 10 \
+#    --noccurrences 30 \
 #    --output "Fabaceae_in_AU"
 
 
