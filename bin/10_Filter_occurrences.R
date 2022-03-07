@@ -8,7 +8,7 @@
 ##  --input "s3://gbif-open-data-eu-central-1/occurrence/2022-01-01/occurrence.parquet"
 
 ## Usage:
-# ./Filter_and_aggregate.R \
+# ./10_Filter_occurrences.R \
 #    --input "/mnt/GBIF/Parquet/2022-01-01/occurrence.parquet" \
 #    --family "Fabaceae" \
 #    --country "AU" \
