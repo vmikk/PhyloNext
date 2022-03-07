@@ -24,6 +24,10 @@
 
 ############################################## Parse input parameters
 
+## Check time
+start_time <- Sys.time()
+
+
 cat("Parsing input options and arguments...\n")
 
 suppressPackageStartupMessages(require(optparse))
@@ -238,3 +242,74 @@ if(ROUNDCOORDS == TRUE){
       decimallatitude  = round(decimallatitude,  2),
       decimallongitude = round(decimallongitude, 2))
 }
+
+## Select columns and remove duplicated records
+cat("Column selection\n")
+dsf <- dsf %>%
+  select(specieskey, species, decimallongitude, decimallatitude) %>%
+  distinct()
+
+
+
+## Count number of records by species
+cat("Counting number of records per species\n")
+sp_counts <- dsf %>%
+  count(specieskey) %>% 
+  collect() %>% 
+  mutate(Partition = case_when(n <= OCCURRENCES ~ "low", 
+                              n > OCCURRENCES ~ "high"))
+
+smr <- table(sp_counts$Partition)
+if("low" %in% names(smr)){
+  cat("Number of species with low number of occurrences = ", smr[["low"]], "\n")
+}
+if("high" %in% names(smr)){
+  cat("Number of species with high number of occurrences = ", smr[["high"]], "\n")
+}
+
+## Export species counts
+fwrite(x = sp_counts,
+  file = paste0(OUTPUT, "_SpeciesCounts.txt"),
+  sep = "\t")
+
+
+## Group by species  -- there would be too many partitions (default arrow max = 1024)
+# cat("Groupping by species\n")
+# dsf <- dsf %>%
+#   group_by(specieskey)
+
+
+## Add partition ID to the dataset
+dsf <- dsf %>% 
+  left_join(sp_counts[, c("specieskey", "Partition")]) %>%
+  group_by(Partition)
+
+
+## Export species occurrence, partition by species
+cat("Exporting filtered occurrence data\n")
+
+outdir <- paste0(OUTPUT, ".parquet")
+dir.create(outdir, showWarnings = FALSE)
+
+write_dataset(
+  dataset = dsf,
+  path = outdir,
+  format = "parquet",
+  basename_template = "occ_{i}")
+
+
+
+
+##################### Session info
+
+## Check time
+end_time <- Sys.time()
+
+tmm <- as.numeric(difftime(end_time, start_time, units = "min"))
+cat("\nElapsed time: ", tmm, " minutes\n")
+
+cat("\n")
+cat("Session info:\n")
+sessionInfo()
+cat("\n")
+
