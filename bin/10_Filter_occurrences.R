@@ -129,7 +129,6 @@ load_pckg <- function(pkg = "data.table"){
 load_pckg("arrow")
 load_pckg("data.table")
 load_pckg("dplyr")
-load_pckg("h3")
 
 cat("\n")
 
