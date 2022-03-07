@@ -46,16 +46,15 @@ option_list <- list(
   make_option("--lonmax", action="store", default=NA, type='double', help="Maximum longitude"),
 
   ## Additional filters
-  make_option("--minyear"), action="store", default=1945, type='integer', help="Minimum year of occurrence (default, 1945)"),
-  make_option("--terrestrial", action="store", default=FALSE, type='logical', help="Remove non-terrestrial occurrences"),
+  make_option("--minyear", action="store", default=1945, type='integer', help="Minimum year of occurrence (default, 1945)"),
   make_option("--noextinct", action="store", default=NA, type='character', help="Remove extinct species (provide a file with extinct specieskeys)"),
 
   make_option(c("-c", "--roundcoords"), action="store", default=TRUE, type='logical', help="Round spatial coordinates to two decimal places, to reduce the dataset size (default, TRUE)"),
   make_option(c("-t", "--threads"), action="store", default=4L, type='integer', help="Number of CPU threads for arrow, default 4"),
+  make_option(c("-n", "--noccurrences"), action="store", default=30, type='double', help="Occurrence threshold (used for parquet partitioning)"),
   make_option(c("-o", "--output"), action="store", default=NA, type='character', help="Output prefix")
 )
 opt <- parse_args(OptionParser(option_list=option_list))
-
 
 
 ## Validation of the required argiments
@@ -77,15 +76,16 @@ ORDER <- opt$order
 FAMILY <- opt$family
 
 COUNTRY <- opt$country
-LATMIN <- opt$latmin
-LATMAX <- opt$latmax
-LONMIN <- opt$lonmin
-LONMAX <- opt$lonmax
+LATMIN <- as.numeric(opt$latmin)
+LATMAX <- as.numeric(opt$latmax)
+LONMIN <- as.numeric(opt$lonmin)
+LONMAX <- as.numeric(opt$lonmax)
 
-MINYEAR <- opt$minyear
+MINYEAR <- as.numeric(opt$minyear)
 EXTINCT <- opt$noextinct
-CPUTHREADS <- opt$threads
 ROUNDCOORDS <- opt$roundcoords
+CPUTHREADS <- as.numeric(opt$threads)
+OCCURRENCES <- as.numeric(opt$noccurrences)
 OUTPUT <- opt$output
 
 
@@ -106,8 +106,10 @@ cat(paste("Maximum longitude: ", LONMAX, "\n", sep = ""))
 cat(paste("Minimum year of occurrence: ", MINYEAR, "\n", sep=""))
 cat(paste("List of extict species: ", EXTINCT, "\n", sep=""))
 cat(paste("Round coordinates: ", ROUNDCOORDS, "\n", sep=""))
+
 cat(paste("Number of CPU threads to use: ", CPUTHREADS, "\n", sep=""))
-cat(paste("Output file prefix: ", OUTPUT, "\n", sep=""))
+cat(paste("Occurrence threshold for parquet partitioning: ", OCCURRENCES, "\n", sep=""))
+cat(paste("Output prefix: ", OUTPUT, "\n", sep=""))
 cat("\n")
 
 
