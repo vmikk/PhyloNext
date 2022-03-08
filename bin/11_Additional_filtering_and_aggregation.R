@@ -160,3 +160,61 @@ if(!is.na(TERRESTRIAL)){
   rm(pts)
 }
 
+
+## Density-based outlier removal
+if(DBSCAN == TRUE){
+  cat("Density-based outlier removal\n")
+
+  ## Reproject lat and long such that the Euclidean distance would approximate of geographic distance
+  cat("..Reprojecting coordinates\n")
+
+  pts <- st_as_sf(
+    x = datt[, .(decimallongitude, decimallatitude)],
+    coords = c("decimallongitude", "decimallatitude"),
+    crs = "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0")
+
+  ## Great circle distances, in km
+  # dd1 <- as.dist(st_distance(pts) / 1000)
+
+  ## Create an azimuthal equidistant (AEQD) projection for the center-point of the study area
+  dfc <- st_transform(
+    x = pts,
+    crs = "+proj=aeqd +x_0=0 +y_0=0 +lon_0=0 +lat_0=0 +units=km")
+
+  ## Extract transformed coordinates
+  crd <- st_coordinates(dfc)
+
+  ## Euclidean distance
+  # dd2 <- dist(crd)
+
+  ## Compare distances
+  # dd1[1:10]
+  # dd2[1:10]
+  # dist(datt[, .(decimallongitude, decimallatitude)])[1:10]  # incorrect dist!
+
+
+  cat("..Running DBSCAN\n")
+  ## Hierarchical DBSCAN (HDBSCAN)
+  # cl <- hdbscan(datt[, .(decimallongitude, decimallatitude)], minPts = DBSCAN_PTS)
+  
+  ## Non-hierarchical (with fixed epsilon)
+  cl <- dbscan(crd, minPts = DBSCAN_PTS, eps = DBSCAN_EPS)
+
+  ## Visualization 
+  # hullplot(datt[, .(decimallongitude, decimallatitude)], cl)
+
+  num_outliers <- sum(cl$cluster %in% 0)
+  cat("..Number of potential spatial outliers: ", num_outliers, "\n")
+  
+  if(num_outliers > 0){
+    
+    ## Add cluster ID to the data
+    # datt$ClusterID <- cl$cluster
+
+    ## Remove outliers
+    datt <- datt[ which(cl$cluster != 0 ) ]
+  }
+
+} # end of DBSCAN
+
+
