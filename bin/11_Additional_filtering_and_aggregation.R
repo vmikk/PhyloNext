@@ -264,3 +264,17 @@ datt_h3[ , decimallatitude := NULL ]
 datt_h3 <- merge(x = datt_h3, y = uniq_h3, by = "H3", all.x = TRUE)
 setnames(datt_h3, c("lat","lng"), c("decimallatitude","decimallongitude"))
 
+
+#####################
+
+## Check time
+end_time <- Sys.time()
+
+tmm <- as.numeric(difftime(end_time, start_time, units = "min"))
+cat("\nElapsed time: ", tmm, " minutes\n")
+
+
+cat("\n")
+cat("Session info:\n")
+sessionInfo()
+cat("\n")
