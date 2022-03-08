@@ -21,7 +21,7 @@ option_list <- list(
   make_option(c("-s", "--specieskey"), action="store", default=NA, type='character', help="GBIF species ID (optional)"),
 
   ## Additional filters
-  make_option(c("-l", "--terrestrial"), action="store", default=FALSE, type='logical', help="Remove non-terrestrial occurrences"),
+  make_option(c("-l", "--terrestrial"), action="store", default=NA, type='character', help="Remove non-terrestrial occurrences, provide land polygon in sf-format"),
 
   ## DBSCAN options
   make_option(c("-d", "--dbscan"), action="store", default=FALSE, type='logical', help="Remove spatial outliers with density-based clustering"),
@@ -64,7 +64,7 @@ OUTPUT <- opt$output
 ## Log assigned variables
 cat(paste("Input occurrences: ", INPUT, "\n", sep=""))
 cat(paste("GBIF specieskey: ", SPECIESKEY, "\n", sep=""))
-cat(paste("Only terrestrial records: ", TERRESTRIAL, "\n", sep=""))
+cat(paste("Terrestrial data: ", TERRESTRIAL, "\n", sep=""))
 
 cat(paste("Perform DBSCAN: ", DBSCAN, "\n", sep=""))
 if(DBSCAN == TRUE){
@@ -101,4 +101,12 @@ cat("Number of available CPU threads: ", cpu_count(), "\n")
 cat("Setting number of CPU threads to: ", CPUTHREADS, "\n")
 set_cpu_count(CPUTHREADS)           # for libarrow
 setDTthreads(threads = CPUTHREADS)  # for data.table
+
+
+## Load land mask
+if(!is.na(TERRESTRIAL)){
+  cat("Loading land mask\n")
+  TERRESTRIAL <- readRDS(TERRESTRIAL)
+}
+
 
