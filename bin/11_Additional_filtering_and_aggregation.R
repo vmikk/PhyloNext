@@ -130,3 +130,33 @@ if(!is.na(SPECIESKEY)){
 ## Convert to data.table
 setDT(datt)
 
+
+## Remove non-terrestrial records 
+if(!is.na(TERRESTRIAL)){
+  cat("Removing non-terrestrial records\n")
+  
+  ## Convert coordinates to sf class
+  pts <- st_as_sf(
+    x = datt[, .(decimallongitude, decimallatitude)],
+    coords = c("decimallongitude", "decimallatitude"),
+    crs = "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0")
+
+  ## Check which points are on land
+  land <- lengths(st_intersects(pts, TERRESTRIAL)) > 0
+
+  non_terr <- sum(!land)
+  cat("Number of non-terrestrial points = ", non_terr, "\n")
+
+  ## Visualization
+  # ggplot(data = pts) + 
+  #   geom_sf(color = "red") + 
+  #   geom_sf(data = TERRESTRIAL, fill = "grey")
+
+  ## Remove outliers
+  if(non_terr > 0){
+    datt <- datt[ land ]
+  }
+
+  rm(pts)
+}
+
