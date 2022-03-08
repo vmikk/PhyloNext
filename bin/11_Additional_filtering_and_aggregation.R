@@ -31,7 +31,7 @@ option_list <- list(
   ## Spatial aggregation
   make_option(c("-r", "--resolution"), action="store", default=4L, type='integer', help="Spatial resolution of the H3 Geospatial Indexing System"),
 
-  make_option(c("-t", "--threads"), action="store", default=4L, type='integer', help="Number of CPU threads for arrow, default 4"),
+  make_option(c("-t", "--threads"), action="store", default=2L, type='integer', help="Number of CPU threads for arrow, default 4"),
   make_option(c("-o", "--output"), action="store", default=NA, type='character', help="Output directory")
   )
 
