@@ -93,6 +93,9 @@ load_pckg("arrow")
 load_pckg("data.table")
 load_pckg("dplyr")
 load_pckg("h3")
+load_pckg("sf")
+load_pckg("sp")
+load_pckg("dbscan")
 
 cat("\n")
 
