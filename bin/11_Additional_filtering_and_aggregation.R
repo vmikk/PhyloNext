@@ -161,7 +161,7 @@ cat("There are ", length(unique(datt$specieskey)), "unique specieskeys in the da
 
 
 ## Remove non-terrestrial records 
-if(!is.na(TERRESTRIAL)){
+if(!is.na(TERRESTRIAL[[1]])){
   cat("Removing non-terrestrial records\n")
   
   ## Convert coordinates to sf class
