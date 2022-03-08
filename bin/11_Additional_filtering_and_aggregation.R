@@ -110,3 +110,23 @@ if(!is.na(TERRESTRIAL)){
 }
 
 
+
+
+## Open dataset
+cat("Loading Parquet data\n")
+ds <- arrow::open_dataset(INPUT)
+
+## Select species and collect the data
+cat("Collecting data\n")
+if(!is.na(SPECIESKEY)){
+  datt <- ds %>%
+    filter(specieskey %in% SPECIESKEY) %>% 
+    collect()
+} else {
+  datt <- ds %>%
+    collect()
+}
+
+## Convert to data.table
+setDT(datt)
+
