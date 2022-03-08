@@ -5,6 +5,15 @@
 
 
 
+## Usage:
+# ./11_Additional_filtering_and_aggregation.R \
+#    --input "/tmp/Fabaceae_in_AU.parquet" \
+#    --specieskey "5349398" \
+#    --resolution "4" \
+#    --terrestrial "data/Land_Buffered_025_dgr.RData" \
+#    --output "Fabaceae_in_AU"
+
+
 ############################################## Parse input parameters
 
 ## Check time
