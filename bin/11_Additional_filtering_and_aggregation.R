@@ -55,6 +55,7 @@ option_list <- list(
   make_option(c("-t", "--threads"), action="store", default=2L, type='integer', help="Number of CPU threads for arrow, default 4"),
   make_option(c("-o", "--output"), action="store", default=NA, type='character', help="Output directory")
   )
+opt <- parse_args(OptionParser(option_list=option_list))
 
 
 ## Validation of the required argiments
