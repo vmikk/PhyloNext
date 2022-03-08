@@ -82,13 +82,6 @@ RESOLUTION <- as.integer(opt$resolution)
 CPUTHREADS <- as.numeric(opt$threads)
 OUTPUT <- opt$output
 
-## Prepare output name
-if(is.na(SPECIESKEY)){
-  OUTPUT <- paste0(OUTPUT, "_NoSpKey.RData")
-} else {
-  OUTPUT <- paste0(OUTPUT, "_", SPECIESKEY, ".RData")
-}
-
 
 ## Log assigned variables
 cat(paste("Input occurrences: ", INPUT, "\n", sep=""))
@@ -105,7 +98,7 @@ if(DBSCAN == TRUE){
 cat(paste("Spatial resolution: ", RESOLUTION, "\n", sep=""))
 
 cat(paste("Number of CPU threads to use: ", CPUTHREADS, "\n", sep=""))
-cat(paste("Output file: ", OUTPUT, "\n", sep=""))
+cat(paste("Output directory: ", OUTPUT, "\n", sep=""))
 
 
 
@@ -278,12 +271,18 @@ setnames(datt_h3, c("lat","lng"), c("decimallatitude","decimallongitude"))
 cat("Exporting filtered occurrence data\n")
 
 ## Create output directory if it doesn't exist
-dirr <- dirname(OUTPUT)
-if(!dirr %in% "."){ dir.create(path = dirr, showWarnings = F, recursive = TRUE) }
+dir.create(path = OUTPUT, showWarnings = F, recursive = TRUE)
+
+## Prepare output name
+if(is.na(SPECIESKEY)){
+  OUTFILE <- file.path(OUTPUT, "NoSpKey.RData")
+} else {
+  OUTFILE <- file.path(OUTPUT, paste0(SPECIESKEY, ".RData"))
+}
 
 saveRDS(
   object = datt_h3,
-  file = OUTPUT,
+  file = OUTFILE,
   compress = "xz")
 
 
