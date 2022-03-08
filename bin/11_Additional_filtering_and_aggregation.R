@@ -3,6 +3,18 @@
 
 ## Additional filtering of GBIF occurrences and spatial binning
 
+## TO DO:
+# - handle a case with single observation
+# - in case of multiple species and DBSCAN - do it separately for each species
+# - environmental outliers?
+
+## By default, occurrences are binned using H3 resolution 4
+## (grid cell area ~ 1770 km2; hexagon edge length ~ 22.6 km)
+
+## The DBSCAN algorithm requires 2 parameters:
+# eps: specifies how close points should be to each other to be considered a part of a cluster.
+#      If the distance between two points is lower or equal to this value, these points are considered neighbors.
+# minPoints: the minimum number of points to form a dense region.
 
 
 ## Usage:
