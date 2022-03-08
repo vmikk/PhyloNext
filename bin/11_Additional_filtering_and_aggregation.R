@@ -156,6 +156,9 @@ if(!is.na(SPECIESKEY)){
 ## Convert to data.table
 setDT(datt)
 
+if(is.na(SPECIESKEY)){ cat("No specieskey is specified\n") }
+cat("There are ", length(unique(datt$specieskey)), "unique specieskeys in the data.\n")
+
 
 ## Remove non-terrestrial records 
 if(!is.na(TERRESTRIAL)){
