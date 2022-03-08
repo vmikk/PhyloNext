@@ -110,6 +110,7 @@ if(!is.na(TERRESTRIAL)){
 }
 
 
+############################################## Main pipeline
 
 
 ## Open dataset
@@ -217,4 +218,25 @@ if(DBSCAN == TRUE){
 
 } # end of DBSCAN
 
+
+
+######## Spatial aggregation
+cat("Spatial aggregation using H3 system\n")
+
+## H3 system
+datt[ , H3 := h3::geo_to_h3(datt[, .(decimallatitude, decimallongitude)], res = RESOLUTION) ]
+
+## Aggregate species by OTT IDs
+datt_h3 <- unique(datt, by = c("specieskey", "H3"))
+
+cat("Number of H3-based gridcells = ", length(unique(datt_h3$H3)), ")\n")
+
+## Replace actual coordinates with gridcell centroid coordinates
+uniq_h3 <- unique( datt_h3[, .(H3)] )
+uniq_h3 <- cbind(uniq_h3, h3::h3_to_geo(uniq_h3$H3))
+
+datt_h3[ , decimallongitude := NULL ]
+datt_h3[ , decimallatitude := NULL ]
+datt_h3 <- merge(x = datt_h3, y = uniq_h3, by = "H3", all.x = TRUE)
+setnames(datt_h3, c("lat","lng"), c("decimallatitude","decimallongitude"))
 
