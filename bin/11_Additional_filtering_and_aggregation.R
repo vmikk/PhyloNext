@@ -25,7 +25,7 @@ option_list <- list(
 
   ## DBSCAN options
   make_option(c("-d", "--dbscan"), action="store", default=FALSE, type='logical', help="Remove spatial outliers with density-based clustering"),
-  make_option(c("-e", "--epsilon"), action="store", default=1500, type='double', help="DBSCAN parameter epsilon"),
+  make_option(c("-e", "--epsilon"), action="store", default=700, type='double', help="DBSCAN parameter epsilon, km"),
   make_option(c("-p", "--minpts"), action="store", default=3, type='double', help="DBSCAN min number of points"),
 
   ## Spatial aggregation
