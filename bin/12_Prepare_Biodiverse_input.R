@@ -53,3 +53,39 @@ cat("\n")
 
 ## Create output directory
 dir.create(path = OUTPUT, showWarnings = F, recursive = TRUE)
+
+
+############################################## Load packages
+
+cat("Loading R packages...\n")
+
+load_pckg <- function(pkg = "data.table"){
+  suppressPackageStartupMessages( library(package = pkg, character.only = TRUE) )
+  cat(paste(pkg, packageVersion(pkg), "\n"))
+}
+
+load_pckg("data.table")
+load_pckg("plyr")
+load_pckg("rotl")     # Interface to the 'Open Tree of Life' API
+# load_pckg("rgbif")
+load_pckg("ape")
+
+cat("\n")
+
+
+## Set CPU thread pool
+cat("Setting number of CPU threads to: ", CPUTHREADS, "\n")
+setDTthreads(threads = CPUTHREADS)  # for data.table
+
+## Start local cluster
+if(CPUTHREADS > 1){
+  load_pckg("doFuture")
+  registerDoFuture()
+  plan(multicore, workers = CPUTHREADS)
+  options(future.globals.maxSize = 1e10)
+
+  parall <- TRUE
+} else {
+  parall <- FALSE
+}
+
