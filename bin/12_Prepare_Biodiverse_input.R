@@ -89,3 +89,60 @@ if(CPUTHREADS > 1){
   parall <- FALSE
 }
 
+
+############################################## Main pipeline
+
+## Load phylogenetic tree
+if(!is.na(PHYTREE)){
+  
+  ## Function to extract file extension
+  file_extension <- function(x){
+    pos <- regexpr("\\.([[:alnum:]]+)$", x)
+    ifelse(pos > -1L, substring(x, pos + 1L), "")
+  }
+
+  if(file_extension(PHYTREE) %in% c("nwk", "newick", "Newick", "tre", "tree")){
+
+    ## Load Newick tree
+    cat("Loading pre-computed phylogenetic tree\n")
+    TREE <- ape::read.tree(PHYTREE)
+  
+  } else if(PHYTREE %in% "API") {
+    
+    cat("Fetching phylogenetic tree from Open Tree API\n")
+    # ////////////////////////////////////////  -- TO DO
+
+  } else {
+
+    stop("Unknown tree option is specified. Please check `--phytree` argument.\n")
+
+  }
+}
+
+
+
+## Load and combine filtered data
+cat("Loading filtered occurrences\n")
+fls <- list.files(
+  path = INPUT,
+  pattern = ".RData$",
+  full.names = T, recursive = T)
+
+datt <- alply(.data = fls, .margins = 1,
+  .fun = function(z){ readRDS(z) },
+  .progress = "none", .parallel = parall)
+
+cat("..Merging filtered occurrences from different specieskeys\n")
+datt <- rbindlist(datt)
+
+## Check data
+if(!nrow(datt) > 1){
+  stop("No species occurrences found. Please check the `--input` argument.\n")
+}
+
+## Data summary
+cat("..Total number of records: ", nrow(datt), "\n")
+cat("..Number of unique specieskeys: ", length(unique(datt$specieskey)), "\n")
+cat("..Number of unique gridcells: ", length(unique(datt$H3)), "\n")
+
+
