@@ -27,9 +27,9 @@ my ($opt, $usage) = describe_options(
   [ 'out_file|output_bd=s',  'The output basedata file', { required => 1 }],
   [ 'label_column_number:i',    'Column containing the label name [default= "0"]', { default => 0 } ],
   [ 'group_column_number_x:i',  'Column containing the x-axis values [default= "1"]', { default => 1 } ],
-  [ 'group_column_number_y:i',  'Column containing the y-axis values [default= "2"]', { default => 2 } ],
+  # [ 'group_column_number_y:i',  'Column containing the y-axis values [default= "2"]', { default => 2 } ],
   [ 'cell_size_x:f',  'Cell size of x-axis [default= "100000"]', { default => 100000 } ],
-  [ 'cell_size_y:f',  'Cell size of y-axis [default= "100000"]', { default => 100000 } ],
+  # [ 'cell_size_y:f',  'Cell size of y-axis [default= "100000"]', { default => 100000 } ],
   [],
   [ 'help',       "print usage message and exit" ],
 );
@@ -44,9 +44,9 @@ my $csv_file              = $opt->csv_file;
 my $out_file              = $opt->out_file;
 my $label_column_number   = $opt->label_column_number;
 my $group_column_number_x = $opt->group_column_number_x;
-my $group_column_number_y = $opt->group_column_number_y;
+# my $group_column_number_y = $opt->group_column_number_y;
 my $cell_size_x = $opt->cell_size_x;
-my $cell_size_y = $opt->cell_size_y;
+# my $cell_size_y = $opt->cell_size_y;
 
 
 my @table;
@@ -63,7 +63,8 @@ my %input_files = (
     $names[0] => {
         input_quotes    => $double_quotes,
         label_columns   => [$label_column_number],
-        group_columns   => [$group_column_number_x, $group_column_number_y],
+        group_columns   => [$group_column_number_x],
+        # group_columns   => [$group_column_number_x, $group_column_number_y],
     }
 );
 
@@ -80,7 +81,8 @@ if (not defined $bd) {
 sub create_bd {
     my $bd = Biodiverse::BaseData -> new (
         NAME        => $out_file,
-        CELL_SIZES  => [$cell_size_x, $cell_size_y],
+        CELL_SIZES  => [$cell_size_x],
+        # CELL_SIZES  => [$cell_size_x, $cell_size_y],
     );
 
     foreach my $file (@names) {
