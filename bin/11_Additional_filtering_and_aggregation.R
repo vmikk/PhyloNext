@@ -94,13 +94,11 @@ if(DBSCAN == TRUE){
   cat(paste("DBSCAN min number of points: ", DBSCAN_PTS, "\n", sep=""))
 }
 
-
 cat(paste("Spatial resolution: ", RESOLUTION, "\n", sep=""))
-
 cat(paste("Number of CPU threads to use: ", CPUTHREADS, "\n", sep=""))
 cat(paste("Output directory: ", OUTPUT, "\n", sep=""))
 
-
+cat("\n")
 
 ############################################## Load packages and data
 
@@ -116,7 +114,7 @@ load_pckg("data.table")
 load_pckg("dplyr")
 load_pckg("h3")
 load_pckg("sf")
-load_pckg("sp")
+# load_pckg("sp")
 load_pckg("dbscan")
 
 cat("\n")
@@ -143,7 +141,7 @@ cat("Loading Parquet data\n")
 ds <- arrow::open_dataset(INPUT)
 
 ## Select species and collect the data
-cat("Collecting data\n")
+cat("..Collecting data\n")
 if(!is.na(SPECIESKEY)){
   datt <- ds %>%
     filter(specieskey %in% SPECIESKEY) %>% 
@@ -174,7 +172,7 @@ if(!is.na(TERRESTRIAL[[1]])){
   land <- lengths(st_intersects(pts, TERRESTRIAL)) > 0
 
   non_terr <- sum(!land)
-  cat("Number of non-terrestrial points = ", non_terr, "\n")
+  cat("..Number of non-terrestrial points: ", non_terr, "\n")
 
   ## Visualization
   # ggplot(data = pts) + 
@@ -257,7 +255,7 @@ datt[ , H3 := h3::geo_to_h3(datt[, .(decimallatitude, decimallongitude)], res = 
 ## Aggregate species by OTT IDs
 datt_h3 <- unique(datt, by = c("specieskey", "H3"))
 
-cat("Number of H3-based gridcells = ", length(unique(datt_h3$H3)), ")\n")
+cat("..Number of H3-based gridcells: ", length(unique(datt_h3$H3)), "\n")
 
 ## Replace actual coordinates with gridcell centroid coordinates
 uniq_h3 <- unique( datt_h3[, .(H3)] )
