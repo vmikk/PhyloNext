@@ -23,6 +23,14 @@ RUN /rocker_scripts/install_tidyverse.sh \
 ## Install additional R packages
 RUN install2.r --error --skipinstalled --ncpus -1 \
     optparse \
+    ape \
+    plyr \
+    rotl \
+    rgbif \
+    proj4 \
+    rgeos \
+    sf \
+    dbscan \
     && R -e 'remotes::install_github("crazycapivara/h3-r")' \
     && rm -rf /tmp/downloaded_packages/
 
