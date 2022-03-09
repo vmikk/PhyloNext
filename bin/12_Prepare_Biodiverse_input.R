@@ -146,3 +146,100 @@ cat("..Number of unique specieskeys: ", length(unique(datt$specieskey)), "\n")
 cat("..Number of unique gridcells: ", length(unique(datt$H3)), "\n")
 
 
+
+######################################
+###################################### Map GBIF IDs to Open Tree of Life (OTT) IDs
+######################################
+
+## Unique species IDs
+species_uniq <- unique(datt[, .(specieskey, species)])
+
+## Function to get OTT ids
+get_ott_ids <- function(x, fuzzy = FALSE, group = "All life", progr = "text"){
+
+  res <- adply(
+    .data = x,
+    .margins = 1,
+    .fun = function(sp){
+      
+      rz <- rotl::tnrs_match_names(
+        names = sp,
+        context_name = group,
+        do_approximate_matching = fuzzy)
+
+      rz <- data.table(
+          verbatim_name = sp,
+          id = rz$ott_id,
+          species = rz$unique_name,
+          is_synonym = rz$is_synonym,
+          flags = rz$flags,
+          number_matches = rz$number_matches
+          )
+      return(rz)
+    },
+    .progress = progr, .parallel = parall
+    )
+
+  setDT(res)
+  res[, X1 := NULL ]
+  colnames(res)[-1] <- paste0("ott_", colnames(res)[-1])
+  return(res)
+}
+
+
+## To list available OTT tax groups run
+# rotl::tnrs_contexts()
+#
+## as of rotl v.3.0.12 these contexts are available
+# Possible contexts:
+#    Animals 
+#       Birds, Tetrapods, Mammals, Amphibians, Vertebrates 
+#       Arthropods, Molluscs, Nematodes, Platyhelminthes, Annelids 
+#       Cnidarians, Arachnids, Insects 
+#    Fungi 
+#       Basidiomycetes, Ascomycetes 
+#    All life 
+#    Bacteria 
+#       SAR group, Archaea, Excavata, Amoebozoa, Centrohelida 
+#       Haptophyta, Apusozoa, Diatoms, Ciliates, Forams 
+#    Land plants 
+#       Hornworts, Mosses, Liverworts, Vascular plants, Club mosses 
+#       Ferns, Seed plants, Flowering plants, Monocots, Eudicots 
+#       Rosids, Asterids, Asterales, Asteraceae, Aster 
+#       Symphyotrichum, Campanulaceae, Lobelia 
+
+cat("Matching species names to the Open Tree Taxonomy\n")
+
+species_ott <- get_ott_ids(x = species_uniq$species,
+  fuzzy = FALSE, group = TAXGROUP, progr = "none")
+
+cat("..Species names with OTT IDs found", sum(!is.na(species_ott$ott_id)), "\n")
+cat("..Species names without matches to Open Tree", sum(is.na(species_ott$ott_id)), "\n")
+
+
+# species_exact <- species_ott[ approximate_match == FALSE ]
+# cat("..Number of exact matches", nrow(species_exact), "\n")
+
+# species_fuzzy <- species_ott[ approximate_match != FALSE ]
+# cat("..Number of fuzzy matches", nrow(species_fuzzy), "\n")
+
+
+## Add OTT IDs to the species table
+species_uniq <- merge(
+  x = species_uniq,
+  y = species_ott[ , .(verbatim_name, ott_id)],
+  by.x = "species", by.y = "verbatim_name", all.x = TRUE)
+
+## Remove species without OTT matches
+species_uniq <- species_uniq[ !is.na(ott_id) ]
+
+## Check for duplicates
+if(any(duplicated(species_uniq$ott_id))){
+  cat("Warning: There are OTT IDs matching multiple GBIF specieskeys. These recodes will be merged\n")
+}
+
+
+# cat("Exporting OTT IDs\n")
+# saveRDS(object = species, file = "species_OTT.RData", compress = "xz")
+
+
