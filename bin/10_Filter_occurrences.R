@@ -227,8 +227,8 @@ if(!is.na(LONMAX)){
 
 
 ## Remove extinct species
-if(!is.na(EXTINCT)){
-  cat("Filtering extinct species longitude\n")
+if(!is.na(EXTINCT[[1]][1])){
+  cat("..Filtering out extinct species\n")
   dsf <- dsf %>% filter(!specieskey %in% EXTINCT$specieskey)
 }
 
