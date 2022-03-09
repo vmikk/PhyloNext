@@ -280,3 +280,66 @@ cat("..Exporting trimmed phylogentic tree for Biodiverse\n")
 ape::write.nexus(tree_trimmed,
   file = file.path(OUTPUT, "Trimmed_tree.nex"))
 
+
+######################################
+###################################### Subset species
+######################################
+
+cat("Preparing occurrence data\n")
+
+records_before_filtering <- nrow(datt)
+
+## Add OTT IDs to occurrences
+cat("..Adding OTT IDs to occurrences\n")
+
+datt <- merge(
+  x = datt,
+  y = species_uniq[, .(specieskey, OTT)],
+  by = "specieskey", all.x = TRUE)
+
+
+## Remove taxa
+cat("..Removing taxa without OTT IDs\n")
+
+# datt <- datt[ !is.na(OTT) ]
+datt <- datt[ OTT %in% otts_to_keep  ]
+
+records_after_filtering <- nrow(datt)
+records_precent <- round(records_after_filtering / records_before_filtering * 100, 1)
+
+cat("..After removal of not-in-tree taxa, dataset is comprised of ",
+  records_after_filtering, "(", records_precent, "%) entries.\n")
+
+
+## Remove duplicated IDs
+if(any(duplicated(species_uniq$ott_id))){
+  cat("..Merging duplicated OTT IDs\n")
+  datt <- unique(datt, by = c("OTT", "H3"))
+  cat("..Number of records without duplicates: ", nrow(datt), "\n")
+}
+
+# any(is.na(datt$OTT))
+# any(datt$OTT %in% "")
+
+
+## Export data (in long format) for Biodiverse
+cat("..Exporting trimmed occurrence data for Biodiverse\n")
+fwrite(
+  x = datt[, .(OTT, H3, specieskey, species, decimallatitude, decimallongitude)],
+  file = file.path(OUTPUT, "Trimmed_occurrence.csv"),
+  sep = ",", quote = T, row.names = FALSE, col.names = TRUE)
+
+
+
+## Coordinates of the observed gridcells
+cat("Exporting gridcell coordinates\n")
+uniq_h3 <- unique(datt[, .(H3, decimallatitude, decimallongitude)])
+
+cat("..Number of unique gridcells after trimming: ", nrow(uniq_h3), "\n")
+
+fwrite(
+  x = uniq_h3,
+  file = file.path(OUTPUT, "H3_GridCell_Centres.csv"),
+  sep = "\t", quote = F, row.names = FALSE, col.names = TRUE)
+
+
