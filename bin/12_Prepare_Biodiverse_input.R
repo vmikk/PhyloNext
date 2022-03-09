@@ -343,3 +343,17 @@ fwrite(
   sep = "\t", quote = F, row.names = FALSE, col.names = TRUE)
 
 
+
+#####################
+
+## Check time
+end_time <- Sys.time()
+
+tmm <- as.numeric(difftime(end_time, start_time, units = "min"))
+cat("\nElapsed time: ", tmm, " minutes\n")
+
+
+cat("\n")
+cat("Session info:\n")
+sessionInfo()
+cat("\n")
