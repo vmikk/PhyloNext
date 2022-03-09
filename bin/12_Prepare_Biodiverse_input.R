@@ -2,6 +2,26 @@
 
 ## Prepare input data for Biodiverse
 
+## TO DO:
+# - add option to retrive tree via Open Tree API
+# - export GBIF-OTT ID matches
+# - export species IDs that are not in tree
+# - check tree nodes (in case if tree is not strictly species-level)
+# - handle the case without phylogentic tree (do we need it?)
+# - use pre-computed OTT-vs-GIBF IDs table (instead of OTT API)
+
+## Name matching with Open Tree of life:
+# - currently fuzzy-matching is disabled (only exact matches are used)
+
+## Usage example:
+# ./12_Prepare_Biodiverse_input.R \
+#   --input "filtered_data" \
+#   --phytree "phy_trees/Fabaceae_Australian.nwk" \
+#   --taxgroup "Rosids" \
+#   --threads 12 \
+#   --output "Biodiverse_input"
+
+
 ############################################## Parse input parameters
 
 ## Check time
