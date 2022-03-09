@@ -243,3 +243,40 @@ if(any(duplicated(species_uniq$ott_id))){
 # saveRDS(object = species, file = "species_OTT.RData", compress = "xz")
 
 
+
+######################################
+###################################### Trim the phylogenetic tree
+######################################
+
+cat("Preparing phylogenetic tree\n")
+
+## In the tree, tip names have "ott" prefix (e.g., "ott114")
+## Add this prefix to OTT IDs
+species_uniq[, OTT := paste0("ott", ott_id)]
+
+## Summary
+uniq_otts <- unique(species_uniq$OTT)                 # there could be duplicates
+in_tree_total <- sum(uniq_otts %in% TREE$tip.label)
+in_tree_percent <- round(in_tree_total / length(uniq_otts) * 100, 1)
+
+cat("..Phylogenetic tree contains ", length(TREE$tip.label), "tips\n")
+cat("..In total, there are ", nrow(species_uniq), " unique specieskeys (with OTT matches) in GBIF data.\n")
+cat("..Of them, ", in_tree_total, "(", in_tree_percent, "%) are present at the tips of the tree.\n")
+
+
+## These OTT IDs should be preserved (in occurrence data and on a tree)
+otts_to_keep <- uniq_otts[ uniq_otts %in% TREE$tip.label ]
+
+## Subset tree
+## NB. only tree tips are considered now, but there could be named nodes!
+cat("..Timming phylogentic tree:\n")
+cat("..Number of tips to remove from the tree: ", length(TREE$tip.label) - length(otts_to_keep), "\n")
+tree_trimmed <- ape::keep.tip(phy = TREE, tip = otts_to_keep)
+
+
+## Export tree in Nexus format
+cat("..Exporting trimmed phylogentic tree for Biodiverse\n")
+
+ape::write.nexus(tree_trimmed,
+  file = file.path(OUTPUT, "Trimmed_tree.nex"))
+
