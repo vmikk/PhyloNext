@@ -12,7 +12,8 @@ RUN apt-get update -qq \
   && apt-get -y --no-install-recommends install \
     zip unzip \
     curl git wget less \
-    build-essential
+    build-essential \
+    libgeos-dev libudunits2-dev libproj-dev libgdal-dev
 
 ## Install tidyverse packages along with arrow and data.table
 RUN /rocker_scripts/install_tidyverse.sh \
