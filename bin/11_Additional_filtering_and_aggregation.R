@@ -68,13 +68,18 @@ if(is.na(opt$output)){
   stop()
 }
 
+## Function to convert text "NA"s to NA
+to_na <- function(x){ 
+  if(x %in% "NA"){ x <- NA }
+  return(x)
+}
 
 ## Assign variables
 INPUT <- opt$input
-SPECIESKEY <- opt$specieskey
-TERRESTRIAL <- opt$terrestrial
+SPECIESKEY <- to_na( opt$specieskey )
+TERRESTRIAL <- to_na( opt$terrestrial )
 
-DBSCAN <- opt$dbscan
+DBSCAN <- as.logical( opt$dbscan )
 DBSCAN_EPS <- as.numeric(opt$epsilon)
 DBSCAN_PTS <- as.numeric(opt$minpts)
 
