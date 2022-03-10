@@ -1,18 +1,29 @@
 #!/usr/bin/env nextflow
 /*
-Pipeline for 
+
 ========================================================================================
-    vmikk/biodiverse
+    GBIF phylogenetic diversity pipeline
 ========================================================================================
+    Version: v0.1
+    License: MIT
     Github : https://github.com/vmikk/biodiverse-scripts
     Website: TBA
     Slack  : TBA
 ----------------------------------------------------------------------------------------
 */
 
+// TO DO:
+// - specify default path to pipeline data and scripts
+// - specify threads for each process in a config
+// - specify Dockerimages
+// - split the pipeline into workflows?
+
+
 // Enable DSL2 syntax
 nextflow.enable.dsl = 2
 
+// Pipeline version
+version = '0.1'
 
 //// Initialize parameters, set default values
 
