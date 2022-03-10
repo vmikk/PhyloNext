@@ -52,10 +52,15 @@ if(is.na(opt$output)){
   stop("Output directory is not specified.\n")
 }
 
+## Function to convert text "NA"s to NA
+to_na <- function(x){ 
+  if(x %in% "NA"){ x <- NA }
+  return(x)
+}
 
 ## Assign variables
 INPUT <- opt$input
-PHYTREE <- opt$phytree
+PHYTREE <- to_na( opt$phytree )
 TAXGROUP <- opt$taxgroup
 CPUTHREADS <- as.numeric(opt$threads)
 OUTPUT <- opt$output
