@@ -71,23 +71,29 @@ if(is.na(opt$output)){
   stop()
 }
 
+## Function to convert text "NA"s to NA
+to_na <- function(x){ 
+  if(x %in% "NA"){ x <- NA }
+  return(x)
+}
+
 ## Assign variables
 INPUT <- opt$input
 
-PHYLUM <- opt$phylum
-CLASS <- opt$class
-ORDER <- opt$order
-FAMILY <- opt$family
+PHYLUM <- to_na( opt$phylum )
+CLASS  <- to_na( opt$class )
+ORDER  <- to_na( opt$order )
+FAMILY <- to_na( opt$family )
 
-COUNTRY <- opt$country
-LATMIN <- as.numeric(opt$latmin)
-LATMAX <- as.numeric(opt$latmax)
-LONMIN <- as.numeric(opt$lonmin)
-LONMAX <- as.numeric(opt$lonmax)
+COUNTRY <- to_na( opt$country )
+LATMIN <- as.numeric( to_na(opt$latmin) )
+LATMAX <- as.numeric( to_na(opt$latmax) )
+LONMIN <- as.numeric( to_na(opt$lonmin) )
+LONMAX <- as.numeric( to_na(opt$lonmax) )
 
 MINYEAR <- as.numeric(opt$minyear)
-EXTINCT <- opt$noextinct
-ROUNDCOORDS <- opt$roundcoords
+EXTINCT <- to_na( opt$noextinct)
+ROUNDCOORDS <- as.logical( opt$roundcoords )
 CPUTHREADS <- as.numeric(opt$threads)
 OCCURRENCES <- as.numeric(opt$noccurrences)
 OUTPUT <- opt$output
