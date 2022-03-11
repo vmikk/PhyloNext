@@ -63,6 +63,19 @@ params.taxgroup = "All life"
 params.helpMsg = false
 
 
+// Number of CPUs to use at different steps --> configure as ${task.cpus}
+// params.cpusfilt1 = 10
+// params.cpusfilt2l = 5
+// params.cpusfilt2h = 1
+// params.cpusbioprep = 12
+
+
+// Define output paths for different steps
+out_flt1 = params.outdir + "/00.filtered1.parquet"
+out_flt2 = params.outdir + "/01.filtered2"
+out_biod = params.outdir + "/02.Biodiverse_input"
+out_logs = params.outdir + "/logs"
+
 
 // Pipeline help message
 def helpMsg() {
