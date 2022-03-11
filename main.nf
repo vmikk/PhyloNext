@@ -44,8 +44,10 @@ params.minyear = 1945
 params.noextinct = "NA"
 params.roundcoords = true
 
+params.terrestrial = "pipeline_data/Land_Buffered_025_dgr.RData"
+
+
 // Filtering, stage II - "11_Additional_filtering_and_aggregation.R"
-params.specieskey = "NA"
 params.h3resolution = 4
 params.dbscan = false
 params.dbscannoccurrences = 30
