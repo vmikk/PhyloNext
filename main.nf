@@ -14,9 +14,10 @@
 
 // TO DO:
 // - specify default path to pipeline data and scripts
-// - specify threads for each process in a config
-// - specify Dockerimages
+// - specify threads for each process in a config: https://www.nextflow.io/docs/latest/process.html#cpus
+// - specify Dockerimages: https://www.nextflow.io/docs/latest/process.html#container
 // - split the pipeline into workflows?
+// - fix publishDir: https://www.nextflow.io/docs/latest/process.html#publishdir
 
 
 // Enable DSL2 syntax
