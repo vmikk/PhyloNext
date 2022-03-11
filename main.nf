@@ -145,6 +145,10 @@ if(params.dbscan == true){
 log.info "\n"
 
 
+// Input channel (GBIF dump dir)
+input_ch = Channel.value(params.input)
+
+
 
 // On completion
 workflow.onComplete {
