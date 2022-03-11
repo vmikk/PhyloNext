@@ -29,7 +29,7 @@ version = '0.1'
 
 // Filtering, stage I - "10_Filter_occurrences.R"
 params.input = false
-params.output = "$baseDir/results"
+params.outdir = "$baseDir/results"
 params.phylum = "NA"
 params.class = "NA"
 params.order = "NA"
