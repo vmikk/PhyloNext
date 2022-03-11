@@ -63,14 +63,6 @@ params.taxgroup = "All life"
 params.helpMsg = false
 
 
-// Print the parameters to the console
-println "-----------------------------------------------------"
-println "GBIF occurrence dump:     " + params.input
-println "Output path:              " + params.output
-println "H3 spatial resolution:    " + params.h3resolution
-println "Spatial outliers removal: " + params.dbscan
-println "DBSCAN epsilon:           " + params.dbscanepsilon
-println "DBSCAN minpts:            " + params.dbscanminpts
 
 // Pipeline help message
 def helpMsg() {
@@ -114,6 +106,29 @@ if (params.helpMsg){
     exit(0)
 }
 
-println "-----------------------------------------------------"
+// Check if input path was provided
+if (params.input == false) {
+    println( "Please provide the directory with input data wuth `--input`")
+    exit(1)
+}
+
+
+// Print the parameters to the console and to the log
+log.info """
+        GBIF phylogenetic diversity pipeline
+        ===========================================
+        GBIF occurrence dump:     ${params.input}
+        Output path:              ${params.outdir}
+        H3 spatial resolution:    ${params.h3resolution}
+        Spatial outliers removal: ${params.dbscan}
+        """
+        .stripIndent()
+
+if(params.dbscan == true){
+    log.info "DBSCAN epsilon:           ${params.dbscanepsilon}".stripIndent()
+    log.info "DBSCAN minptsl:           ${params.dbscanminpts}".stripIndent()
+} 
+
+log.info "\n"
 
 
