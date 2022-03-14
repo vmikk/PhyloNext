@@ -18,7 +18,7 @@
 // - specify Dockerimages: https://www.nextflow.io/docs/latest/process.html#container
 // - split the pipeline into workflows?
 // - fix publishDir: https://www.nextflow.io/docs/latest/process.html#publishdir
-
+//      change copy to move??
 
 
 // Enable DSL2 syntax
