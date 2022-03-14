@@ -43,17 +43,15 @@ params.lonmax = "NA"
 params.minyear = 1945
 params.noextinct = "NA"
 params.roundcoords = true
-
-params.terrestrial = "pipeline_data/Land_Buffered_025_dgr.RData"
-
+params.dbscannoccurrences = 30
 
 // Filtering, stage II - "11_Additional_filtering_and_aggregation.R"
 params.h3resolution = 4
 params.dbscan = false
-params.dbscannoccurrences = 30
 params.dbscanepsilon = 700
 params.dbscanminpts = 3
-params.terrestrial = "NA"
+params.terrestrial = params.data_path + "/Land_Buffered_025_dgr.RData"
+
 
 // Filtered data aggregation - "12_Prepare_Biodiverse_input.R"
 params.phytree = "NA"
@@ -67,7 +65,7 @@ params.helpMsg = false
 // params.cpusfilt1 = 10
 // params.cpusfilt2l = 5
 // params.cpusfilt2h = 1
-// params.cpusbioprep = 12
+// params.cpusbioprep = 10
 
 
 // Define output paths for different steps
