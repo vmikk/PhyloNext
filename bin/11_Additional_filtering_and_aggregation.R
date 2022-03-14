@@ -174,7 +174,8 @@ if(!is.na(TERRESTRIAL[[1]])){
     crs = "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0")
 
   ## Check which points are on land
-  land <- lengths(st_intersects(pts, TERRESTRIAL)) > 0
+  land_intersect <- st_intersects(pts, TERRESTRIAL)
+  land <- lengths(land_intersect) > 0
 
   non_terr <- sum(!land)
   cat("..Number of non-terrestrial points: ", non_terr, "\n")
@@ -186,10 +187,15 @@ if(!is.na(TERRESTRIAL[[1]])){
 
   ## Remove outliers
   if(non_terr > 0){
+    removed_nonterrestrial <- datt[ ! land ]   # outliers
     datt <- datt[ land ]
+  } else {
+    removed_nonterrestrial <- NA   # no non-terrestrial samples found
   }
 
   rm(pts)
+} else {
+  removed_nonterrestrial <- NA     # no terrestrial filtering was performed
 }
 
 
@@ -272,6 +278,20 @@ datt_h3 <- merge(x = datt_h3, y = uniq_h3, by = "H3", all.x = TRUE)
 setnames(datt_h3, c("lat","lng"), c("decimallatitude","decimallongitude"))
 
 
+#### Add grid cell IDs of removed samples as attributes to the resulting data
+
+## Non-terrestrial outliers
+if(!is.na(removed_nonterrestrial)){
+  
+  ## H3 binning of non-terrestrial outliers
+  removed_nonterrestrial[ , H3 := h3::geo_to_h3(removed_nonterrestrial[, .(decimallatitude, decimallongitude)], res = RESOLUTION) ]
+
+  attr(datt_h3, which = "removed_nonterrestrial_h3") <- unique(removed_nonterrestrial$H3)
+  attr(datt_h3, which = "removed_nonterrestrial_n") <- nrow(removed_nonterrestrial)
+} else {
+  attr(datt_h3, which = "removed_nonterrestrial_h3") <- NA 
+  attr(datt_h3, which = "removed_nonterrestrial_n") <- 0
+}
 
 ## Export
 cat("Exporting filtered occurrence data\n")
