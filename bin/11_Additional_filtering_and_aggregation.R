@@ -243,18 +243,25 @@ if(DBSCAN == TRUE){
 
   num_outliers <- sum(cl$cluster %in% 0)
   cat("..Number of potential spatial outliers: ", num_outliers, "\n")
-  
+
   if(num_outliers > 0){
     
     ## Add cluster ID to the data
     # datt$ClusterID <- cl$cluster
 
+    ## Extract outliers
+    removed_dbscan <- datt[ which(cl$cluster == 0 ) ]
+
     ## Remove outliers
     datt <- datt[ which(cl$cluster != 0 ) ]
+  
+  } else {
+    removed_dbscan <- NA    # no outliers found
   }
 
-} # end of DBSCAN
-
+} else { # end of DBSCAN
+    removed_dbscan <- NA    # DBSCAN-based filtering was not performed
+}
 
 
 ######## Spatial aggregation
@@ -292,6 +299,23 @@ if(!is.na(removed_nonterrestrial)){
   attr(datt_h3, which = "removed_nonterrestrial_h3") <- NA 
   attr(datt_h3, which = "removed_nonterrestrial_n") <- 0
 }
+
+
+## DBSCAN-based outliers
+if(!is.na(removed_dbscan)){
+  
+  ## H3 binning of non-terrestrial outliers
+  removed_dbscan[ , H3 := h3::geo_to_h3(removed_dbscan[, .(decimallatitude, decimallongitude)], res = RESOLUTION) ]
+
+  attr(datt_h3, which = "removed_dbscan_h3") <- unique(removed_dbscan$H3)
+  attr(datt_h3, which = "removed_dbscan_n") <- nrow(removed_dbscan)
+
+} else {
+  attr(datt_h3, which = "removed_dbscan_h3") <- NA 
+  attr(datt_h3, which = "removed_dbscan_n") <- 0
+}
+
+
 
 ## Export
 cat("Exporting filtered occurrence data\n")
