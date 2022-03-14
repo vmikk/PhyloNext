@@ -20,6 +20,7 @@
 // - fix publishDir: https://www.nextflow.io/docs/latest/process.html#publishdir
 
 
+
 // Enable DSL2 syntax
 nextflow.enable.dsl = 2
 
@@ -28,9 +29,12 @@ version = '0.1'
 
 //// Initialize parameters, set default values
 
+params.scripts_path = "${baseDir}/bin"
+params.data_path = "${baseDir}/pipeline_data"
+
 // Filtering, stage I - "10_Filter_occurrences.R"
 params.input = false
-params.outdir = "$baseDir/results"
+params.outdir = "${baseDir}/results"
 params.phylum = "NA"
 params.class = "NA"
 params.order = "NA"
