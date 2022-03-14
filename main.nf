@@ -149,10 +149,49 @@ log.info "==========================================="
 log.info "\n"
 
 
-// Input channel (GBIF dump dir)
+// Input directory with parquet files (GBIF dump dir)
 input_ch = Channel.value(params.input)
 
 
+// Occurrence filtering, stage I
+process occ_filter {
+
+    publishDir "$params.outdir", mode: 'copy'
+    cpus 10
+
+    input:
+      val input
+
+    output:
+      val "${out_flt1}/Partition=low", emit: part_low
+      val "${out_flt1}/Partition=high", emit: part_high
+      path "spp.txt", emit: spp
+
+    script:
+    """
+    Rscript ${params.scripts_path}/10_Filter_occurrences.R \
+      --input ${input} \
+      --phylum ${params.phylum} \
+      --class ${params.class} \
+      --order ${params.order} \
+      --family ${params.family} \
+      --country ${params.country} \
+      --latmin ${params.latmin} \
+      --latmax ${params.latmax} \
+      --lonmin ${params.lonmin} \
+      --lonmax ${params.lonmax} \
+      --minyear ${params.minyear} \
+      --noextinct ${params.noextinct} \
+      --roundcoords ${params.roundcoords} \
+      --threads ${task.cpus} \
+      --noccurrences ${params.dbscannoccurrences} \
+      --output ${out_flt1}
+
+    ## Prepare species list for DBSCAN
+    awk '\$3 ~ /high/ {print \$1 }' SpeciesCounts.txt > spp.txt
+
+    """
+}
 
 // On completion
 workflow.onComplete {
