@@ -135,6 +135,7 @@ log.info """
         GBIF occurrence dump:     ${params.input}
         Output path:              ${params.outdir}
         H3 spatial resolution:    ${params.h3resolution}
+        Land-mask:                ${params.terrestrial}
         Spatial outliers removal: ${params.dbscan}
         """
         .stripIndent()
@@ -144,6 +145,7 @@ if(params.dbscan == true){
     log.info "DBSCAN minptsl:           ${params.dbscanminpts}".stripIndent()
 } 
 
+log.info "==========================================="
 log.info "\n"
 
 
