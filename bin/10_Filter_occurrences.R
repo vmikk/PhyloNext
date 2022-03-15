@@ -293,7 +293,8 @@ dsf <- dsf %>%
 ## Export species occurrence, partition by species
 cat("Exporting filtered occurrence data\n")
 
-outdir <- paste0(OUTPUT, ".parquet")
+# outdir <- paste0(OUTPUT, ".parquet")
+outdir <- OUTPUT
 dir.create(outdir, showWarnings = FALSE)
 
 write_dataset(
