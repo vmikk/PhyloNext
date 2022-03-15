@@ -302,8 +302,8 @@ if(!is.na(removed_nonterrestrial[[1]])){
 
 
 ## DBSCAN-based outliers
-if(!is.na(removed_dbscan)){
-  
+if(!is.na(removed_dbscan[[1]])){
+
   ## H3 binning of non-terrestrial outliers
   removed_dbscan[ , H3 := h3::geo_to_h3(removed_dbscan[, .(decimallatitude, decimallongitude)], res = RESOLUTION) ]
 
