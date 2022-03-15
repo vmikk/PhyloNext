@@ -59,7 +59,7 @@ params.terrestrial = params.data_path + "/Land_Buffered_025_dgr.RData"
 
 // Filtered data aggregation - "12_Prepare_Biodiverse_input.R"
 params.phytree = "NA"
-params.taxgroup = "All life"
+params.taxgroup = "All_life"
 
 // Help message flag
 params.helpMsg = false
