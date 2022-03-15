@@ -288,7 +288,7 @@ setnames(datt_h3, c("lat","lng"), c("decimallatitude","decimallongitude"))
 #### Add grid cell IDs of removed samples as attributes to the resulting data
 
 ## Non-terrestrial outliers
-if(!is.na(removed_nonterrestrial)){
+if(!is.na(removed_nonterrestrial[[1]])){
   
   ## H3 binning of non-terrestrial outliers
   removed_nonterrestrial[ , H3 := h3::geo_to_h3(removed_nonterrestrial[, .(decimallatitude, decimallongitude)], res = RESOLUTION) ]
