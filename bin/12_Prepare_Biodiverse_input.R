@@ -65,6 +65,9 @@ TAXGROUP <- opt$taxgroup
 CPUTHREADS <- as.numeric(opt$threads)
 OUTPUT <- opt$output
 
+## Modify tax group argument (no spaces are allowed)
+if(TAXGROUP %in% "All_life"){ TAXGROUP <- "All life" }
+
 
 ## Log assigned variables
 cat(paste("Input directory with filtered occurrences: ", INPUT, "\n", sep=""))
