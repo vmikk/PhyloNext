@@ -220,6 +220,14 @@ process outl_low {
     """
 }
 
+//  The default workflow
+workflow {
+
+    // Run stage-I filtering
+    occ_filter(input_ch)
+}
+
+
 // On completion
 workflow.onComplete {
     println "Pipeline completed at : $workflow.complete"
