@@ -274,7 +274,7 @@ if("high" %in% names(smr)){
 
 ## Export species counts
 fwrite(x = sp_counts,
-  file = paste0(OUTPUT, "_SpeciesCounts.txt"),
+  file = "SpeciesCounts.txt",
   sep = "\t")
 
 
