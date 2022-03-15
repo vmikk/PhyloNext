@@ -157,6 +157,21 @@ datt <- alply(.data = fls, .margins = 1,
   .fun = function(z){ readRDS(z) },
   .progress = "none", .parallel = parall)
 
+## Count number of gridcells-outliers
+cat("..Counting the number of outliers\n")
+
+outliers_terrestrial <- laply(.data = datt, .fun = function(z){
+  length( na.omit(attr(z, "removed_nonterrestrial_h3")) )
+  })
+
+outliers_dbscan <- laply(.data = datt, .fun = function(z){
+  length( na.omit(attr(z, "removed_dbscan_h3")) )
+  })
+
+cat("...The number of excluded non-terrestrial gridcells: ", sum(outliers_terrestrial), "\n")
+cat("...The number of excluded DBSCAN-based gridcells-outliers: ", sum(outliers_dbscan), "\n")
+
+
 cat("..Merging filtered occurrences from different specieskeys\n")
 datt <- rbindlist(datt)
 
