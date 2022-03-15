@@ -193,6 +193,33 @@ process occ_filter {
     """
 }
 
+
+// Outlier filtering, stage II - without DBSCAN, all low abundant species
+process outl_low {
+
+    publishDir "$params.outdir/01.filtered2", mode: 'copy'
+    cpus 5
+
+    input:
+      path(part_low)
+
+    output:
+      path "NoSpKey.RData", emit: lowabsp
+
+    script:
+    """
+    Rscript ${params.scripts_path}/11_Additional_filtering_and_aggregation.R \
+      --input "${part_low}" \
+      --dbscan false \
+      --resolution ${params.h3resolution} \
+      --terrestrial ${params.terrestrial} \
+      --threads ${task.cpus} \
+      --output ${out_flt2}
+
+    cp ${out_flt2}/NoSpKey.RData NoSpKey.RData
+    """
+}
+
 // On completion
 workflow.onComplete {
     println "Pipeline completed at : $workflow.complete"
