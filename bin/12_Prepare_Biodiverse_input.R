@@ -366,7 +366,7 @@ if(any(duplicated(species_uniq$ott_id))){
 cat("..Exporting trimmed occurrence data for Biodiverse\n")
 fwrite(
   x = datt[, .(OTT, H3, specieskey, species, decimallatitude, decimallongitude)],
-  file = file.path(OUTPUT, "Trimmed_occurrence.csv"),
+  file = file.path(OUTPUT, "Trimmed_occurrences.csv"),
   sep = ",", quote = T, row.names = FALSE, col.names = TRUE)
 
 
