@@ -259,6 +259,36 @@ process outl_high {
     """
 }
 
+
+// Merge filtered species occurrences and prep data for Biodiverse
+process merge_occ {
+
+    publishDir "$params.outdir/02.Biodiverse_input", mode: 'copy'
+    cpus 10
+
+    input:
+      val spp
+
+    output:
+      path "H3_GridCell_Centres.csv", emit: h3coords
+      path "Trimmed_occurrences.csv", emit: occurrences
+      path "Trimmed_tree.nex", emit: tree
+
+    script:
+    """
+    Rscript ${params.scripts_path}/12_Prepare_Biodiverse_input.R \
+      --input ${out_flt2} \
+      --phytree ${params.phytree} \
+      --taxgroup ${params.taxgroup} \
+      --threads ${task.cpus} \
+      --output ${out_biod}
+
+    cp ${out_biod}/H3_GridCell_Centres.csv H3_GridCell_Centres.csv
+    cp ${out_biod}/Trimmed_occurrences.csv Trimmed_occurrences.csv
+    cp ${out_biod}/Trimmed_tree.nex Trimmed_tree.nex
+
+    """
+}
 //  The default workflow
 workflow {
 
