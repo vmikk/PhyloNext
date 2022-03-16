@@ -306,6 +306,13 @@ workflow {
     // Run stage-II filtering for abundant species (with DBSCAN)
     outl_high(species_ch)
 
+    // Use output of for Biodiverse
+    flt_ch = outl_high.out.sp.mix(outl_low.out.lowabsp).collect()
+    // flt_ch.view()
+
+    // Merge species occurrences into a single file
+    merge_occ(flt_ch)
+
 }
 
 
