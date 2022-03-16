@@ -220,6 +220,41 @@ process outl_low {
     """
 }
 
+
+// Outlier filtering, stage II - with DBSCAN, independently by species
+process outl_high {
+
+    publishDir "$params.outdir/01.filtered2", mode: 'copy'
+    cpus 1
+
+    // Add species ID to the log file
+    tag "$sp"
+
+    // Iterate for each species from `species_ch` channel
+    input:
+      val sp
+
+    output:
+      path "${sp}.RData", emit: sp
+
+    script:
+    """
+    Rscript ${params.scripts_path}/11_Additional_filtering_and_aggregation.R \
+      --input "${out_flt1}/Partition=high" \
+      --specieskey ${sp} \
+      --dbscan ${params.dbscan} \
+      --epsilon ${params.dbscanepsilon} \
+      --minpts ${params.dbscanminpts} \
+      --resolution ${params.h3resolution} \
+      --terrestrial ${params.terrestrial} \
+      --threads ${task.cpus} \
+      --output ${out_flt2}
+
+    cp ${out_flt2}/${sp}.RData ${sp}.RData
+
+    """
+}
+
 //  The default workflow
 workflow {
 
