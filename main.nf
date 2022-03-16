@@ -264,6 +264,14 @@ workflow {
     // Run stage-II filtering for species with low abundance (no DBSCAN)
     outl_low( occ_filter.out.part_low )
 
+    // Channel for DBSCAN-based filtering (iterate for each species)
+    //species_ch = Channel.fromPath("${params.outdir}/spp.txt").splitText().map{it -> it.trim()}
+    species_ch = occ_filter.out.spp.splitText().map{it -> it.trim()}
+    // species_ch.view()
+
+    // Run stage-II filtering for abundant species (with DBSCAN)
+    outl_high(species_ch)
+
 }
 
 
