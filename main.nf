@@ -13,12 +13,16 @@
 */
 
 // TO DO:
-// - specify default path to pipeline data and scripts
 // - specify threads for each process in a config: https://www.nextflow.io/docs/latest/process.html#cpus
 // - specify Dockerimages: https://www.nextflow.io/docs/latest/process.html#container
 // - split the pipeline into workflows?
 // - fix publishDir: https://www.nextflow.io/docs/latest/process.html#publishdir
 //      change copy to move??
+// - fix output dirs (hardcoded / parametrized)
+// - tracing & visualisation: https://www.nextflow.io/docs/latest/tracing.html
+// - include sha256 hash of the image in the container reference: https://www.nextflow.io/blog/2016/docker-and-nextflow.html
+// - add test profile
+// - move params into a config
 
 
 // Enable DSL2 syntax
