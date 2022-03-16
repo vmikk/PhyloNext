@@ -260,6 +260,10 @@ workflow {
 
     // Run stage-I filtering
     occ_filter(input_ch)
+
+    // Run stage-II filtering for species with low abundance (no DBSCAN)
+    outl_low( occ_filter.out.part_low )
+
 }
 
 
