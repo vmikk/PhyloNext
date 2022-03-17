@@ -289,6 +289,56 @@ process merge_occ {
 
     """
 }
+
+// Create Biodiverse input files
+process prep_biodiv {
+
+    container = 'vmikk/biodiverse:0.0.1'
+    // containerOptions '--volume /data/db:/db'
+
+    publishDir "$params.outdir/02.Biodiverse_input", mode: 'copy'
+    cpus 1
+
+    input:
+      val occurrences
+      val tree
+
+    output:
+      path "occ.bds", emit: BDS
+      path "tree.bts", emit: BTS
+      path "occ_analysed.bds", emit: BDA
+
+    script:
+    """
+ 
+    ## For debugging - check which Perl are we using?
+    # perl --version
+
+    ## Prepare Biodiverse input file
+    perl ${params.scripts_path}/00_create_bds.pl \
+      --csv_file ${occurrences} \
+      --out_file "occ.bds" \
+      --label_column_number '0' \
+      --group_column_number_x '1' \
+      --cell_size_x '-1'
+    
+    ## Prepare the tree for Biodiverse
+    perl ${params.scripts_path}/00_create_bts.pl \
+      --input_tree_file ${tree} \
+      --out_file "tree.bts"
+    
+    ## Run the analyses
+    perl ${params.scripts_path}/02_biodiverse_analyses.pl \
+      --input_bds_file "occ.bds" \
+      --input_bts_file "tree.bts" \
+      --calcs ${params.indices}
+ 
+    cp "occ.bds.csv" "${params.outdir}/02.Biodiverse_input/Biodiverse_ObservedIndices.csv"
+
+    """
+}
+
+
 //  The default workflow
 workflow {
 
