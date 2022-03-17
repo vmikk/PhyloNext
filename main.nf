@@ -157,7 +157,13 @@ log.info """
 if(params.dbscan == true){
     log.info "DBSCAN epsilon:           ${params.dbscanepsilon}".stripIndent()
     log.info "DBSCAN minptsl:           ${params.dbscanminpts}".stripIndent()
-} 
+}
+
+log.info """
+        Biodiverse indices:       ${params.indices}
+        Biodiverse args:          ${biodiverse_args}
+        """
+        .stripIndent()
 
 log.info "==========================================="
 log.info "\n"
