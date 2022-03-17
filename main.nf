@@ -363,6 +363,9 @@ workflow {
     // Merge species occurrences into a single file
     merge_occ(flt_ch)
 
+    // Prepare Biodiverse input files
+    prep_biodiv(merge_occ.out.occurrences, merge_occ.out.tree)
+
 }
 
 
