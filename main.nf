@@ -60,10 +60,17 @@ params.dbscanepsilon = 700
 params.dbscanminpts = 3
 params.terrestrial = params.data_path + "/Land_Buffered_025_dgr.RData"
 
-
 // Filtered data aggregation - "12_Prepare_Biodiverse_input.R"
 params.phytree = "NA"
 params.taxgroup = "All_life"
+
+// Biodiverse
+params.indices = "calc_richness,calc_simpson_shannon,calc_endemism_whole,calc_pd,calc_pe,calc_phylo_rpd1,calc_phylo_rpd2,calc_phylo_rpe1,calc_phylo_rpe2,calc_phylo_mpd_mntd2"
+params.randname = "rand_structured"
+params.iterations = 100
+
+biodiverse_args = "function=" + params.randname + " max_iters=" + params.iterations
+
 
 // Help message flag
 params.helpMsg = false
