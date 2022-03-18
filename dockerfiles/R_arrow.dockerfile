@@ -32,6 +32,7 @@ RUN install2.r --error --skipinstalled --ncpus -1 \
     rgeos \
     sf \
     dbscan \
+    doFuture \
     && R -e 'remotes::install_github("crazycapivara/h3-r")' \
     && rm -rf /tmp/downloaded_packages/
 
