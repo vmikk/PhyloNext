@@ -355,6 +355,35 @@ process prep_biodiv {
 }
 
 
+
+// Estimate phylogenetic diversity with Biodiverse
+process phylodiv {
+
+    container = 'vmikk/biodiverse:0.0.1'
+
+    publishDir "$params.outdir/02.Biodiverse_results", mode: 'copy'
+    cpus 1
+
+    input:
+      val BDA
+
+    output:
+      path "occ_analysed.bds", emit: BDArand
+
+    script:
+    """
+
+    perl ${params.scripts_path}/03_run_randomisation.pl \
+      --basedata ${BDA} \
+      --bd_name ${BDA} \
+      --out_file "occ_analysed.bds" \
+      --rand_name 'rand' \
+      --iterations ${params.iterations} \
+      --args ${biodiverse_args}
+
+    """
+}
+
 //  The default workflow
 workflow {
 
