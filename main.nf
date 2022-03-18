@@ -23,6 +23,13 @@
 // - include sha256 hash of the image in the container reference: https://www.nextflow.io/blog/2016/docker-and-nextflow.html
 // - add test profile
 // - move params into a config
+// - specify output name for `03_run_randomisation.pl` script (`phylodiv` process)
+// - In Nextflow, any binaries within the the bin directory of a repository are added to the path
+//   --> deprecate `scripts_path`
+//   make scripts executable + remove Rscript and perl ??
+// - Fix `10_Filter_occurrences.R`   In value[[3L]](cond) : double expected, got “NA”
+// - Fix docker mount path - pass directory parquet
+
 
 
 // Enable DSL2 syntax
