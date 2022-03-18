@@ -411,6 +411,9 @@ workflow {
     // Prepare Biodiverse input files
     prep_biodiv(merge_occ.out.occurrences, merge_occ.out.tree)
 
+    // Estimate phylogenetic diversity with Biodiverse
+    phylodiv(prep_biodiv.out.BDA)
+
 }
 
 
