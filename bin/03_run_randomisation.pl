@@ -3,6 +3,7 @@
 ## Scipt to run randomizations
 ## Parameteres:
 # --basedata     = Input .bds file
+# --out_file     = Output file
 # --rand_name    = Randomisation output name (e.g., 'rand')
 # --iterations   = Number of iterations (e.g., '999')
 # --args         = Additional arguments passed to Biodiverse, should be key=value pairs separated by spaces
@@ -38,13 +39,14 @@ use Biodiverse::Common;
 
 use Getopt::Long;
 
-my ($in_file, $rand_name, $print_usage, $bd_name);
+my ($in_file, $out_file, $rand_name, $print_usage, $bd_name);
 my %rest_of_args;
 my $iterations = 10;
 
 
 GetOptions (
     "basedata|bd=s"  => \$in_file,
+    "out_file|o=s" => \$out_file,
     "rand_name|r=s"  => \$rand_name,
     "bd_name=s"     => \$bd_name,
     "iterations|iters|i:i" => \$iterations,
@@ -57,6 +59,7 @@ my @usage_array = (
     "\nUsage:",
     $0,
     '--basedata  --bd Basedata file name',
+    '--out_file   --o Outdata file name',
     '--rand_name  --r Randomisation output name',
     '--bd_name        Basedata object name to use (optional)',
     '--iterations --i Number of randomisation iterations [default is 10]',
@@ -78,9 +81,10 @@ exit (0) if $ENV{BDV_PP_BUILDING};
 
 die "\nError: Basedata file not specified\n$usage\n"
   if !defined $in_file;
+die "\nError: Outdata file not specified\n$usage\n"
+  if !defined $out_file;
 die "\nError: Randomisation name not specified\n$usage\n"
   if !defined $rand_name;
-
 
 my $tmp_bd     = Biodiverse::BaseData->new(CELL_SIZES => [100000, 100000]);
 my $extensions = join ('|', $tmp_bd->get_param('OUTSUFFIX'), $tmp_bd->get_param('OUTSUFFIX_YAML'));
@@ -138,8 +142,9 @@ croak "Analysis not successful\n"
 
 if ($success) {
     eval {
-        $bd->save (filename => $in_file);
-        #die "checking";
+        # $bd->save (filename => $in_file);
+        $bd->save (filename => $out_file);
+        # die "checking";
     };
     if ($EVAL_ERROR) {
         report_error ($EVAL_ERROR);
@@ -148,7 +153,6 @@ if ($success) {
 }
 
 exit 0 if $success;
-
 
 sub report_error {
     my $error = shift;
