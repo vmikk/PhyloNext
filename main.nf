@@ -300,11 +300,11 @@ process merge_occ {
       --phytree ${params.phytree} \
       --taxgroup ${params.taxgroup} \
       --threads ${task.cpus} \
-      --output ${out_biod}
+      --output  "\$PWD"  # ${out_biod}
 
-    cp ${out_biod}/H3_GridCell_Centres.csv H3_GridCell_Centres.csv
-    cp ${out_biod}/Trimmed_occurrences.csv Trimmed_occurrences.csv
-    cp ${out_biod}/Trimmed_tree.nex Trimmed_tree.nex
+    # cp H3_GridCell_Centres.csv ${out_biod}/H3_GridCell_Centres.csv
+    # cp Trimmed_occurrences.csv ${out_biod}/Trimmed_occurrences.csv
+    # cp Trimmed_tree.nex ${out_biod}/Trimmed_tree.nex
 
     """
 }
@@ -353,6 +353,10 @@ process prep_biodiv {
       --calcs ${params.indices}
  
     cp "occ.bds.csv" "${params.outdir}/02.Biodiverse_input/Biodiverse_ObservedIndices.csv"
+    
+    cp "occ.bds"  "${params.outdir}/02.Biodiverse_input/occ.bds"
+    cp "tree.bts" "${params.outdir}/02.Biodiverse_input/tree.bts"
+    cp "occ_analysed.bds" "${params.outdir}/02.Biodiverse_input/occ_analysed.bds"
 
     """
 }
@@ -371,7 +375,7 @@ process phylodiv {
       val BDA
 
     output:
-      path "occ_analysed.bds", emit: BDArand
+      path "Biodiv_randomized.bds", emit: BDArand
 
     script:
     """
@@ -379,7 +383,7 @@ process phylodiv {
     perl ${params.scripts_path}/03_run_randomisation.pl \
       --basedata ${BDA} \
       --bd_name ${BDA} \
-      --out_file "occ_analysed.bds" \
+      --out_file "Biodiv_randomized.bds" \
       --rand_name 'rand' \
       --iterations ${params.iterations} \
       --args ${biodiverse_args}
