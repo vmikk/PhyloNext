@@ -13,7 +13,6 @@
 */
 
 // TO DO:
-// - specify threads for each process in a config: https://www.nextflow.io/docs/latest/process.html#cpus
 // - specify Dockerimages: https://www.nextflow.io/docs/latest/process.html#container
 // - split the pipeline into workflows?
 // - fix publishDir: https://www.nextflow.io/docs/latest/process.html#publishdir
@@ -23,7 +22,6 @@
 // - include sha256 hash of the image in the container reference: https://www.nextflow.io/blog/2016/docker-and-nextflow.html
 // - add test profile
 // - move params into a config
-// - specify output name for `03_run_randomisation.pl` script (`phylodiv` process)
 // - In Nextflow, any binaries within the the bin directory of a repository are added to the path
 //   --> deprecate `scripts_path`
 //   make scripts executable + remove Rscript and perl ??
