@@ -176,10 +176,6 @@ log.info "==========================================="
 log.info "\n"
 
 
-// Input directory with parquet files (GBIF dump dir)
-input_ch = Channel.value(params.input)
-
-
 // Occurrence filtering, stage I
 process occ_filter {
 
@@ -393,6 +389,9 @@ process phylodiv {
 
 //  The default workflow
 workflow {
+
+    // Input directory with parquet files (GBIF dump dir)
+    input_ch = Channel.value(params.input)
 
     // Run stage-I filtering
     occ_filter(input_ch)
