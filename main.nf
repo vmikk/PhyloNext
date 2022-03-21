@@ -179,6 +179,9 @@ log.info "\n"
 // Occurrence filtering, stage I
 process occ_filter {
 
+    container = 'vmikk/rarrow:0.0.1'
+    containerOptions = "--volume ${params.input}:${params.input}"
+
     publishDir "$params.outdir", mode: 'copy'
     cpus 10
 
@@ -220,7 +223,10 @@ process occ_filter {
 // Outlier filtering, stage II - without DBSCAN, all low abundant species
 process outl_low {
 
-    publishDir "$params.outdir/01.filtered2", mode: 'copy'
+    container = 'vmikk/rarrow:0.0.1'
+    containerOptions = "--volume ${out_flt2}:${out_flt2}"
+
+    // publishDir "$params.outdir/01.filtered2", mode: 'copy'
     cpus 5
 
     input:
@@ -247,7 +253,10 @@ process outl_low {
 // Outlier filtering, stage II - with DBSCAN, independently by species
 process outl_high {
 
-    publishDir "$params.outdir/01.filtered2", mode: 'copy'
+    container = 'vmikk/rarrow:0.0.1'
+    containerOptions = "--volume ${out_flt2}:${out_flt2}"
+
+    // publishDir "$params.outdir/01.filtered2", mode: 'copy'
     cpus 1
 
     // Add species ID to the log file
@@ -282,7 +291,10 @@ process outl_high {
 // Merge filtered species occurrences and prep data for Biodiverse
 process merge_occ {
 
-    publishDir "$params.outdir/02.Biodiverse_input", mode: 'copy'
+    container = 'vmikk/rarrow:0.0.1'
+    containerOptions = "--volume ${out_biod}:${out_biod}"
+
+    // publishDir "$params.outdir/02.Biodiverse_input", mode: 'copy'
     cpus 10
 
     input:
@@ -313,9 +325,8 @@ process merge_occ {
 process prep_biodiv {
 
     container = 'vmikk/biodiverse:0.0.1'
-    // containerOptions '--volume /data/db:/db'
 
-    publishDir "$params.outdir/02.Biodiverse_input", mode: 'copy'
+    // publishDir "$params.outdir/02.Biodiverse_input", mode: 'copy'
     cpus 1
 
     input:
