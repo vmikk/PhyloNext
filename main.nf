@@ -167,8 +167,17 @@ if(params.dbscan == true){
 log.info """
         Biodiverse indices:       ${params.indices}
         Biodiverse args:          ${biodiverse_args}
-        Pipeline scripts location:${params.scripts_path}
-        Pipeline internal data:   ${params.data_path}
+        """
+        .stripIndent()
+
+log.info """
+        Pipeline info:
+          Pipeline version:                ${version}
+          Pipeline scripts location:       ${params.scripts_path}
+          Pipeline internal data location: ${params.data_path}
+          Pipeline profile:                ${workflow.profile}
+          Config file used:                ${workflow.configFiles}
+          Container engine:                ${workflow.containerEngine}
         """
         .stripIndent()
 
