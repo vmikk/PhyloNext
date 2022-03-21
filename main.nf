@@ -168,6 +168,7 @@ log.info """
         Biodiverse indices:       ${params.indices}
         Biodiverse args:          ${biodiverse_args}
         Pipeline scripts location:${params.scripts_path}
+        Pipeline internal data:   ${params.data_path}
         """
         .stripIndent()
 
