@@ -34,7 +34,7 @@
 nextflow.enable.dsl = 2
 
 // Pipeline version
-version = '0.1'
+version = '0.0.1'
 
 //// Initialize parameters, set default values
 
