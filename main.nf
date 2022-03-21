@@ -183,7 +183,7 @@ process occ_filter {
     containerOptions = "--volume ${params.input}:${params.input}"
 
     publishDir "$params.outdir", mode: 'copy'
-    cpus 10
+    // cpus 10
 
     input:
       val input
@@ -227,7 +227,7 @@ process outl_low {
     containerOptions = "--volume ${out_flt2}:${out_flt2}"
 
     // publishDir "$params.outdir/01.filtered2", mode: 'copy'
-    cpus 5
+    // cpus 5
 
     input:
       path(part_low)
@@ -257,7 +257,7 @@ process outl_high {
     containerOptions = "--volume ${out_flt2}:${out_flt2}"
 
     // publishDir "$params.outdir/01.filtered2", mode: 'copy'
-    cpus 1
+    // cpus 1
 
     // Add species ID to the log file
     tag "$sp"
@@ -295,7 +295,7 @@ process merge_occ {
     containerOptions = "--volume ${out_biod}:${out_biod}"
 
     // publishDir "$params.outdir/02.Biodiverse_input", mode: 'copy'
-    cpus 10
+    // cpus 10
 
     input:
       val spp
@@ -327,7 +327,7 @@ process prep_biodiv {
     container = 'vmikk/biodiverse:0.0.1'
 
     // publishDir "$params.outdir/02.Biodiverse_input", mode: 'copy'
-    cpus 1
+    // cpus 1
 
     input:
       val occurrences
@@ -380,7 +380,7 @@ process phylodiv {
     container = 'vmikk/biodiverse:0.0.1'
 
     publishDir "$params.outdir/02.Biodiverse_results", mode: 'copy'
-    cpus 1
+    // cpus 1
 
     input:
       val BDA
@@ -409,7 +409,7 @@ process div_to_csv {
     container = 'vmikk/biodiverse:0.0.1'
 
     publishDir "$params.outdir/02.Biodiverse_results", mode: 'copy'
-    cpus 1
+    // cpus 1
 
     input:
       val BDArand
