@@ -448,6 +448,8 @@ workflow {
     // Estimate phylogenetic diversity with Biodiverse
     phylodiv(prep_biodiv.out.BDA)
 
+    // Output results as CSV
+    div_to_csv(phylodiv.out.BDArand)
 }
 
 
