@@ -149,7 +149,7 @@ if (params.input == false) {
 
 // Print the parameters to the console and to the log
 log.info """
-        GBIF phylogenetic diversity pipeline
+        GBIF phylogenetic diversity pipeline: Version ${version}
         ===========================================
         GBIF occurrence dump:     ${params.input}
         Output path:              ${params.outdir}
