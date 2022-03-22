@@ -58,7 +58,7 @@ GBIF phylogenetic diversity pipeline :  Version 0.0.1
 
 Pipeline Usage:
 To run the pipeline, enter the following in the command line:
-    nextflow run main.nf --input ... --outdir ...
+    nextflow run vmikk/biodiverse-scripts -r main --input ... --outdir ...
 
 Options:
 REQUIRED:
