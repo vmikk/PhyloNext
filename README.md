@@ -13,6 +13,25 @@ The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool
 
 2. Install [`Docker`](https://docs.docker.com/engine/installation/)
 
+3. Download the pipeline and test it on a minimal dataset with a single command:
+
+    ```console
+    nextflow run vmikk/biodiverse-scripts -r main -profile test
+    ```
+4. Start running your own analysis!
+
+    ```console
+    nextflow run vmikk/biodiverse-scripts -r main \
+      --input "/mnt/GBIF/Parquet/2022-01-01/occurrence.parquet/" \
+      --class "Mammalia" --family  "Felidae,Canidae" \
+      --country "DE,PL,CZ"  \
+      --minyear 2000  \
+      --dbscan true  \
+      --phytree  $(realpath "${HOME}/.nextflow/assets/vmikk/biodiverse-scripts/test_data/phy_trees/Mammals.nwk") \
+      --iterations 100  \
+      --outdir "$PWD" \
+      -resume
+    ```
 
 ### Installation example on Ubuntu
 
