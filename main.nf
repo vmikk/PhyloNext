@@ -14,9 +14,6 @@
 
 // TO DO:
 // - split the pipeline into workflows?
-// - fix publishDir: https://www.nextflow.io/docs/latest/process.html#publishdir
-//      change copy to move??
-// - fix output dirs (hardcoded / parametrized)
 // - tracing & visualisation: https://www.nextflow.io/docs/latest/tracing.html
 // - include sha256 hash of the image in the container reference: https://www.nextflow.io/blog/2016/docker-and-nextflow.html
 // - add test profile
@@ -300,7 +297,7 @@ process merge_occ {
     container = 'vmikk/rarrow:0.0.1'
     containerOptions = "--volume ${params.outdir}:${params.outdir} --volume ${params.phytree}:${params.phytree}"
 
-    // publishDir "$params.outdir/02.Biodiverse_input", mode: 'copy'
+    publishDir "$params.outdir/02.Biodiverse_input", mode: 'copy'
     // cpus 10
 
     input:
@@ -320,10 +317,6 @@ process merge_occ {
       --threads ${task.cpus} \
       --output  "\$PWD"  # ${out_biod}
 
-    # cp H3_GridCell_Centres.csv ${out_biod}/H3_GridCell_Centres.csv
-    # cp Trimmed_occurrences.csv ${out_biod}/Trimmed_occurrences.csv
-    # cp Trimmed_tree.nex ${out_biod}/Trimmed_tree.nex
-
     """
 }
 
@@ -333,7 +326,8 @@ process prep_biodiv {
     container = 'vmikk/biodiverse:0.0.1'
     containerOptions = "--volume ${params.outdir}:${params.outdir}"
 
-    // publishDir "$params.outdir/02.Biodiverse_input", mode: 'copy'
+    publishDir "$params.outdir/02.Biodiverse_input", mode: 'copy'
+
     // cpus 1
 
     input:
@@ -370,11 +364,11 @@ process prep_biodiv {
       --input_bts_file "tree.bts" \
       --calcs ${params.indices}
  
-    cp "occ.bds.csv" "${params.outdir}/02.Biodiverse_input/Biodiverse_ObservedIndices.csv"
-    
-    cp "occ.bds"  "${params.outdir}/02.Biodiverse_input/occ.bds"
-    cp "tree.bts" "${params.outdir}/02.Biodiverse_input/tree.bts"
-    cp "occ_analysed.bds" "${params.outdir}/02.Biodiverse_input/occ_analysed.bds"
+    # cp "occ.bds.csv" "${params.outdir}/02.Biodiverse_input/Biodiverse_ObservedIndices.csv"
+    # 
+    # cp "occ.bds"  "${params.outdir}/02.Biodiverse_input/occ.bds"
+    # cp "tree.bts" "${params.outdir}/02.Biodiverse_input/tree.bts"
+    # cp "occ_analysed.bds" "${params.outdir}/02.Biodiverse_input/occ_analysed.bds"
 
     """
 }
@@ -447,6 +441,9 @@ workflow {
 
     // Run stage-I filtering
     occ_filter(input_ch)
+
+    // Channel with land shapefile
+    // land_ch = Channel.value(params.terrestrial)
 
     // Run stage-II filtering for species with low abundance (no DBSCAN)
     outl_low( occ_filter.out.part_low )
