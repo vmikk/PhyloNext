@@ -17,6 +17,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool
 ### Installation example on Ubuntu
 
 1. Nextflow installation:
+
     Nextflow requires Java 8 (or later, up to 17) to be installed.
     ```
     sudo apt-get update
@@ -46,3 +47,44 @@ The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool
     sudo usermod -aG docker $USER
     newgrp docker
     ```
+
+
+## Documentation
+To show a help message, run `nextflow run vmikk/biodiverse-scripts -r main --helpMsg`.
+```
+====================================================================
+GBIF phylogenetic diversity pipeline :  Version 0.0.1
+====================================================================
+
+Pipeline Usage:
+To run the pipeline, enter the following in the command line:
+    nextflow run main.nf --input ... --outdir ...
+
+Options:
+REQUIRED:
+    --input               Path to the directory with parquet files (GBIF occurrcence dump)
+    --outdir              The output directory where the results will be saved
+OPTIONAL:
+    --phylum              Phylum to analyze (multiple comma-separated values allowed); e.g., "Chordata"
+    --class               Class to analyze (multiple comma-separated values allowed); e.g., "Mammalia"
+    --order               Order to analyze (multiple comma-separated values allowed); e.g., "Carnivora"
+    --family              Family to analyze (multiple comma-separated values allowed); e.g., "Felidae,Canidae"
+    --country             Country code, ISO 3166 (multiple comma-separated values allowed); e.g., "DE,PL,CZ"
+    --latmin              Minimum latitude of species occurrences (decimal degrees); e.g., 5.1
+    --latmax              Maximum latitude of species occurrences (decimal degrees); e.g., 15.5
+    --lonmin              Minimum longitude of species occurrences (decimal degrees); e.g., 47.0
+    --lonmax              Maximum longitude of species occurrences (decimal degrees); e.g., 55.5
+    --minyear             Minimum year of record's occurrences; default, 1945
+    --noextinct           File with extinct species specieskeys for their removal
+    --roundcoords         Logical, round spatial coordinates to two decimal places, to reduce the dataset size (default, TRUE)
+    --h3resolution        Spatial resolution of the H3 geospatial indexing system; e.g., 4
+    --dbscan              Logical, remove spatial outliers with density-based clustering; e.g., "false"
+    --dbscannoccurrences  Minimum species occurrence to perform DBSCAN; e.g., 30
+    --dbscanepsilon       DBSCAN parameter epsilon, km; e.g., "700"
+    --dbscanminpts        DBSCAN min number of points; e.g., "3"
+    --terrestrial         Land polygon for removal of non-terrestrial occurrences; e.g., "pipeline_data/Land_Buffered_025_dgr.RData"
+    --indices             Comma-seprated list of diversity and endemism indices; e.g., "calc_richness,calc_pd,calc_pe"
+    --randname            Randomisation scheme type; e.g., "rand_structured"
+    --iterations          Number of randomisation iterations; e.g., 1000
+
+```
