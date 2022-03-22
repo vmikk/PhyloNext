@@ -4,7 +4,7 @@
 ========================================================================================
     GBIF phylogenetic diversity pipeline
 ========================================================================================
-    Version: v0.1
+    Version: v0.0.1
     License: MIT
     Github : https://github.com/vmikk/biodiverse-scripts
     Website: TBA
