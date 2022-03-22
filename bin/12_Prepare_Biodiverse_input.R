@@ -1,4 +1,4 @@
-#!/usr/bin/Rscript
+#!/usr/bin/env Rscript
 
 ## Prepare input data for Biodiverse
 

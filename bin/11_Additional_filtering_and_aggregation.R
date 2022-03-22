@@ -1,4 +1,4 @@
-#!/usr/bin/Rscript
+#!/usr/bin/env Rscript
 
 
 ## Additional filtering of GBIF occurrences and spatial binning
