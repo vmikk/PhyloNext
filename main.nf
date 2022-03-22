@@ -22,6 +22,8 @@
 //   --> deprecate `scripts_path`
 //   make scripts executable + remove Rscript and perl ??
 // - Fix `10_Filter_occurrences.R`   In value[[3L]](cond) : double expected, got “NA”
+// - Fix docker mount path for a user-specified phylogenetic tree (conditional?)
+// - Add spatial constraints for the randomizations (e.g., shapefile with biomes?)
 
 
 // Enable DSL2 syntax
@@ -338,6 +340,7 @@ process prep_biodiv {
       path "occ.bds", emit: BDS
       path "tree.bts", emit: BTS
       path "occ_analysed.bds", emit: BDA
+      path "occ.bds.csv", emit: BDOBS
 
     script:
     """
