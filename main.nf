@@ -13,7 +13,6 @@
 */
 
 // TO DO:
-// - specify Dockerimages: https://www.nextflow.io/docs/latest/process.html#container
 // - split the pipeline into workflows?
 // - fix publishDir: https://www.nextflow.io/docs/latest/process.html#publishdir
 //      change copy to move??
@@ -26,7 +25,6 @@
 //   --> deprecate `scripts_path`
 //   make scripts executable + remove Rscript and perl ??
 // - Fix `10_Filter_occurrences.R`   In value[[3L]](cond) : double expected, got “NA”
-// - Fix docker mount path - pass directory parquet
 
 
 // Enable DSL2 syntax
@@ -188,7 +186,7 @@ log.info "\n"
 process occ_filter {
 
     container = 'vmikk/rarrow:0.0.1'
-    containerOptions = "--volume ${params.input}:${params.input}"
+    containerOptions = "--volume ${params.input}:${params.input} --volume ${params.outdir}:${params.outdir}"
 
     publishDir "$params.outdir", mode: 'copy'
     // cpus 10
@@ -232,7 +230,7 @@ process occ_filter {
 process outl_low {
 
     container = 'vmikk/rarrow:0.0.1'
-    containerOptions = "--volume ${out_flt2}:${out_flt2}"
+    containerOptions = "--volume ${params.outdir}:${params.outdir} --volume ${params.data_path}:${params.data_path}"
 
     // publishDir "$params.outdir/01.filtered2", mode: 'copy'
     // cpus 5
@@ -262,7 +260,7 @@ process outl_low {
 process outl_high {
 
     container = 'vmikk/rarrow:0.0.1'
-    containerOptions = "--volume ${out_flt2}:${out_flt2}"
+    containerOptions = "--volume ${params.outdir}:${params.outdir} --volume ${params.data_path}:${params.data_path}"
 
     // publishDir "$params.outdir/01.filtered2", mode: 'copy'
     // cpus 1
@@ -300,7 +298,7 @@ process outl_high {
 process merge_occ {
 
     container = 'vmikk/rarrow:0.0.1'
-    containerOptions = "--volume ${out_biod}:${out_biod}"
+    containerOptions = "--volume ${params.outdir}:${params.outdir} --volume ${params.phytree}:${params.phytree}"
 
     // publishDir "$params.outdir/02.Biodiverse_input", mode: 'copy'
     // cpus 10
@@ -333,6 +331,7 @@ process merge_occ {
 process prep_biodiv {
 
     container = 'vmikk/biodiverse:0.0.1'
+    containerOptions = "--volume ${params.outdir}:${params.outdir}"
 
     // publishDir "$params.outdir/02.Biodiverse_input", mode: 'copy'
     // cpus 1
@@ -386,6 +385,7 @@ process prep_biodiv {
 process phylodiv {
 
     container = 'vmikk/biodiverse:0.0.1'
+    containerOptions = "--volume ${params.outdir}:${params.outdir}"
 
     publishDir "$params.outdir/02.Biodiverse_results", mode: 'copy'
     // cpus 1
@@ -415,6 +415,7 @@ process phylodiv {
 process div_to_csv {
 
     container = 'vmikk/biodiverse:0.0.1'
+    containerOptions = "--volume ${params.outdir}:${params.outdir}"
 
     publishDir "$params.outdir/02.Biodiverse_results", mode: 'copy'
     // cpus 1
