@@ -17,6 +17,12 @@ The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool
 ### Installation example on Ubuntu
 
 1. Nextflow installation:
+    Nextflow requires Java 8 (or later, up to 17) to be installed.
+    ```
+    sudo apt-get update
+    sudo apt-get install default-jdk
+    ```
+    Install Nextflow:
     ```
     wget -qO- https://get.nextflow.io | bash
     chmod +x ./nextflow
