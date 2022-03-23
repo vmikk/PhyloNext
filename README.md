@@ -107,3 +107,23 @@ OPTIONAL:
     --iterations          Number of randomisation iterations; e.g., 1000
 
 ```
+
+The other helpful commands:
+```
+## Download or update the pipeline
+## By default, the pipeiline is stored in the '~/.nextflow/assets/vmikk/biodiverse-scripts' directory
+nextflow pull vmikk/biodiverse-scripts
+
+## Run the latest development version of the pipeline
+nextflow run vmikk/biodiverse-scripts -r main ...
+
+## Run the tagged version (e.g., v0.1) of the pipeline
+nextflow run vmikk/biodiverse-scripts -r v0.1 ...
+
+## Print the pipeline and system runtime information
+nextflow info
+nextflow info vmikk/biodiverse-scripts
+
+## Delete the local copy of the pipeline
+nextflow drop vmikk/biodiverse-scripts
+```
