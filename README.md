@@ -127,3 +127,14 @@ nextflow info vmikk/biodiverse-scripts
 ## Delete the local copy of the pipeline
 nextflow drop vmikk/biodiverse-scripts
 ```
+
+
+If you would like to run the pipeline locally, you may download the GBIF occurrence dump from the [Amazon AWS cloud](https://registry.opendata.aws/gbif/) using the [AWS CLI program](https://aws.amazon.com/cli/) (No AWS account required). E.g., to download `2022-01-01` dump to the `GBIF` directory in your home folder run:
+```
+aws s3 sync \
+  s3://gbif-open-data-eu-central-1/occurrence/2022-01-01/occurrence.parquet/ \
+  ~/GBIF/ \
+  --no-sign-request
+```
+
+
