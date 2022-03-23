@@ -1,5 +1,9 @@
 # PD (Phylogenetic Diversity) in the cloud
 Scripts for Biodiverse pipeline
+
+[![Nextflow](https://img.shields.io/badge/nextflow%20DSL2-%E2%89%A521.10.0-23aa62.svg?labelColor=000000)](https://www.nextflow.io/)
+[![run with docker](https://img.shields.io/badge/run%20with-docker-0db7ed?labelColor=000000&logo=docker)](https://www.docker.com/)
+
 ## Introduction
 
 Current pipeline brings together two critical research data infrastructures, the Global
