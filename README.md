@@ -7,6 +7,16 @@ Biodiversity Information Facility [(GBIF)](https://www.gbif.org/) and Open Tree 
 
 The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool to run tasks across multiple compute infrastructures in a very portable manner. It uses Docker containers making installation trivial and results highly reproducible. The [Nextflow DSL2](https://www.nextflow.io/docs/latest/dsl2.html) implementation of this pipeline uses one container per process which makes it much easier to maintain and update software dependencies. 
 
+## Pipeline summary
+
+1. Filtering of GBIF species occurrences for various taxonomic clades and geographic areas
+2. Removal of non-terrestrial records and spatial outliers (using density-based clustering)
+3. Preparation of phylogenetic tree (currently, only pre-constructed phylogenetic trees are available; with the update of OToL, phylogenetic trees will be downloaded automatically using API) and name-matching with GBIF species keys
+4. Spatial binning of species occurrences using Uber’s H3 system (hexagonal hierarchical spatial index)
+5. Estimation of phylogenetic diversity and endemism indices using [Biodeverse program](https://shawnlaffan.github.io/biodiverse/)
+6. Visualization of the obtained results (to be implemented soon)
+
+
 ## Quick Start
 
 1. Install [`Nextflow`](https://www.nextflow.io/docs/latest/getstarted.html#installation) (`>=21.10.0`)
