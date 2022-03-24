@@ -17,6 +17,7 @@ option_list <- list(
   make_option(c("-r", "--observed"), action="store", default=NA, type='character', help="Input file (CSV) with Biodiverse results - observed indices"),
   make_option(c("-z", "--zscores"),  action="store", default=NA, type='character', help="Input file (CSV) with Biodiverse results - Z-scores"),
   make_option(c("-v", "--variables"), action="store", default="PHYLO_RPD1", type='character', help="Diversity variables to plot"),
+  make_option(c("-w", "--world"), action="store", default=NA, type='character', help="File with contour map of the world"),
   make_option(c("-t", "--threads"), action="store", default=1L, type='integer', help="Number of CPU threads for arrow, default 4"),
   make_option(c("-f", "--format"), action="store", default="pdf", type='character', help="Image format (pdf, png, svg, jpg)"),
   make_option(c("-o", "--output"), action="store", default=NA, type='character', help="Output directory")
@@ -45,6 +46,7 @@ to_na <- function(x){
 INPUTO <- opt$observed
 INPUTZ <- opt$zscores
 VARIABLES <- opt$variables
+WORLD <- to_na( opt$world )
 
 CPUTHREADS <- as.numeric(opt$threads)
 FORMAT <- opt$format
@@ -55,6 +57,7 @@ OUTPUT <- opt$output
 cat(paste("Input file (observed indices): ", INPUTO, "\n", sep=""))
 cat(paste("Input file (Z-scores): ", INPUTZ, "\n", sep=""))
 cat(paste("Variables to plot: ", VARIABLES, "\n", sep=""))
+cat(paste("Adding world map: ", WORLD, "\n", sep=""))
 cat(paste("Number of CPU threads to use: ", CPUTHREADS, "\n", sep=""))
 cat(paste("Output image format: ", FORMAT, "\n", sep=""))
 cat(paste("Output directory: ", OUTPUT, "\n", sep=""))
@@ -105,6 +108,13 @@ if(CPUTHREADS > 1){
 
 
 ############################################## Main pipeline
+
+## Load world data
+if(! is.na(WORLD) ){
+cat("Loading world map\n")
+  world <- readRDS(WORLD)
+}
+
 ## Load input data
 cat("Loading Biodiverse results\n")
 
@@ -152,6 +162,17 @@ boxx <- st_bbox(H3_poly)
 xx <- pretty(c(boxx["xmin"], boxx["xmax"]))
 yy <- pretty(c(boxx["ymin"], boxx["ymax"]))
 
+
+if(is.na(WORLD)){
+  PP <- ggplot(H3_poly) +
+    geom_sf(aes_string(fill = VARIABLES), color = NA) +
+    scale_fill_distiller(palette = "Spectral") + 
+    ggtitle(VARIABLES) +
+    xlim(xx[1], xx[length(xx)]) +
+    ylim(yy[1], yy[length(yy)])
+}
+
+if(!is.na(WORLD)){
   PP <- ggplot(H3_poly) +
     geom_sf(data = world, fill = "grey95", color = "grey80") + 
     geom_sf(aes_string(fill = VARIABLES), color = NA) +
@@ -159,6 +180,7 @@ yy <- pretty(c(boxx["ymin"], boxx["ymax"]))
     ggtitle(VARIABLES) +
     xlim(xx[1], xx[length(xx)]) +
     ylim(yy[1], yy[length(yy)])
+}
 
 OUTNAME <- file.path(OUTPUT, paste0(VARIABLES, ".", FORMAT))
 
