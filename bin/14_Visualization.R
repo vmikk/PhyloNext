@@ -2,6 +2,15 @@
 
 ## Visualization of Biodiverse results
 
+## Usage example:
+# ./14_Visualization.R \
+#   --observed "02.Biodiverse_input/occ.bds.csv" \
+#   --zscores "02.Biodiverse_results/RND_rand--z_scores--SPATIAL_RESULTS.csv" \
+#   --threads 1 \
+#   --variables "PHYLO_RPD1" \
+#   --world "pipeline_data/WorldMap_NaturalEarth_Medium.RData" \
+#   --output "03.Plots"
+
 ############################################## Parse input parameters
 
 ## Check time
