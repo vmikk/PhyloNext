@@ -107,7 +107,7 @@ def helpMsg() {
     
     Pipeline Usage:
     To run the pipeline, enter the following in the command line:
-        nextflow run main.nf --input ... --outdir ...
+        nextflow run vmikk/biodiverse-scripts -r ${version} --input ... --outdir ...
     
     Options:
     REQUIRED:
