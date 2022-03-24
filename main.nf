@@ -16,7 +16,7 @@
 // - split the pipeline into workflows?
 // - tracing & visualisation: https://www.nextflow.io/docs/latest/tracing.html
 // - include sha256 hash of the image in the container reference: https://www.nextflow.io/blog/2016/docker-and-nextflow.html
-// - add test profile
+// - add local and azure profiles
 // - move params into a config
 // - In Nextflow, any binaries within the the bin directory of a repository are added to the path
 //   --> deprecate `scripts_path`
@@ -24,6 +24,8 @@
 // - Fix `10_Filter_occurrences.R`   In value[[3L]](cond) : double expected, got “NA”
 // - Fix docker mount path for a user-specified phylogenetic tree (conditional?)
 // - Add spatial constraints for the randomizations (e.g., shapefile with biomes?)
+// - Dynamic computing resources for intensive tasks: https://www.nextflow.io/docs/latest/process.html#dynamic-computing-resources
+// - Vizualization: add channel with PD index names?
 
 
 // Enable DSL2 syntax
