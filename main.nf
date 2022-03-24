@@ -515,6 +515,9 @@ workflow {
 
     // Output results as CSV
     div_to_csv(phylodiv.out.BDArand)
+
+    // Plot PD indices
+    plot_pd(prep_biodiv.out.BDOBS, div_to_csv.out.RND4)
 }
 
 
