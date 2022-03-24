@@ -124,7 +124,8 @@ OPTIONAL:
     --indices             Comma-seprated list of diversity and endemism indices; e.g., "calc_richness,calc_pd,calc_pe"
     --randname            Randomisation scheme type; e.g., "rand_structured"
     --iterations          Number of randomisation iterations; e.g., 1000
-
+NEXTFLOW-SPECIFIC:
+    -qs                   Queue size (max number of processes that can be executed in parallel); e.g., 8
 ```
 
 The other helpful commands:
