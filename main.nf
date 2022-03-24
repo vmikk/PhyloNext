@@ -72,6 +72,10 @@ params.iterations = 100
 
 biodiverse_args = "function=" + params.randname + " max_iters=" + params.iterations
 
+// Visualization
+params.plotvar = "PHYLO_RPD1"
+params.plotformat = "pdf"
+params.world = params.data_path + "/WorldMap_NaturalEarth_Medium.RData"
 
 // Help message flag
 params.helpMsg = false
@@ -88,6 +92,7 @@ params.helpMsg = false
 out_flt1 = params.outdir + "/00.filtered1.parquet"
 out_flt2 = params.outdir + "/01.filtered2"
 out_biod = params.outdir + "/02.Biodiverse_input"
+out_plot = params.outdir + "/03.Plots"
 out_logs = params.outdir + "/logs"
 
 
@@ -436,6 +441,42 @@ process div_to_csv {
 
     """
 }
+
+// Plot Biodiverse results
+process plot_pd {
+
+    container = 'vmikk/rarrow:0.0.1'
+    containerOptions = "--volume ${params.outdir}:${params.outdir} --volume ${params.data_path}:${params.data_path}"
+
+    publishDir "$params.outdir/03.Plots", mode: 'copy'
+
+    input:
+      val BDOBS
+      val RND4
+
+    output:
+      path "*.${params.plotformat}"
+
+    script:
+    """
+    Rscript ${params.scripts_path}/14_Visualization.R \
+      --observed ${BDOBS} \
+      --zscores ${RND4} \
+      --threads ${task.cpus} \
+      --variables ${params.plotvar} \
+      --world "${params.world}" \
+      --format "${params.plotformat}" \
+      --output "."
+
+      # --output "${out_plot}"
+
+    """
+}
+
+
+
+
+
 //  The default workflow
 workflow {
 
