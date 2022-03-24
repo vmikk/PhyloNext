@@ -187,3 +187,20 @@ OUTNAME <- file.path(OUTPUT, paste0(VARIABLES, ".", FORMAT))
 ggsave(filename = OUTNAME,
   plot = PP, width = 18, height = 18)
 
+
+
+#####################
+
+cat("Plotting finished\n")
+
+## Check time
+end_time <- Sys.time()
+
+tmm <- as.numeric(difftime(end_time, start_time, units = "min"))
+cat("\nElapsed time: ", tmm, " minutes\n")
+
+
+cat("\n")
+cat("Session info:\n")
+sessionInfo()
+cat("\n")
