@@ -22,6 +22,11 @@
 #    --output "Fabaceae_in_AU"
 
 
+# TO DO:
+# - add country name validation
+# - check if the input folder exists (except of 's3')
+
+
 ############################################## Parse input parameters
 
 ## Check time
