@@ -142,7 +142,7 @@ family     : "Felidae,Canidae"
 country    : "DE,PL,CZ"
 minyear    : 2000
 dbscan     : true
-phytree    : "/path/to/the/phylogenetic/tree.nwk)"
+phytree    : "/path/to/the/phylogenetic/tree.nwk"
 iterations : 100
 outdir     : "${launchDir}"
 ```
