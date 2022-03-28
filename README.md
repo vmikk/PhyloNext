@@ -146,6 +146,10 @@ phytree    : "$(realpath $HOME/.nextflow/assets/vmikk/biodiverse-scripts/test_da
 iterations : 100
 outdir     : "${launchDir}"
 ```
+
+
+#### The other helpful commands
+
 ```
 ## Download or update the pipeline
 ## By default, the pipeiline is stored in the '~/.nextflow/assets/vmikk/biodiverse-scripts' directory
