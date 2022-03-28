@@ -5,6 +5,7 @@
 
 ## TO DO:
 # - handle a case with single observation
+# - handle a case with no observations
 # - in case of multiple species and DBSCAN - do it separately for each species
 # - environmental outliers?
 
