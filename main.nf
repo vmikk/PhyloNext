@@ -26,6 +26,7 @@
 // - Add spatial constraints for the randomizations (e.g., shapefile with biomes?)
 // - Dynamic computing resources for intensive tasks: https://www.nextflow.io/docs/latest/process.html#dynamic-computing-resources
 // - Vizualization: add channel with PD index names?
+// - For species name matchin to the Open Tree Taxonomy - use pre-built DB?
 
 
 // Enable DSL2 syntax
