@@ -128,7 +128,24 @@ NEXTFLOW-SPECIFIC:
     -qs                   Queue size (max number of processes that can be executed in parallel); e.g., 8
 ```
 
-The other helpful commands:
+#### Passing in an input parameter file
+
+It is possible to pass the pipeline parameters via YAML or JSON file, e.g.:
+```
+nextflow run vmikk/biodiverse-scripts -r main -resume -params-file Mammals.yaml
+```
+The YAML file could contain the following:
+```
+input      : "/mnt/GBIF/Parquet/2022-01-01/occurrence.parquet/"
+class      : "Mammalia"
+family     : "Felidae,Canidae"
+country    : "DE,PL,CZ"
+minyear    : 2000
+dbscan     : true
+phytree    : "$(realpath $HOME/.nextflow/assets/vmikk/biodiverse-scripts/test_data/phy_trees/Mammals.nwk)"
+iterations : 100
+outdir     : "${launchDir}"
+```
 ```
 ## Download or update the pipeline
 ## By default, the pipeiline is stored in the '~/.nextflow/assets/vmikk/biodiverse-scripts' directory
