@@ -159,6 +159,8 @@ if(!is.na(SPECIESKEY)){
 
 ## Convert to data.table
 setDT(datt)
+NRECORDS <- nrow(datt)  # will be added as attribute to the results
+cat("Total number of records: ", NRECORDS, "\n")
 
 if(is.na(SPECIESKEY)){ cat("No specieskey is specified\n") }
 cat("There are ", length(unique(datt$specieskey)), "unique specieskeys in the data.\n")
@@ -339,6 +341,8 @@ if(!is.na(removed_dbscan[[1]])){
   attr(datt_h3, which = "dbscan_epsilon") <- NA
 }
 
+## Add total number of records (before filtering and spatial aggregation)
+attr(datt_h3, which = "number_of_records") <- NRECORDS
 
 
 ## Export
