@@ -14,7 +14,6 @@
 
 // TO DO:
 // - split the pipeline into workflows?
-// - tracing & visualisation: https://www.nextflow.io/docs/latest/tracing.html
 // - include sha256 hash of the image in the container reference: https://www.nextflow.io/blog/2016/docker-and-nextflow.html
 // - add local and azure profiles
 // - move params into a config
@@ -22,11 +21,11 @@
 //   --> deprecate `scripts_path`
 //   make scripts executable + remove Rscript and perl ??
 // - Fix `10_Filter_occurrences.R`   In value[[3L]](cond) : double expected, got “NA”
-// - Fix docker mount path for a user-specified phylogenetic tree (conditional?)
 // - Add spatial constraints for the randomizations (e.g., shapefile with biomes?)
 // - Dynamic computing resources for intensive tasks: https://www.nextflow.io/docs/latest/process.html#dynamic-computing-resources
 // - Vizualization: add channel with PD index names?
 // - For species name matchin to the Open Tree Taxonomy - use pre-built DB?
+// - Distribute Biodiverse randomizations across workers, and merge them on completion
 
 
 // Enable DSL2 syntax
