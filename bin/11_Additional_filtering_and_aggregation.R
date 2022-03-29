@@ -232,6 +232,25 @@ if(DBSCAN == TRUE){
   # dist(datt[, .(decimallongitude, decimallatitude)])[1:10]  # incorrect dist!
 
 
+  ## Specify the minimum size of a cluster proportional to the total number of occurrences
+  if(DBSCAN_PTS < 1){
+
+    ## How many records do we have?
+    nsamps <- nrow(pts)
+
+    ## If MinPts parameter is specified as a fraction, translate it into integer count
+    DBSCAN_PTS <- ceiling(nsamps * DBSCAN_PTS / 100)
+
+    cat("...MinPts parameter for DBSCAN was specified as a floating point number\n")
+    cat("...and corresponds to ", DBSCAN_PTS, " spatial points.\n")
+
+    if(DBSCAN_PTS < 2){
+      cat("....Specified MinPts is < 2 and is too low. Setting MinPts = 2\n")
+      DBSCAN_PTS <- 2
+    }
+  }    # end of proportional DBSCAN_PTS
+
+
   cat("..Running DBSCAN\n")
   ## Hierarchical DBSCAN (HDBSCAN)
   # cl <- hdbscan(datt[, .(decimallongitude, decimallatitude)], minPts = DBSCAN_PTS)
