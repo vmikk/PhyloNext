@@ -329,10 +329,14 @@ if(!is.na(removed_dbscan[[1]])){
 
   attr(datt_h3, which = "removed_dbscan_h3") <- unique(removed_dbscan$H3)
   attr(datt_h3, which = "removed_dbscan_n") <- nrow(removed_dbscan)
+  attr(datt_h3, which = "dbscan_minpts") <- DBSCAN_PTS
+  attr(datt_h3, which = "dbscan_epsilon") <- DBSCAN_EPS
 
 } else {
   attr(datt_h3, which = "removed_dbscan_h3") <- NA 
   attr(datt_h3, which = "removed_dbscan_n") <- 0
+  attr(datt_h3, which = "dbscan_minpts") <- NA
+  attr(datt_h3, which = "dbscan_epsilon") <- NA
 }
 
 
