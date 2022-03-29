@@ -21,6 +21,8 @@
 #    --noccurrences 30 \
 #    --output "Fabaceae_in_AU"
 
+## Note about rounding of coordinates (`--roundcoords true`):
+## A value in decimal degrees to an accuracy of 2 decimal places is accurate to ~1.11 km at the equator
 
 # TO DO:
 # - add country name validation
