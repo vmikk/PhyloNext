@@ -26,7 +26,12 @@ my $glob = $opt->glob;
 my $opfx = $opt->output_prefix;
 my $no_verify = $opt->no_verify;
 
-my @files = glob $glob;
+# my @files = glob $glob;
+
+## Load randomization chunks
+open my $glob_file, '<', $glob or die $!;
+my @files = <$glob_file>;
+close $glob_file;
 
 die "No files found using $glob" if !@files;
 die "Only one file found using $glob ($files[0])" if @files == 1;
