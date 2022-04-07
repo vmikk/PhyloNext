@@ -1,3 +1,4 @@
+#!/usr/bin/env perl
 
 ## Script to reintegrate multiple BDS files after randomizations
 ## Author: Shawn Laffan
