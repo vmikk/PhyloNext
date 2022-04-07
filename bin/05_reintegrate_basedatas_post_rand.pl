@@ -1,3 +1,9 @@
+
+## Script to reintegrate multiple BDS files after randomizations
+## Author: Shawn Laffan
+## Based on 4adf0f0 commit (Nov 29, 2019)
+## https://raw.githubusercontent.com/shawnlaffan/biodiverse/73522b74e52a5fb77ae5cfc2e90010350a3abf70/bin/reintegrate_basedatas_post_rand.pl
+
 use 5.016;
 
 use rlib;
