@@ -27,12 +27,16 @@ my $glob = $opt->glob;
 my $opfx = $opt->output_prefix;
 my $no_verify = $opt->no_verify;
 
-# my @files = glob $glob;
+print "\nInput file with paths to randomization chunks:\n";
+print "$glob\n";
 
-## Load randomization chunks
+## Read paths to randomization chunks
 open my $glob_file, '<', $glob or die $!;
-my @files = <$glob_file>;
+chomp( my @files = <$glob_file> );
 close $glob_file;
+
+print "\nList of randomization chunks:\n";
+print "@files\n\n";
 
 die "No files found using $glob" if !@files;
 die "Only one file found using $glob ($files[0])" if @files == 1;
