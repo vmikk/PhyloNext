@@ -412,11 +412,12 @@ process phylodiv {
     container = 'vmikk/biodiverse:0.0.1'
     containerOptions = "--volume ${params.outdir}:${params.outdir}"
 
-    publishDir "$params.outdir/02.Biodiverse_results", mode: 'copy'
+    // publishDir "$params.outdir/02.Biodiverse_results", mode: 'copy'
     // cpus 1
 
     input:
       val BDA
+      val chunkid
 
     output:
       path "Biodiv_randomized.bds", emit: BDArand
@@ -436,13 +437,14 @@ process phylodiv {
 }
 
 
+
 // Export Biodiverse results into CSV
 process div_to_csv {
 
     container = 'vmikk/biodiverse:0.0.1'
     containerOptions = "--volume ${params.outdir}:${params.outdir}"
 
-    publishDir "$params.outdir/02.Biodiverse_results", mode: 'copy'
+    // publishDir "$params.outdir/02.Biodiverse_results", mode: 'copy'
     // cpus 1
 
     input:
