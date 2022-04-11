@@ -187,8 +187,11 @@ if(params.dbscan == true){
 }
 
 log.info """
-        Biodiverse indices:       ${params.indices}
-        Biodiverse args:          ${biodiverse_args}
+        Biodiverse indices:         ${params.indices}
+        Biodiverse randomizations:  ${params.iterations}
+        Biodiverse threads:         ${params.iterations}
+        Biodiverse rand per thread: ${iterations_per_thread}
+        Biodiverse args:            ${biodiverse_args}
         """
         .stripIndent()
 
