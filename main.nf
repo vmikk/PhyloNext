@@ -553,14 +553,28 @@ workflow {
     // Prepare Biodiverse input files
     prep_biodiv(merge_occ.out.occurrences, merge_occ.out.tree)
 
-    // Estimate phylogenetic diversity with Biodiverse
-    phylodiv(prep_biodiv.out.BDA)
+
+    // Channel of randomization chunks
+    rnd_ch = Channel.fromList( randomization_chunks )
+
+    // Perform Biodiverse randomizations
+    phylodiv(prep_biodiv.out.BDA, rnd_ch)
 
     // Output results as CSV
     div_to_csv(phylodiv.out.BDArand)
 
+    // Prepare a file with paths of `div_to_csv` output (multiple chunks of randomizations)
+    // and create a new channel from it
+    rand_filelist(div_to_csv.out.RND3.collect())
+
+    // Aggregate randomization results
+    // aggregate_rnds(rand_filelist.out.RND)
+
+    // Plot PD indices - for single-randomization-chunk case
+    // plot_pd(prep_biodiv.out.BDOBS, div_to_csv.out.RND4)
+
     // Plot PD indices
-    plot_pd(prep_biodiv.out.BDOBS, div_to_csv.out.RND4)
+    // plot_pd(prep_biodiv.out.BDOBS, aggregate_rnds.out.AGG)
 }
 
 
