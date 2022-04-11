@@ -89,7 +89,6 @@ else {
 biodiverse_args = "function=" + params.randname + " max_iters=" + iterations_per_thread
 
 
-biodiverse_args = "function=" + params.randname + " max_iters=" + params.iterations
 
 // Visualization
 params.plotvar = "PHYLO_RPD1"
