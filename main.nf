@@ -467,6 +467,24 @@ process div_to_csv {
     """
 }
 
+
+// Create a file with paths to all chunks with randomization results
+process rand_filelist {
+
+    input:  val randfiles
+    output: path "randomization_results.txt", emit: RND
+
+    shell:
+    $/
+    echo "${randfiles}" \
+      | sed -z 's/, /\n/g; s/^\[//; s/\]//' \
+      > randomization_results.txt
+    /$
+}
+// Groovy allows an alternative syntax for string definitions 
+// which uses the $ as escape character in place of \ character. 
+// These strings are delimited with an opening $/ and and a closing /$
+
 // Plot Biodiverse results
 process plot_pd {
 
