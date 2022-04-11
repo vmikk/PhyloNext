@@ -183,7 +183,7 @@ log.info """
 
 if(params.dbscan == true){
     log.info "DBSCAN epsilon:           ${params.dbscanepsilon}".stripIndent()
-    log.info "DBSCAN minptsl:           ${params.dbscanminpts}".stripIndent()
+    log.info "DBSCAN minpts:            ${params.dbscanminpts}".stripIndent()
 }
 
 log.info """
