@@ -71,6 +71,23 @@ params.taxgroup = "All_life"
 params.indices = "calc_richness,calc_simpson_shannon,calc_endemism_whole,calc_pd,calc_pe,calc_phylo_rpd1,calc_phylo_rpd2,calc_phylo_rpe1,calc_phylo_rpe2,calc_phylo_mpd_mntd2"
 params.randname = "rand_structured"
 params.iterations = 100
+params.biodiversethreads = 1
+
+// // Biodiverse args
+// biodiverse_args = "function=" + params.randname + " max_iters=" + params.iterations
+
+// How many randomization iterations should be per Biodiverse thread?
+if( params.biodiversethreads > 1 ) {
+    randomization_chunks = (0..<params.biodiversethreads)
+    iterations_per_thread = params.iterations / params.biodiversethreads
+    iterations_per_thread = Math.ceil(iterations_per_thread).toInteger()
+}
+else {
+    randomization_chunks = [ 1 ]
+    iterations_per_thread = params.iterations
+}
+biodiverse_args = "function=" + params.randname + " max_iters=" + iterations_per_thread
+
 
 biodiverse_args = "function=" + params.randname + " max_iters=" + params.iterations
 
