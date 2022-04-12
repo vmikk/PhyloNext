@@ -485,6 +485,38 @@ process rand_filelist {
 // which uses the $ as escape character in place of \ character. 
 // These strings are delimited with an opening $/ and and a closing /$
 
+
+
+// Aggregate the randomization results
+process aggregate_rnds {
+
+    container = 'vmikk/rarrow:0.0.1'
+    containerOptions = "--volume ${params.outdir}:${params.outdir}"
+
+    publishDir "$params.outdir/02.Biodiverse_results", mode: 'copy'
+    // cpus 10
+
+    input:
+      val obs
+      val rnd
+
+    output:
+      path "Biodiverse_aggregated_results.csv", emit: AGG
+
+    script:
+    """
+    Rscript ${params.scripts_path}/13_Aggregate_Biodiverse_results.R \
+      --observed ${obs} \
+      --randomized ${rnd} \
+      --threads ${task.cpus} \
+      --output  "\$PWD"  # ${out_biod}
+
+    """
+}
+
+
+
+
 // Plot Biodiverse results
 process plot_pd {
 
