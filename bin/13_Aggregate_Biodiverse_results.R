@@ -1,4 +1,15 @@
 #!/usr/bin/env Rscript
+
+## Aggregate Biodiverse randomization results (from different threads)
+## and estimate Z-scores
+
+
+## Usage example:
+# ./13_Aggregate_Biodiverse_results.R \
+#   --observed "obs.csv" \
+#   --randomized "rnd.txt" \
+#   --output "Biodiverse_input" \
+#   --threads 1 \
 ############################################## Parse input parameters
 
 ## Check time
