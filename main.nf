@@ -212,8 +212,8 @@ log.info "\n"
 // Occurrence filtering, stage I
 process occ_filter {
 
-    container = 'vmikk/rarrow:0.0.1'
     containerOptions = "--volume ${params.input}:${params.input} --volume ${params.outdir}:${params.outdir}"
+    label "container_r"
 
     publishDir "$params.outdir", mode: 'copy'
     // cpus 10
@@ -256,8 +256,8 @@ process occ_filter {
 // Outlier filtering, stage II - without DBSCAN, all low abundant species
 process outl_low {
 
-    container = 'vmikk/rarrow:0.0.1'
     containerOptions = "--volume ${params.outdir}:${params.outdir} --volume ${params.data_path}:${params.data_path}"
+    label "container_r"
 
     // publishDir "$params.outdir/01.filtered2", mode: 'copy'
     // cpus 5
@@ -286,8 +286,8 @@ process outl_low {
 // Outlier filtering, stage II - with DBSCAN, independently by species
 process outl_high {
 
-    container = 'vmikk/rarrow:0.0.1'
     containerOptions = "--volume ${params.outdir}:${params.outdir} --volume ${params.data_path}:${params.data_path}"
+    label "container_r"
 
     // publishDir "$params.outdir/01.filtered2", mode: 'copy'
     // cpus 1
@@ -324,8 +324,8 @@ process outl_high {
 // Merge filtered species occurrences and prep data for Biodiverse
 process merge_occ {
 
-    container = 'vmikk/rarrow:0.0.1'
     containerOptions = "--volume ${params.outdir}:${params.outdir} --volume ${params.phytree}:${params.phytree}"
+    label "container_r"
 
     publishDir "$params.outdir/02.Biodiverse_input", mode: 'copy'
     // cpus 10
@@ -353,8 +353,8 @@ process merge_occ {
 // Create Biodiverse input files
 process prep_biodiv {
 
-    container = 'vmikk/biodiverse:0.0.1'
     containerOptions = "--volume ${params.outdir}:${params.outdir}"
+    label "container_biodiverse"
 
     publishDir "$params.outdir/02.Biodiverse_input", mode: 'copy'
 
@@ -409,8 +409,8 @@ process prep_biodiv {
 // Estimate phylogenetic diversity with Biodiverse
 process phylodiv {
 
-    container = 'vmikk/biodiverse:0.0.1'
     containerOptions = "--volume ${params.outdir}:${params.outdir}"
+    label "container_biodiverse"
 
     // publishDir "$params.outdir/02.Biodiverse_results", mode: 'copy'
     // cpus 1
@@ -490,8 +490,8 @@ process rand_filelist {
 // Aggregate the randomization results
 process aggregate_rnds {
 
-    container = 'vmikk/rarrow:0.0.1'
     containerOptions = "--volume ${params.outdir}:${params.outdir}"
+    label "container_biodiverse"
 
     publishDir "$params.outdir/02.Biodiverse_results", mode: 'copy'
     // cpus 10
@@ -520,8 +520,8 @@ process aggregate_rnds {
 // Plot Biodiverse results
 process plot_pd {
 
-    container = 'vmikk/rarrow:0.0.1'
     containerOptions = "--volume ${params.outdir}:${params.outdir} --volume ${params.data_path}:${params.data_path}"
+    label "container_r"
 
     publishDir "$params.outdir/03.Plots", mode: 'copy'
 
