@@ -438,35 +438,6 @@ process phylodiv {
 
 
 
-// Export Biodiverse results into CSV
-process div_to_csv {
-
-    container = 'vmikk/biodiverse:0.0.1'
-    containerOptions = "--volume ${params.outdir}:${params.outdir}"
-
-    // publishDir "$params.outdir/02.Biodiverse_results", mode: 'copy'
-    // cpus 1
-
-    input:
-      val BDArand
-
-    output:
-      path "RND_groups.csv", emit: RND1
-      path "RND_rand--p_rank--SPATIAL_RESULTS.csv", emit: RND2
-      path "RND_rand--SPATIAL_RESULTS.csv", emit: RND3
-      path "RND_rand--z_scores--SPATIAL_RESULTS.csv", emit: RND4
-      path "RND_SPATIAL_RESULTS.csv", emit: RND5
-
-    script:
-    """
-
-    perl ${params.scripts_path}/04_load_bds_and_export_results.pl \
-      --input_bds_file ${BDArand} \
-      --output_csv_prefix 'RND'
-
-    """
-}
-
 
 // Create a file with paths to all chunks with randomization results
 process rand_filelist {
@@ -487,14 +458,29 @@ process rand_filelist {
 
 
 
-// Aggregate the randomization results
-process aggregate_rnds {
+// Aggregate the randomization results - with Biodiverse
+process aggregate_rnds_biodiv {
 
     containerOptions = "--volume ${params.outdir}:${params.outdir}"
     label "container_biodiverse"
 
     publishDir "$params.outdir/02.Biodiverse_results", mode: 'copy'
-    // cpus 10
+    // cpus 1
+    
+    input:
+      val RND
+
+    output:
+      path "Biodiverse.bds", emit: Biodiv
+
+    script:
+    """
+    perl ${params.scripts_path}/05_reintegrate_basedatas_post_rand.pl \
+      --glob ${RND} \
+      --output_prefix Biodiverse
+    """
+}
+
 
     input:
       val obs
