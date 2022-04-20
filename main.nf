@@ -206,6 +206,14 @@ log.info """
         """
         .stripIndent()
 
+log.info """
+        Core Nextflow options:
+          launchDir:              ${workflow.launchDir}
+          workDir:                ${workflow.workDir}
+          projectDir:             ${workflow.projectDir}
+        """
+        .stripIndent()
+
 log.info "========================================================"
 log.info "\n"
 
