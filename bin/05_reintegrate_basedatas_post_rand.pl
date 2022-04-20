@@ -38,8 +38,8 @@ close $glob_file;
 print "\nList of randomization chunks:\n";
 print "@files\n\n";
 
-die "No files found using $glob" if !@files;
-die "Only one file found using $glob ($files[0])" if @files == 1;
+print "Multiple randomization chunks fond, reinegrating..\n" if !@files;
+print "Just a single randomization file found\n" if @files == 1;
 
 my $first_bd = shift @files;
 my $bd = Biodiverse::BaseData->new (file => $first_bd);
