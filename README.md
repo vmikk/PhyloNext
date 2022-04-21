@@ -187,3 +187,7 @@ Alternative GBIF snapshot is also [hosted by the Microsoft AI for Earth program]
 ## Funding
 
 The work is supported by a grant “PD (Phylogenetic Diversity) in the Cloud” to GBIF Supplemental funds from the GEO-Microsoft Planetary Computer Programme.
+## Future plans
+
+- Add support of [`Singularity`](https://www.sylabs.io/guides/3.0/user-guide/), [`Podman`](https://podman.io/), [`Shifter`](https://nersc.gitlab.io/development/shifter/how-to-use/) or [`Charliecloud`](https://hpc.github.io/charliecloud/) containers.
+
