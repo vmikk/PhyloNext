@@ -620,21 +620,21 @@ workflow {
     // Perform Biodiverse randomizations
     phylodiv(prep_biodiv.out.BDA, rnd_ch)
 
-    // Output results as CSV
-    div_to_csv(phylodiv.out.BDArand)
-
-    // Prepare a file with paths of `div_to_csv` output (multiple chunks of randomizations)
+    // Prepare a file with paths of `phylodiv` output (multiple chunks of randomizations)
     // and create a new channel from it
-    rand_filelist(div_to_csv.out.RND3.collect())
+    rand_filelist(phylodiv.out.BDArand.collect())
 
-    // Aggregate randomization results
-    // aggregate_rnds(rand_filelist.out.RND)
+    // Aggregate randomization results (with Biodiverse script)
+    aggregate_rnds_biodiv(rand_filelist.out.RND)
 
-    // Plot PD indices - for single-randomization-chunk case
-    // plot_pd(prep_biodiv.out.BDOBS, div_to_csv.out.RND4)
+    // Output results as CSV
+    div_to_csv(aggregate_rnds_biodiv.out.Biodiv)
 
     // Plot PD indices
-    // plot_pd(prep_biodiv.out.BDOBS, aggregate_rnds.out.AGG)
+    plot_pd(div_to_csv.out.RND5, div_to_csv.out.RND4)
+    // plot_pd(prep_biodiv.out.BDOBS, div_to_csv.out.RND4)
+
+
 }
 
 
