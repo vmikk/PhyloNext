@@ -221,8 +221,10 @@ log.info "\n"
 // Occurrence filtering, stage I
 process occ_filter {
 
-    containerOptions = "--volume ${params.input}:${params.input} --volume ${params.outdir}:${params.outdir}"
     label "container_r"
+    containerOptions = { workflow.containerEngine == "docker" ? 
+        "--volume ${params.input}:${params.input} --volume ${params.outdir}:${params.outdir}"
+        : null }
 
     publishDir "$params.outdir", mode: 'copy'
     // cpus 10
@@ -265,8 +267,10 @@ process occ_filter {
 // Outlier filtering, stage II - without DBSCAN, all low abundant species
 process outl_low {
 
-    containerOptions = "--volume ${params.outdir}:${params.outdir} --volume ${params.data_path}:${params.data_path}"
     label "container_r"
+    containerOptions = { workflow.containerEngine == "docker" ?
+        "--volume ${params.outdir}:${params.outdir} --volume ${params.data_path}:${params.data_path}"
+        : null }
 
     // publishDir "$params.outdir/01.filtered2", mode: 'copy'
     // cpus 5
@@ -295,8 +299,10 @@ process outl_low {
 // Outlier filtering, stage II - with DBSCAN, independently by species
 process outl_high {
 
-    containerOptions = "--volume ${params.outdir}:${params.outdir} --volume ${params.data_path}:${params.data_path}"
     label "container_r"
+    containerOptions = { workflow.containerEngine == "docker" ?
+        "--volume ${params.outdir}:${params.outdir} --volume ${params.data_path}:${params.data_path}"
+        : null }
 
     // publishDir "$params.outdir/01.filtered2", mode: 'copy'
     // cpus 1
@@ -333,8 +339,10 @@ process outl_high {
 // Merge filtered species occurrences and prep data for Biodiverse
 process merge_occ {
 
-    containerOptions = "--volume ${params.outdir}:${params.outdir} --volume ${params.phytree}:${params.phytree}"
     label "container_r"
+    containerOptions = { workflow.containerEngine == "docker" ?
+        "--volume ${params.outdir}:${params.outdir} --volume ${params.phytree}:${params.phytree}"
+        : null }
 
     publishDir "$params.outdir/02.Biodiverse_input", mode: 'copy'
     // cpus 10
@@ -362,8 +370,10 @@ process merge_occ {
 // Create Biodiverse input files
 process prep_biodiv {
 
-    containerOptions = "--volume ${params.outdir}:${params.outdir}"
     label "container_biodiverse"
+    containerOptions = { workflow.containerEngine == "docker" ?
+        "--volume ${params.outdir}:${params.outdir}"
+        : null }
 
     publishDir "$params.outdir/02.Biodiverse_input", mode: 'copy'
 
@@ -418,8 +428,10 @@ process prep_biodiv {
 // Estimate phylogenetic diversity with Biodiverse
 process phylodiv {
 
-    containerOptions = "--volume ${params.outdir}:${params.outdir}"
     label "container_biodiverse"
+    containerOptions = { workflow.containerEngine == "docker" ?
+        "--volume ${params.outdir}:${params.outdir}"
+        : null }
 
     // publishDir "$params.outdir/02.Biodiverse_results", mode: 'copy'
     // cpus 1
@@ -470,8 +482,10 @@ process rand_filelist {
 // Aggregate the randomization results - with Biodiverse
 process aggregate_rnds_biodiv {
 
-    containerOptions = "--volume ${params.outdir}:${params.outdir}"
     label "container_biodiverse"
+    containerOptions = { workflow.containerEngine == "docker" ?
+        "--volume ${params.outdir}:${params.outdir}"
+        : null }
 
     publishDir "$params.outdir/02.Biodiverse_results", mode: 'copy'
     // cpus 1
@@ -515,8 +529,10 @@ process aggregate_rnds_biodiv {
 // Plot Biodiverse results
 process plot_pd {
 
-    containerOptions = "--volume ${params.outdir}:${params.outdir} --volume ${params.data_path}:${params.data_path}"
     label "container_r"
+    containerOptions = { workflow.containerEngine == "docker" ?
+        "--volume ${params.outdir}:${params.outdir} --volume ${params.data_path}:${params.data_path}"
+        : null }
 
     publishDir "$params.outdir/03.Plots", mode: 'copy'
 
