@@ -510,20 +510,34 @@ process aggregate_rnds_biodiv {
 }
 
 
+// Export Biodiverse results into CSV
+process div_to_csv {
+
+    label "container_biodiverse"
+    containerOptions = { workflow.containerEngine == "docker" ?
+        "--volume ${params.outdir}:${params.outdir}"
+        : null }
+
+    publishDir "$params.outdir/02.Biodiverse_results", mode: 'copy'
+
+    // cpus 1
+
     input:
-      val obs
-      val rnd
+      val Biodiv
 
     output:
-      path "Biodiverse_aggregated_results.csv", emit: AGG
+      path "RND_groups.csv", emit: RND1
+      path "RND_rand--p_rank--SPATIAL_RESULTS.csv", emit: RND2
+      path "RND_rand--SPATIAL_RESULTS.csv", emit: RND3
+      path "RND_rand--z_scores--SPATIAL_RESULTS.csv", emit: RND4
+      path "RND_SPATIAL_RESULTS.csv", emit: RND5
 
     script:
     """
-    Rscript ${params.scripts_path}/13_Aggregate_Biodiverse_results.R \
-      --observed ${obs} \
-      --randomized ${rnd} \
-      --threads ${task.cpus} \
-      --output  "\$PWD"  # ${out_biod}
+
+    perl ${params.scripts_path}/04_load_bds_and_export_results.pl \
+      --input_bds_file ${Biodiv} \
+      --output_csv_prefix 'RND'
 
     """
 }
