@@ -13,7 +13,10 @@
 */
 
 // TO DO:
-// - split the pipeline into workflows?
+// - autoname outdir (with current date?)
+// - add a text file with parameter summary to the results
+// - update visualization results (PDP, PD, S)
+// - Vizualization: add channel with PD index names?
 // - include sha256 hash of the image in the container reference: https://www.nextflow.io/blog/2016/docker-and-nextflow.html
 // - add local and azure profiles
 // - move params into a config
@@ -23,9 +26,11 @@
 // - Fix `10_Filter_occurrences.R`   In value[[3L]](cond) : double expected, got “NA”
 // - Add spatial constraints for the randomizations (e.g., shapefile with biomes?)
 // - Dynamic computing resources for intensive tasks: https://www.nextflow.io/docs/latest/process.html#dynamic-computing-resources
-// - Vizualization: add channel with PD index names?
 // - For species name matchin to the Open Tree Taxonomy - use pre-built DB?
-// - Distribute Biodiverse randomizations across workers, and merge them on completion
+// - Add alternative outlier detection algorithm (e.g., OPTICS algorithm)
+// - Add spatial constraints for randomizations (e.g., within biome)
+// - Split the pipeline into workflows?
+// - Colorize verbose messages
 
 
 // Enable DSL2 syntax
@@ -525,7 +530,6 @@ process aggregate_rnds_biodiv {
 
 
 
-
 // Plot Biodiverse results
 process plot_pd {
 
@@ -537,8 +541,8 @@ process plot_pd {
     publishDir "$params.outdir/03.Plots", mode: 'copy'
 
     input:
-      val BDOBS
-      val RND4
+      val BDOBS   // observed indices
+      val RND4    // randomized indices
 
     output:
       path "*.${params.plotformat}"
@@ -558,7 +562,6 @@ process plot_pd {
 
     """
 }
-
 
 
 
