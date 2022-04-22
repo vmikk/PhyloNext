@@ -31,6 +31,7 @@
 // - Add spatial constraints for randomizations (e.g., within biome)
 // - Split the pipeline into workflows?
 // - Colorize verbose messages
+// - Choose location for singularity image caching: with `singularity.cacheDir` or `NXF_SINGULARITY_CACHEDIR`
 
 
 // Enable DSL2 syntax
