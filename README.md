@@ -86,6 +86,10 @@ The pipeline could be launched in a cloud environment (e.g., the [Microsoft Azur
     newgrp docker
     ```
 
+### Singularity
+
+As Docker is NOT supported in most HPC systems, it's possible to run the pipeline using [Singularity](https://sylabs.io/singularity/).
+
 
 ## Documentation
 To show a help message, run `nextflow run vmikk/biodiverse-scripts -r main --helpMsg`.
