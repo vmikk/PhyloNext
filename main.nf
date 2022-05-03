@@ -65,7 +65,7 @@ params.dbscannoccurrences = 30
 // Filtering, stage II - "11_Additional_filtering_and_aggregation.R"
 params.h3resolution = 4
 params.dbscan = false
-params.dbscanepsilon = 700
+params.dbscanepsilon = 1500
 params.dbscanminpts = 3
 params.terrestrial = params.data_path + "/Land_Buffered_025_dgr.RData"
 
