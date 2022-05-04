@@ -397,7 +397,7 @@ if(!is.na(removed_WGSRPD[[1]])){
 ## DBSCAN-based outliers
 if(!is.na(removed_dbscan[[1]])){
 
-  ## H3 binning of non-terrestrial outliers
+  ## H3 binning of DBSCAN outliers
   removed_dbscan[ , H3 := h3::geo_to_h3(removed_dbscan[, .(decimallatitude, decimallongitude)], res = RESOLUTION) ]
 
   attr(datt_h3, which = "removed_dbscan_h3") <- unique(removed_dbscan$H3)
@@ -420,7 +420,9 @@ attr(datt_h3, which = "number_of_records") <- NRECORDS
 cat("Exporting filtered occurrence data\n")
 
 ## Create output directory if it doesn't exist
-dir.create(path = OUTPUT, showWarnings = F, recursive = TRUE)
+if(!OUTPUT %in% "."){
+  dir.create(path = OUTPUT, showWarnings = F, recursive = TRUE)
+}
 
 ## Prepare output name
 if(is.na(SPECIESKEY)){
