@@ -100,6 +100,9 @@ OUTPUT <- opt$output
 cat(paste("Input occurrences: ", INPUT, "\n", sep=""))
 cat(paste("GBIF specieskey: ", SPECIESKEY, "\n", sep=""))
 cat(paste("Terrestrial data: ", TERRESTRIAL, "\n", sep=""))
+cat(paste("WGSRPD data: ", WGSRPD, "\n", sep=""))
+cat(paste("WGSRPD regions: ", WGSRPDREGIONS, "\n", sep=""))
+
 
 cat(paste("Perform DBSCAN: ", DBSCAN, "\n", sep=""))
 if(DBSCAN == TRUE){
@@ -207,6 +210,7 @@ if(!is.na(TERRESTRIAL[[1]])){
 } else {
   removed_nonterrestrial <- NA     # no terrestrial filtering was performed
 }
+
 
 
 
