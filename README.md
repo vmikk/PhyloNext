@@ -125,6 +125,8 @@ OPTIONAL:
     --dbscanepsilon       DBSCAN parameter epsilon, km; e.g., "700"
     --dbscanminpts        DBSCAN min number of points; e.g., "3"
     --terrestrial         Land polygon for removal of non-terrestrial occurrences; e.g., "pipeline_data/Land_Buffered_025_dgr.RData"
+    --wgsrpd              Polygons of World Geographical Regions; e.g., "pipeline_data/WGSRPD.RData"
+    --regions             Names of World Geographical Regions; e.g., "L1_EUROPE,L1_ASIA_TEMPERATE"
     --indices             Comma-seprated list of diversity and endemism indices; e.g., "calc_richness,calc_pd,calc_pe"
     --randname            Randomisation scheme type; e.g., "rand_structured"
     --iterations          Number of randomisation iterations; e.g., 1000
