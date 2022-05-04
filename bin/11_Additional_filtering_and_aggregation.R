@@ -84,6 +84,9 @@ INPUT <- opt$input
 SPECIESKEY <- to_na( opt$specieskey )
 TERRESTRIAL <- to_na( opt$terrestrial )
 
+WGSRPD <- to_na( opt$wgsrpd )
+WGSRPDREGIONS <- to_na( opt$regions )
+
 DBSCAN <- as.logical( opt$dbscan )
 DBSCAN_EPS <- as.numeric(opt$epsilon)
 DBSCAN_PTS <- as.numeric(opt$minpts)
@@ -206,6 +209,55 @@ if(!is.na(TERRESTRIAL[[1]])){
 }
 
 
+
+## Subset to WGSRPD regions
+if(!is.na(WGSRPD) & !is.na(WGSRPDREGIONS)){
+  cat("Subsetting by World Geographical Regions\n")
+
+  ## Load WGSRPD polygons
+  cat("..Loading WGSRPD polygons\n")
+  WGSRPD <- readRDS(WGSRPD)
+
+  ## Split the selected regions (if there are more than one)
+  WGSRPDREGIONS <- strsplit(x = WGSRPDREGIONS, split = ",")[[1]]
+
+  ## Check if selected regions are in the shapefile
+  in_polygons <- WGSRPDREGIONS %in% WGSRPD$LevelName
+  if(any(!in_polygons)){
+    cat("\n...! Check: ", WGSRPDREGIONS[!in_polygons], "!...\n")
+    stop("ERROR: Some of the selected regions are not in the shapefile!\n")
+  }
+
+  ## Extract polygons of the selected regions
+  POLY <- WGSRPD[ which(WGSRPD$LevelName %in% WGSRPDREGIONS),  ]
+
+  ## Convert coordinates to sf class
+  pts <- st_as_sf(
+    x = datt[, .(decimallongitude, decimallatitude)],
+    coords = c("decimallongitude", "decimallatitude"),
+    crs = "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0")
+
+  ## Check which points belong to the polygons
+  cat("..Intersecting world polygons and data points\n")
+  poly_intersect <- st_intersects(pts, POLY)
+  poly <- lengths(poly_intersect) > 0
+
+  non_poly <- sum(!poly)
+  cat("..Number of points inside the selected polygons: ", sum(poly), "\n")
+  cat("..Number of points outside the selected polygons: ", non_poly, "\n")
+
+  ## Remove outliers
+  if(non_poly > 0){
+    removed_WGSRPD <- datt[ ! poly ]   # outliers
+    datt <- datt[ poly ]
+  } else {
+    removed_WGSRPD <- NA   # no non-WGSRPD samples found
+  }
+
+  rm(pts)
+} else {
+  removed_WGSRPD <- NA     # no WGSRPD-filtering was performed
+}
 ## Density-based outlier removal
 if(DBSCAN == TRUE){
   cat("Density-based outlier removal\n")
@@ -325,6 +377,21 @@ if(!is.na(removed_nonterrestrial[[1]])){
   attr(datt_h3, which = "removed_nonterrestrial_h3") <- NA 
   attr(datt_h3, which = "removed_nonterrestrial_n") <- 0
 }
+
+
+## WGSRPD-outliers
+if(!is.na(removed_WGSRPD[[1]])){
+  
+  ## H3 binning of non-removed_WGSRPD outliers
+  removed_WGSRPD[ , H3 := h3::geo_to_h3(removed_WGSRPD[, .(decimallatitude, decimallongitude)], res = RESOLUTION) ]
+
+  attr(datt_h3, which = "removed_WGSRPD_h3") <- unique(removed_WGSRPD$H3)
+  attr(datt_h3, which = "removed_WGSRPD_n") <- nrow(removed_WGSRPD)
+} else {
+  attr(datt_h3, which = "removed_WGSRPD_h3") <- NA 
+  attr(datt_h3, which = "removed_WGSRPD_n") <- 0
+}
+
 
 
 ## DBSCAN-based outliers
