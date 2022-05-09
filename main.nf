@@ -58,7 +58,7 @@ params.latmax = "NA"
 params.lonmin = "NA"
 params.lonmax = "NA"
 params.minyear = 1945
-params.noextinct = "NA"
+params.noextinct = "NA"          // params.data_path + "/Fossil_IDs.RData"
 params.roundcoords = true
 params.dbscannoccurrences = 30
 
@@ -70,6 +70,10 @@ params.dbscanminpts = 3
 params.terrestrial = params.data_path + "/Land_Buffered_025_dgr.RData"
 params.wgsrpd = params.data_path + "/WGSRPD.RData"
 params.regions = "NA"
+params.rmcountrycentroids = false    // pipeline_data/CC_CountryCentroids.RData
+params.rmcountrycapitals = false     // pipeline_data/CC_Capitals.RData
+params.rminstitutions = false        // pipeline_data/CC_Institutions.RData
+params.rmurban = false               // pipeline_data/CC_Urban.RData
 
 // Filtered data aggregation - "12_Prepare_Biodiverse_input.R"
 params.phytree = "NA"
@@ -353,6 +357,9 @@ process outl_high {
 // Create a file with paths to all chunks with filtered results
 process filtered_filelist {
 
+    // container image is required for Cloud only
+    label "container_r"
+
     input:
     val spp
 
@@ -496,6 +503,9 @@ process phylodiv {
 
 // Create a file with paths to all chunks with randomization results
 process rand_filelist {
+
+    // container image is required for Cloud only
+    label "container_r"
 
     input:  val randfiles
     output: path "randomization_results.txt", emit: RND
