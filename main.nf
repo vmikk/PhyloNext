@@ -634,6 +634,9 @@ workflow {
     flt_ch = outl_high.out.sp.mix(outl_low.out.lowabsp).collect()
     // flt_ch.view()
 
+    // Prepare a file with paths to occurrence filtering results
+    filtered_filelist(flt_ch)
+
     // Merge species occurrences into a single file
     merge_occ(flt_ch)
 
