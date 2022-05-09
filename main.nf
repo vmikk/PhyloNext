@@ -390,11 +390,13 @@ process merge_occ {
     script:
     """
     Rscript ${params.scripts_path}/12_Prepare_Biodiverse_input.R \
-      --input ${out_flt2} \
+      --inputfile ${spp} \
       --phytree ${params.phytree} \
       --taxgroup ${params.taxgroup} \
       --threads ${task.cpus} \
-      --output  "\$PWD"  # ${out_biod}
+      --output  "\$PWD"     # ${out_biod}
+
+    #  --input ${out_flt2}  # direcotory with RData files
 
     """
 }
@@ -638,7 +640,7 @@ workflow {
     filtered_filelist(flt_ch)
 
     // Merge species occurrences into a single file
-    merge_occ(flt_ch)
+    merge_occ(filtered_filelist.out.FLT)
 
     // Prepare Biodiverse input files
     prep_biodiv(merge_occ.out.occurrences, merge_occ.out.tree)
