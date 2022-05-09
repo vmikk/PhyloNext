@@ -235,7 +235,7 @@ process occ_filter {
 
     label "container_r"
     containerOptions = { workflow.containerEngine == "docker" ? 
-        "--volume ${params.input}:${params.input} --volume ${params.outdir}:${params.outdir}"
+        "--volume ${params.input}:${params.input} --volume ${params.outdir}:${params.outdir} --volume ${params.scripts_path}:${params.scripts_path} --volume ${params.data_path}:${params.data_path}"
         : null }
 
     publishDir "$params.outdir", mode: 'copy'
