@@ -350,6 +350,24 @@ process outl_high {
 }
 
 
+// Create a file with paths to all chunks with filtered results
+process filtered_filelist {
+
+    input:
+    val spp
+
+    output:
+    path "filtered_results.txt", emit: FLT
+
+    shell:
+    $/
+    echo "${spp}" \
+      | sed -z 's/, /\n/g; s/^\[//; s/\]//' \
+      > filtered_results.txt
+    /$
+}
+
+
 // Merge filtered species occurrences and prep data for Biodiverse
 process merge_occ {
 
