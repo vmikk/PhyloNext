@@ -238,15 +238,15 @@ process occ_filter {
         "--volume ${params.input}:${params.input} --volume ${params.outdir}:${params.outdir} --volume ${params.scripts_path}:${params.scripts_path} --volume ${params.data_path}:${params.data_path}"
         : null }
 
-    publishDir "$params.outdir", mode: 'copy'
+    publishDir "${out_flt1}", mode: 'copy'
     // cpus 10
 
     input:
       val input
 
     output:
-      val "${out_flt1}/Partition=low", emit: part_low
-      val "${out_flt1}/Partition=high", emit: part_high
+      path "Partition=low", emit: part_low
+      path "Partition=high", emit: part_high
       path "spp.txt", emit: spp
 
     script:
