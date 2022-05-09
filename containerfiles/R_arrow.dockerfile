@@ -41,4 +41,4 @@ RUN install2.r --error --skipinstalled --ncpus -1 \
 #     && rm -rf /tmp/downloaded_packages/
 
 ## Run bash in the container
-ENTRYPOINT ["bash"]
+# ENTRYPOINT ["bash"]
