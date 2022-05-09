@@ -267,7 +267,7 @@ process occ_filter {
       --roundcoords ${params.roundcoords} \
       --threads ${task.cpus} \
       --noccurrences ${params.dbscannoccurrences} \
-      --output ${out_flt1}
+      --output "."
 
     ## Prepare species list for DBSCAN
     awk '\$3 ~ /high/ {print \$1 }' SpeciesCounts.txt > spp.txt
