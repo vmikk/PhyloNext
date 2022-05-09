@@ -317,7 +317,7 @@ process outl_high {
         "--volume ${params.outdir}:${params.outdir} --volume ${params.data_path}:${params.data_path}"
         : null }
 
-    // publishDir "$params.outdir/01.filtered2", mode: 'copy'
+    publishDir "${out_flt2}", mode: 'copy'
     // cpus 1
 
     // Add species ID to the log file
@@ -326,6 +326,7 @@ process outl_high {
     // Iterate for each species from `species_ch` channel
     input:
       val sp
+      path(part_high)
 
     output:
       path "${sp}.RData", emit: sp
@@ -333,7 +334,7 @@ process outl_high {
     script:
     """
     Rscript ${params.scripts_path}/11_Additional_filtering_and_aggregation.R \
-      --input "${out_flt1}/Partition=high" \
+      --input "${part_high}" \
       --specieskey ${sp} \
       --dbscan ${params.dbscan} \
       --epsilon ${params.dbscanepsilon} \
@@ -343,9 +344,7 @@ process outl_high {
       --wgsrpd ${params.wgsrpd} \
       --regions ${params.regions} \
       --threads ${task.cpus} \
-      --output ${out_flt2}
-
-    cp ${out_flt2}/${sp}.RData ${sp}.RData
+      --output "."
 
     """
 }
@@ -611,7 +610,7 @@ workflow {
     // species_ch.view()
 
     // Run stage-II filtering for abundant species (with DBSCAN)
-    outl_high(species_ch)
+    outl_high(species_ch, occ_filter.out.part_high)
 
     // Use output of for Biodiverse
     flt_ch = outl_high.out.sp.mix(outl_low.out.lowabsp).collect()
