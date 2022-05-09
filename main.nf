@@ -284,7 +284,7 @@ process outl_low {
         "--volume ${params.outdir}:${params.outdir} --volume ${params.data_path}:${params.data_path}"
         : null }
 
-    // publishDir "$params.outdir/01.filtered2", mode: 'copy'
+    publishDir "${out_flt2}", mode: 'copy'
     // cpus 5
 
     input:
@@ -303,9 +303,8 @@ process outl_low {
       --wgsrpd ${params.wgsrpd} \
       --regions ${params.regions} \
       --threads ${task.cpus} \
-      --output ${out_flt2}
+      --output "."
 
-    cp ${out_flt2}/NoSpKey.RData NoSpKey.RData
     """
 }
 
