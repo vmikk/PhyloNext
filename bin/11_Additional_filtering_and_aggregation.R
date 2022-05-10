@@ -142,12 +142,6 @@ set_cpu_count(CPUTHREADS)           # for libarrow
 setDTthreads(threads = CPUTHREADS)  # for data.table
 
 
-## Load land mask
-if(!is.na(TERRESTRIAL)){
-  cat("Loading land mask\n")
-  TERRESTRIAL <- readRDS(TERRESTRIAL)
-}
-
 
 ############################################## Main pipeline
 
@@ -177,9 +171,13 @@ cat("There are ", length(unique(datt$specieskey)), "unique specieskeys in the da
 
 
 ## Remove non-terrestrial records 
-if(!is.na(TERRESTRIAL[[1]])){
+if(!is.na(TERRESTRIAL)){
   cat("Removing non-terrestrial records\n")
   
+  ## Load land mask
+  cat("..Loading land mask\n")
+  TERRESTRIAL <- readRDS(TERRESTRIAL)
+
   ## Convert coordinates to sf class
   pts <- st_as_sf(
     x = datt[, .(decimallongitude, decimallatitude)],
@@ -187,6 +185,7 @@ if(!is.na(TERRESTRIAL[[1]])){
     crs = "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0")
 
   ## Check which points are on land
+  cat("..Intersecting polygons and data points\n")
   land_intersect <- st_intersects(pts, TERRESTRIAL)
   land <- lengths(land_intersect) > 0
 
