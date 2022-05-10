@@ -24,7 +24,7 @@
 #    --specieskey "5349398" \
 #    --resolution "4" \
 #    --terrestrial "pipeline_data/Land_Buffered_025_dgr.RData" \
-#    --wgsrpd "pipeline_data/Land_Buffered_025_dgr.RData" \
+#    --wgsrpd "pipeline_data/WGSRPD.RData" \
 #    --regions "L2_Australia" \
 #    --output "Fabaceae_in_AU"
 
