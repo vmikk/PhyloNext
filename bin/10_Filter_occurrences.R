@@ -302,7 +302,12 @@ cat("Exporting filtered occurrence data\n")
 
 # outdir <- paste0(OUTPUT, ".parquet")
 outdir <- OUTPUT
-dir.create(outdir, showWarnings = FALSE)
+if(! outdir %in% "."){ dir.create(outdir, showWarnings = FALSE) }
+
+dir_high <- paste0(outdir, "/Partition=high")
+dir_low <- paste0(outdir, "/Partition=low")
+dir.create(dir_high, showWarnings = FALSE)
+dir.create(dir_low, showWarnings = FALSE)
 
 write_dataset(
   dataset = dsf,
