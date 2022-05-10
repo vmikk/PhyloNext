@@ -49,6 +49,12 @@ option_list <- list(
   make_option(c("-w", "--wgsrpd"), action="store", default=NA, type='character', help="Path to the World Geographical Scheme for Recording Plant Distributions data (polygons in sf-format)"),
   make_option(c("-x", "--regions"), action="store", default=NA, type='character', help="Comma-separated list of WGSRPD regions"),
 
+  ## CoordinateCleaner-like filters
+  make_option(c("-c", "--rmcountrycentroids"), action="store", default=NA, type='character', help="Remove records within a radius around the geographic centroids of political countries and provinces"),
+  make_option(c("-k", "--rmcountrycapitals"), action="store", default=NA, type='character', help="Remove records within a radius around country capitals"),
+  make_option(c("-b", "--rminstitutions"), action="store", default=NA, type='character', help="Remove records in the vicinity of biodiversity institutions"),
+  make_option(c("-u", "--rmurban"), action="store", default=NA, type='character', help="Remove records inside urban areas"),
+
   ## DBSCAN options
   make_option(c("-d", "--dbscan"), action="store", default=FALSE, type='logical', help="Remove spatial outliers with density-based clustering"),
   make_option(c("-e", "--epsilon"), action="store", default=700, type='double', help="DBSCAN parameter epsilon, km"),
@@ -87,6 +93,11 @@ TERRESTRIAL <- to_na( opt$terrestrial )
 WGSRPD <- to_na( opt$wgsrpd )
 WGSRPDREGIONS <- to_na( opt$regions )
 
+CC_COUNTRY <- to_na( opt$rmcountrycentroids )
+CC_CAPITAL <- to_na( opt$rmcountrycapitals )
+CC_INSTIT  <- to_na( opt$rminstitutions )
+CC_URBAN   <- to_na( opt$rmurban )
+
 DBSCAN <- as.logical( opt$dbscan )
 DBSCAN_EPS <- as.numeric(opt$epsilon)
 DBSCAN_PTS <- as.numeric(opt$minpts)
@@ -103,6 +114,10 @@ cat(paste("Terrestrial data: ", TERRESTRIAL, "\n", sep=""))
 cat(paste("WGSRPD data: ", WGSRPD, "\n", sep=""))
 cat(paste("WGSRPD regions: ", WGSRPDREGIONS, "\n", sep=""))
 
+cat(paste("Country and province centroids: ", CC_COUNTRY, "\n", sep=""))
+cat(paste("Capitals: ", CC_CAPITAL, "\n", sep=""))
+cat(paste("Institutions: ", CC_INSTIT, "\n", sep=""))
+cat(paste("Uraban areas: ", CC_URBAN, "\n", sep=""))
 
 cat(paste("Perform DBSCAN: ", DBSCAN, "\n", sep=""))
 if(DBSCAN == TRUE){
