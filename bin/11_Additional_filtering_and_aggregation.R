@@ -26,6 +26,10 @@
 #    --terrestrial "pipeline_data/Land_Buffered_025_dgr.RData" \
 #    --wgsrpd "pipeline_data/WGSRPD.RData" \
 #    --regions "L2_Australia" \
+#    --rmcountrycentroids "pipeline_data/CC_CountryCentroids_buf_1000m.RData" \
+#    --rmcountrycapitals "pipeline_data/CC_Capitals_buf_10000m.RData" \
+#    --rminstitutions "pipeline_data/CC_Institutions_buf_100m.RData" \
+#    --rmurban "pipeline_data/CC_Urban.RData" \
 #    --output "Fabaceae_in_AU"
 
 
