@@ -157,6 +157,13 @@ set_cpu_count(CPUTHREADS)           # for libarrow
 setDTthreads(threads = CPUTHREADS)  # for data.table
 
 
+## Function to suppress function output
+## (will be used for silencing of garbage collector)
+quiet <- function(x) { 
+  sink("/dev/null")
+  on.exit(sink()) 
+  invisible(force(x)) 
+} 
 
 ############################################## Main pipeline
 
