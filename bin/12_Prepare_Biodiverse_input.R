@@ -170,6 +170,12 @@ if(!is.na(INPUTFILE)){
     header = F, sep = "\t", col.names = "FilePath")$FilePath
 }
 
+
+cat("..Files found: ", length(fls), "\n")
+if(length(fls) == 0){
+  stop("ERROR: no filtered data found in the speciefied path.\n")
+}
+
 datt <- alply(.data = fls, .margins = 1,
   .fun = function(z){ readRDS(z) },
   .progress = "none", .parallel = parall)
