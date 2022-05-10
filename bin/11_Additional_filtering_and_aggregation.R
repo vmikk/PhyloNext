@@ -400,6 +400,49 @@ if(!is.na(CC_INSTIT)){
 } else {
   removed_CC_INSTIT <- NULL     # no filtering was performed
 }
+
+
+## Remove records inside urban areas (similar to CoordinateCleaner::cc_urb)
+## https://github.com/ropensci/CoordinateCleaner/blob/master/R/cc_urb.R
+if(!is.na(CC_URBAN)){
+  cat("Removing occurrences inside urban areas\n")
+
+  ## Load polygons
+  cat("..Loading polygons\n")
+  CC_URBAN <- readRDS(CC_URBAN)
+  cat("..Number of polygons provided: ", nrow(CC_URBAN), "\n")
+
+  ## Convert coordinates to sf class
+  pts <- st_as_sf(
+    x = datt[, .(decimallongitude, decimallatitude)],
+    coords = c("decimallongitude", "decimallatitude"),
+    crs = "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0")
+
+  ## Check which points belong to the polygons
+  cat("..Intersecting polygons and data points\n")
+  poly_intersect <- st_intersects(pts, CC_URBAN)
+  poly <- lengths(poly_intersect) > 0
+
+  non_poly <- sum(!poly)
+  cat("..Number of points inside the selected polygons: ", sum(poly), "\n")
+  cat("..Number of points outside the selected polygons: ", non_poly, "\n")
+
+  ## Remove outliers
+  if(non_poly > 0){
+    removed_CC_URBAN <- datt[ poly ]   # outliers
+    datt <- datt[ ! poly ]
+  } else {
+    removed_CC_URBAN <- NULL   # no found
+  }
+
+  rm(pts, CC_URBAN)
+  quiet( gc() )
+} else {
+  removed_CC_URBAN <- NULL     # no filtering was performed
+}
+
+
+
 ## Density-based outlier removal
 if(DBSCAN == TRUE){
   cat("Density-based outlier removal\n")
@@ -575,6 +618,23 @@ if(!is.null(removed_CC_INSTIT)){
   attr(datt_h3, which = "removed_CC_INSTIT_h3") <- NA 
   attr(datt_h3, which = "removed_CC_INSTIT_n") <- 0
 }
+
+
+## Urban areas
+if(!is.null(removed_CC_URBAN)){
+  
+  ## H3 binning of removed occurrences
+  removed_CC_URBAN[ , H3 := h3::geo_to_h3(removed_CC_URBAN[, .(decimallatitude, decimallongitude)], res = RESOLUTION) ]
+
+  attr(datt_h3, which = "removed_CC_URBAN_h3") <- unique(removed_CC_URBAN$H3)
+  attr(datt_h3, which = "removed_CC_URBAN_n") <- nrow(removed_CC_URBAN)
+} else {
+  attr(datt_h3, which = "removed_CC_URBAN_h3") <- NA 
+  attr(datt_h3, which = "removed_CC_URBAN_n") <- 0
+}
+
+
+
 
 ## DBSCAN-based outliers
 if(!is.na(removed_dbscan[[1]])){
