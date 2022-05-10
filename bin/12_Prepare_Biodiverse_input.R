@@ -35,6 +35,7 @@ suppressPackageStartupMessages(require(optparse))
 ## Parse arguments
 option_list <- list(
   make_option(c("-i", "--input"), action="store", default=NA, type='character', help="Path to the directory with filtered data"),
+  make_option(c("-f", "--inputfile"), action="store", default=NA, type='character', help="Text file with paths to the filtered data"),
   make_option(c("-p", "--phytree"), action="store", default=NA, type='character', help="Phylogenetic tree (pre-computed in Newick format or get it from API)"),
   make_option(c("-g", "--taxgroup"), action="store", default="All life", type='character', help="Taxonomy group in OpenTree"),
 
@@ -45,7 +46,7 @@ opt <- parse_args(OptionParser(option_list=option_list))
 
 
 ## Validation of the required argiments
-if(is.na(opt$input)){
+if(sum(is.na(opt$input), is.na(opt$inputfile)) < 1){
   stop("Input is not specified.\n")
 }
 if(is.na(opt$output)){
@@ -60,6 +61,7 @@ to_na <- function(x){
 
 ## Assign variables
 INPUT <- opt$input
+INPUTFILE <- opt$inputfile
 PHYTREE <- to_na( opt$phytree )
 TAXGROUP <- opt$taxgroup
 CPUTHREADS <- as.numeric(opt$threads)
@@ -71,6 +73,7 @@ if(TAXGROUP %in% "All_life"){ TAXGROUP <- "All life" }
 
 ## Log assigned variables
 cat(paste("Input directory with filtered occurrences: ", INPUT, "\n", sep=""))
+cat(paste("Input file with paths to the filtered occurrences: ", INPUTFILE, "\n", sep=""))
 cat(paste("Pre-computed phylogenetic tree: ", PHYTREE, "\n", sep=""))
 cat(paste("Taxonomy group in OpenTree: ", TAXGROUP, "\n", sep=""))
 cat(paste("Number of CPU threads to use: ", CPUTHREADS, "\n", sep=""))
@@ -151,10 +154,21 @@ if(!is.na(PHYTREE)){
 
 ## Load and combine filtered data
 cat("Loading filtered occurrences\n")
-fls <- list.files(
-  path = INPUT,
-  pattern = ".RData$",
-  full.names = T, recursive = T)
+
+## Directory with *.RData files
+if(!is.na(INPUT)){
+  fls <- list.files(
+    path = INPUT,
+    pattern = ".RData$",
+    full.names = T, recursive = T)
+}
+
+## Text file with paths to *.RData files
+if(!is.na(INPUTFILE)){
+  fls <- read.table(
+    file = INPUTFILE,
+    header = F, sep = "\t", col.names = "FilePath")$FilePath
+}
 
 datt <- alply(.data = fls, .margins = 1,
   .fun = function(z){ readRDS(z) },
