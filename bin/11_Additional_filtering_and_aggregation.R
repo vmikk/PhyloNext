@@ -276,6 +276,49 @@ if(!is.na(WGSRPD) & !is.na(WGSRPDREGIONS)){
 } else {
   removed_WGSRPD <- NA     # no WGSRPD-filtering was performed
 }
+
+
+
+## Remove country centroids and province centroids (similar to CoordinateCleaner::cc_cen)
+## https://github.com/ropensci/CoordinateCleaner/blob/master/R/cc_cen.R
+## Default buffer = 1 km
+if(!is.na(CC_COUNTRY)){
+  cat("Removing occurrences inside country and province centroids\n")
+
+  ## Load polygons
+  cat("..Loading polygons\n")
+  CC_COUNTRY <- readRDS(CC_COUNTRY)
+  cat("..Number of polygons provided: ", nrow(CC_COUNTRY), "\n")
+
+  ## Convert coordinates to sf class
+  pts <- st_as_sf(
+    x = datt[, .(decimallongitude, decimallatitude)],
+    coords = c("decimallongitude", "decimallatitude"),
+    crs = "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0")
+
+  ## Check which points belong to the polygons
+  cat("..Intersecting polygons and data points\n")
+  poly_intersect <- st_intersects(pts, CC_COUNTRY)
+  poly <- lengths(poly_intersect) > 0
+
+  non_poly <- sum(!poly)
+  cat("..Number of points inside the selected polygons: ", sum(poly), "\n")
+  cat("..Number of points outside the selected polygons: ", non_poly, "\n")
+
+  ## Remove outliers
+  if(non_poly > 0){
+    removed_CC_COUNTRY <- datt[ poly ]   # outliers
+    datt <- datt[ ! poly ]
+  } else {
+    removed_CC_COUNTRY <- NULL   # no found
+  }
+
+  rm(pts, CC_COUNTRY)
+  quiet( gc() )
+} else {
+  removed_CC_COUNTRY <- NULL     # no filtering was performed
+}
+
 ## Density-based outlier removal
 if(DBSCAN == TRUE){
   cat("Density-based outlier removal\n")
@@ -410,6 +453,19 @@ if(!is.na(removed_WGSRPD[[1]])){
   attr(datt_h3, which = "removed_WGSRPD_n") <- 0
 }
 
+
+## Country and province centroids
+if(!is.null(removed_CC_COUNTRY)){
+  
+  ## H3 binning of removed occurrences
+  removed_CC_COUNTRY[ , H3 := h3::geo_to_h3(removed_CC_COUNTRY[, .(decimallatitude, decimallongitude)], res = RESOLUTION) ]
+
+  attr(datt_h3, which = "removed_CC_COUNTRY_h3") <- unique(removed_CC_COUNTRY$H3)
+  attr(datt_h3, which = "removed_CC_COUNTRY_n") <- nrow(removed_CC_COUNTRY)
+} else {
+  attr(datt_h3, which = "removed_CC_COUNTRY_h3") <- NA 
+  attr(datt_h3, which = "removed_CC_COUNTRY_n") <- 0
+}
 
 
 ## DBSCAN-based outliers
