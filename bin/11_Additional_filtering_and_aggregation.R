@@ -319,6 +319,47 @@ if(!is.na(CC_COUNTRY)){
   removed_CC_COUNTRY <- NULL     # no filtering was performed
 }
 
+
+## Filter country capitals (similar to CoordinateCleaner::cc_cap)
+## https://github.com/ropensci/CoordinateCleaner/blob/master/R/cc_cap.R
+## Default buffer = 10 km
+if(!is.na(CC_CAPITAL)){
+  cat("Removing occurrences within capitals\n")
+
+  ## Load polygons
+  cat("..Loading polygons\n")
+  CC_CAPITAL <- readRDS(CC_CAPITAL)
+  cat("..Number of polygons provided: ", nrow(CC_CAPITAL), "\n")
+
+  ## Convert coordinates to sf class
+  pts <- st_as_sf(
+    x = datt[, .(decimallongitude, decimallatitude)],
+    coords = c("decimallongitude", "decimallatitude"),
+    crs = "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0")
+
+  ## Check which points belong to the polygons
+  cat("..Intersecting polygons and data points\n")
+  poly_intersect <- st_intersects(pts, CC_CAPITAL)
+  poly <- lengths(poly_intersect) > 0
+
+  non_poly <- sum(!poly)
+  cat("..Number of points inside the selected polygons: ", sum(poly), "\n")
+  cat("..Number of points outside the selected polygons: ", non_poly, "\n")
+
+  ## Remove outliers
+  if(non_poly > 0){
+    removed_CC_CAPITAL <- datt[ poly ]   # outliers
+    datt <- datt[ ! poly ]
+  } else {
+    removed_CC_CAPITAL <- NULL   # no found
+  }
+
+  rm(pts, CC_CAPITAL)
+  quiet( gc() )
+} else {
+  removed_CC_CAPITAL <- NULL     # no filtering was performed
+}
+
 ## Density-based outlier removal
 if(DBSCAN == TRUE){
   cat("Density-based outlier removal\n")
@@ -468,6 +509,18 @@ if(!is.null(removed_CC_COUNTRY)){
 }
 
 
+## Capital centroids
+if(!is.null(removed_CC_CAPITAL)){
+  
+  ## H3 binning of removed occurrences
+  removed_CC_CAPITAL[ , H3 := h3::geo_to_h3(removed_CC_CAPITAL[, .(decimallatitude, decimallongitude)], res = RESOLUTION) ]
+
+  attr(datt_h3, which = "removed_CC_CAPITAL_h3") <- unique(removed_CC_CAPITAL$H3)
+  attr(datt_h3, which = "removed_CC_CAPITAL_n") <- nrow(removed_CC_CAPITAL)
+} else {
+  attr(datt_h3, which = "removed_CC_CAPITAL_h3") <- NA 
+  attr(datt_h3, which = "removed_CC_CAPITAL_n") <- 0
+}
 ## DBSCAN-based outliers
 if(!is.na(removed_dbscan[[1]])){
 
