@@ -224,12 +224,13 @@ if(!is.na(TERRESTRIAL)){
     removed_nonterrestrial <- datt[ ! land ]   # outliers
     datt <- datt[ land ]
   } else {
-    removed_nonterrestrial <- NA   # no non-terrestrial samples found
+    removed_nonterrestrial <- NULL   # no non-terrestrial samples found
   }
 
-  rm(pts)
+  rm(pts, TERRESTRIAL)
+  quiet( gc() )
 } else {
-  removed_nonterrestrial <- NA     # no terrestrial filtering was performed
+  removed_nonterrestrial <- NULL     # no terrestrial filtering was performed
 }
 
 
@@ -276,13 +277,15 @@ if(!is.na(WGSRPD) & !is.na(WGSRPDREGIONS)){
     removed_WGSRPD <- datt[ ! poly ]   # outliers
     datt <- datt[ poly ]
   } else {
-    removed_WGSRPD <- NA   # no non-WGSRPD samples found
+    removed_WGSRPD <- NULL   # no non-WGSRPD samples found
   }
 
-  rm(pts)
+  rm(pts, WGSRPD)
+  quiet( gc() )
 } else {
-  removed_WGSRPD <- NA     # no WGSRPD-filtering was performed
+  removed_WGSRPD <- NULL     # no WGSRPD-filtering was performed
 }
+
 
 
 
@@ -526,11 +529,11 @@ if(DBSCAN == TRUE){
     datt <- datt[ which(cl$cluster != 0 ) ]
   
   } else {
-    removed_dbscan <- NA    # no outliers found
+    removed_dbscan <- NULL    # no outliers found
   }
 
 } else { # end of DBSCAN
-    removed_dbscan <- NA    # DBSCAN-based filtering was not performed
+    removed_dbscan <- NULL    # DBSCAN-based filtering was not performed
 }
 
 
@@ -558,7 +561,7 @@ setnames(datt_h3, c("lat","lng"), c("decimallatitude","decimallongitude"))
 #### Add grid cell IDs of removed samples as attributes to the resulting data
 
 ## Non-terrestrial outliers
-if(!is.na(removed_nonterrestrial[[1]])){
+if(!is.null(removed_nonterrestrial)){
   
   ## H3 binning of non-terrestrial outliers
   removed_nonterrestrial[ , H3 := h3::geo_to_h3(removed_nonterrestrial[, .(decimallatitude, decimallongitude)], res = RESOLUTION) ]
@@ -572,7 +575,7 @@ if(!is.na(removed_nonterrestrial[[1]])){
 
 
 ## WGSRPD-outliers
-if(!is.na(removed_WGSRPD[[1]])){
+if(!is.null(removed_WGSRPD)){
   
   ## H3 binning of non-removed_WGSRPD outliers
   removed_WGSRPD[ , H3 := h3::geo_to_h3(removed_WGSRPD[, .(decimallatitude, decimallongitude)], res = RESOLUTION) ]
@@ -644,7 +647,7 @@ if(!is.null(removed_CC_URBAN)){
 
 
 ## DBSCAN-based outliers
-if(!is.na(removed_dbscan[[1]])){
+if(!is.null(removed_dbscan)){
 
   ## H3 binning of DBSCAN outliers
   removed_dbscan[ , H3 := h3::geo_to_h3(removed_dbscan[, .(decimallatitude, decimallongitude)], res = RESOLUTION) ]
