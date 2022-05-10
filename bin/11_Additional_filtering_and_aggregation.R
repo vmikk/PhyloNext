@@ -360,6 +360,46 @@ if(!is.na(CC_CAPITAL)){
   removed_CC_CAPITAL <- NULL     # no filtering was performed
 }
 
+
+## Remove records in the vicinity of biodiversity institutions (similar to CoordinateCleaner::cc_inst)
+## https://github.com/ropensci/CoordinateCleaner/blob/master/R/cc_inst.R
+## Default buffer = 100 m
+if(!is.na(CC_INSTIT)){
+  cat("Removing occurrences in the vicinity of biodiversity institutions\n")
+
+  ## Load polygons
+  cat("..Loading polygons\n")
+  CC_INSTIT <- readRDS(CC_INSTIT)
+  cat("..Number of polygons provided: ", nrow(CC_INSTIT), "\n")
+
+  ## Convert coordinates to sf class
+  pts <- st_as_sf(
+    x = datt[, .(decimallongitude, decimallatitude)],
+    coords = c("decimallongitude", "decimallatitude"),
+    crs = "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0")
+
+  ## Check which points belong to the polygons
+  cat("..Intersecting polygons and data points\n")
+  poly_intersect <- st_intersects(pts, CC_INSTIT)
+  poly <- lengths(poly_intersect) > 0
+
+  non_poly <- sum(!poly)
+  cat("..Number of points inside the selected polygons: ", sum(poly), "\n")
+  cat("..Number of points outside the selected polygons: ", non_poly, "\n")
+
+  ## Remove outliers
+  if(non_poly > 0){
+    removed_CC_INSTIT <- datt[ poly ]   # outliers
+    datt <- datt[ ! poly ]
+  } else {
+    removed_CC_INSTIT <- NULL   # no found
+  }
+
+  rm(pts, CC_INSTIT)
+  quiet( gc() )
+} else {
+  removed_CC_INSTIT <- NULL     # no filtering was performed
+}
 ## Density-based outlier removal
 if(DBSCAN == TRUE){
   cat("Density-based outlier removal\n")
@@ -521,6 +561,21 @@ if(!is.null(removed_CC_CAPITAL)){
   attr(datt_h3, which = "removed_CC_CAPITAL_h3") <- NA 
   attr(datt_h3, which = "removed_CC_CAPITAL_n") <- 0
 }
+
+
+## Instituteion centroids
+if(!is.null(removed_CC_INSTIT)){
+  
+  ## H3 binning of removed occurrences
+  removed_CC_INSTIT[ , H3 := h3::geo_to_h3(removed_CC_INSTIT[, .(decimallatitude, decimallongitude)], res = RESOLUTION) ]
+
+  attr(datt_h3, which = "removed_CC_INSTIT_h3") <- unique(removed_CC_INSTIT$H3)
+  attr(datt_h3, which = "removed_CC_INSTIT_n") <- nrow(removed_CC_INSTIT)
+} else {
+  attr(datt_h3, which = "removed_CC_INSTIT_h3") <- NA 
+  attr(datt_h3, which = "removed_CC_INSTIT_n") <- 0
+}
+
 ## DBSCAN-based outliers
 if(!is.na(removed_dbscan[[1]])){
 
