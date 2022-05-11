@@ -70,10 +70,10 @@ params.dbscanminpts = 3
 params.terrestrial = params.data_path + "/Land_Buffered_025_dgr.RData"
 params.wgsrpd = params.data_path + "/WGSRPD.RData"
 params.regions = "NA"
-params.rmcountrycentroids = false    // pipeline_data/CC_CountryCentroids.RData
-params.rmcountrycapitals = false     // pipeline_data/CC_Capitals.RData
-params.rminstitutions = false        // pipeline_data/CC_Institutions.RData
-params.rmurban = false               // pipeline_data/CC_Urban.RData
+params.rmcountrycentroids = "NA"    // pipeline_data/CC_CountryCentroids_buf_1000m.RData
+params.rmcountrycapitals = "NA"     // pipeline_data/CC_Capitals_buf_10000m.RData
+params.rminstitutions = "NA"        // pipeline_data/CC_Institutions_buf_100m.RData
+params.rmurban = "NA"               // pipeline_data/CC_Urban.RData
 
 // Filtered data aggregation - "12_Prepare_Biodiverse_input.R"
 params.phytree = "NA"
@@ -304,6 +304,10 @@ process outl_low {
       --dbscan false \
       --resolution ${params.h3resolution} \
       --terrestrial ${params.terrestrial} \
+      --rmcountrycentroids ${params.rmcountrycentroids} \
+      --rmcountrycapitals ${params.rmcountrycapitals} \
+      --rminstitutions ${params.rminstitutions} \
+      --rmurban ${params.rmurban} \
       --wgsrpd ${params.wgsrpd} \
       --regions ${params.regions} \
       --threads ${task.cpus} \
@@ -345,6 +349,10 @@ process outl_high {
       --minpts ${params.dbscanminpts} \
       --resolution ${params.h3resolution} \
       --terrestrial ${params.terrestrial} \
+      --rmcountrycentroids ${params.rmcountrycentroids} \
+      --rmcountrycapitals ${params.rmcountrycapitals} \
+      --rminstitutions ${params.rminstitutions} \
+      --rmurban ${params.rmurban} \
       --wgsrpd ${params.wgsrpd} \
       --regions ${params.regions} \
       --threads ${task.cpus} \
