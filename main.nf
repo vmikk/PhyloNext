@@ -104,7 +104,7 @@ biodiverse_args = "function=" + params.randname + " max_iters=" + iterations_per
 
 
 // Visualization
-params.plotvar = "PHYLO_RPD1"
+params.plotvar = "RICHNESS_ALL,PD,PD_P"
 params.plotformat = "pdf"
 params.world = params.data_path + "/WorldMap_NaturalEarth_Medium.RData"
 
