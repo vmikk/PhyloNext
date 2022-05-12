@@ -408,13 +408,13 @@ process merge_occ {
     script:
     """
     Rscript ${params.scripts_path}/12_Prepare_Biodiverse_input.R \
-      --inputfile ${spp} \
+      --input ${out_flt2} \
       --phytree ${params.phytree} \
       --taxgroup ${params.taxgroup} \
       --threads ${task.cpus} \
       --output  "\$PWD"     # ${out_biod}
 
-    #  --input ${out_flt2}  # direcotory with RData files
+    # --inputfile ${spp} \
 
     """
 }
