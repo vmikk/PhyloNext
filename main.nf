@@ -13,6 +13,7 @@
 */
 
 // TO DO:
+// - add filtering summary (per species)
 // - autoname outdir (with current date?)
 // - add a text file with parameter summary to the results
 // - update visualization results (PDP, PD, S)
