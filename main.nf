@@ -106,6 +106,10 @@ biodiverse_args = "function=" + params.randname + " max_iters=" + iterations_per
 // Visualization
 params.plotvar = "RICHNESS_ALL,PD,PD_P"
 params.plotformat = "pdf"
+params.plottype = "raw"
+params.plotwidth = 18
+params.plotheight = 18
+params.plotunits = "in"
 params.world = params.data_path + "/WorldMap_NaturalEarth_Medium.RData"
 
 // Help message flag
@@ -620,6 +624,10 @@ process plot_pd {
       --variables ${params.plotvar} \
       --world "${params.world}" \
       --format "${params.plotformat}" \
+      --plotz "${params.plottype}" \
+      --width "${params.plotwidth}" \
+      --height "${params.plotheight}" \
+      --units "${params.plotunits}" \
       --output "."
 
       # --output "${out_plot}"
