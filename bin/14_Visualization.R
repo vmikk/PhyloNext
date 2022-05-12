@@ -25,7 +25,8 @@ suppressPackageStartupMessages(require(optparse))
 option_list <- list(
   make_option(c("-r", "--observed"), action="store", default=NA, type='character', help="Input file (CSV) with Biodiverse results - observed indices"),
   make_option(c("-z", "--zscores"),  action="store", default=NA, type='character', help="Input file (CSV) with Biodiverse results - Z-scores"),
-  make_option(c("-v", "--variables"), action="store", default="PHYLO_RPD1", type='character', help="Diversity variables to plot"),
+  make_option(c("-v", "--variables"), action="store", default="RICHNESS_ALL,PD,PD_P", type='character', help="Diversity variables to plot (comma-separated entries)"),
+  make_option(c("-p", "--plotz"), action="store", default="raw", type='character', help="Plot raw estimates or Z-scores"),
   make_option(c("-w", "--world"), action="store", default=NA, type='character', help="File with contour map of the world"),
   make_option(c("-t", "--threads"), action="store", default=1L, type='integer', help="Number of CPU threads for arrow, default 4"),
   make_option(c("-f", "--format"), action="store", default="pdf", type='character', help="Image format (pdf, png, svg, jpg)"),
@@ -55,6 +56,7 @@ to_na <- function(x){
 INPUTO <- opt$observed
 INPUTZ <- opt$zscores
 VARIABLES <- opt$variables
+PLOTZ <- opt$plotz
 WORLD <- to_na( opt$world )
 
 CPUTHREADS <- as.numeric(opt$threads)
@@ -65,7 +67,8 @@ OUTPUT <- opt$output
 ## Log assigned variables
 cat(paste("Input file (observed indices): ", INPUTO, "\n", sep=""))
 cat(paste("Input file (Z-scores): ", INPUTZ, "\n", sep=""))
-cat(paste("Variables to plot: ", VARIABLES, "\n", sep=""))
+cat(paste("Indices to plot: ", VARIABLES, "\n", sep=""))
+cat(paste("Variable type to plot (raw or Z-scores): ", PLOTZ, "\n", sep=""))
 cat(paste("Adding world map: ", WORLD, "\n", sep=""))
 cat(paste("Number of CPU threads to use: ", CPUTHREADS, "\n", sep=""))
 cat(paste("Output image format: ", FORMAT, "\n", sep=""))
@@ -139,14 +142,26 @@ res_z <- fread(INPUTZ)
 colnames(res_r)[1] <- "H3"
 colnames(res_z)[1] <- "H3"
 
+## If there are multiple variables selected - split them
+if(any(grepl(pattern = ",", x = VARIABLES))){
+  VARIABLES <- strsplit(x = VARIABLES, split = ",")[[1]]
+}
+
 
 ## Check if the selected index is in the tables
-#                                             ///// update for multiple inds
-if(!VARIABLES %in% colnames(res_r)){
-  stop("Selected index is not present in the table with observed indices!\n")
+colz <- unique(c(colnames(res_r), colnames(res_z)))
+if(any(!VARIABLES %in% colz)){
+  cat("Some of the selected indices are not present in tables with results!\n")
+  cat("Please check the spelling of index names or eneble their estimation in Biodiverse.\n")
+  missing <- VARIABLES[ ! VARIABLES %in% colz ]
+  cat("Indices missing: ", paste(missing, collapse = ", "), "\n")
+
+  ## Exclude missing indices
+  VARIABLES <- VARIABLES[ ! VARIABLES %in% missing ]
 }
-if(!VARIABLES %in% colnames(res_z)){
-  stop("Selected index is not present in the table with Z-scores!\n")
+
+if(length(VARIABLES) == 0){
+  stop("None of the selected indices were found in the results! Nothing to plot.\n")
 }
 
 
@@ -156,14 +171,22 @@ if(!VARIABLES %in% colnames(res_z)){
 
 ## Get spatial polygons
 cat("Preparing gridcell polygons\n")
-H3_poly <- h3_to_geo_boundary_sf(res_z$H3)
-# plot(H3_poly)
+if(PLOTZ %in% c("raw", "Raw", "RAW")){
 
+  H3_poly <- h3_to_geo_boundary_sf(res_r$H3)
+  # plot(H3_poly)
 
-## Add diversity indices to the data
-cat("Adding diversity estimates to polygons\n")
+  cat("..Adding raw diversity estimates to polygons\n")
+  H3_poly <- cbind(H3_poly, res_r[, ..VARIABLES])
+}
+if(PLOTZ %in% c("z", "Z", "z-scores", "Z-scores")){
 
-H3_poly <- cbind(H3_poly, res_z[, ..VARIABLES])
+  H3_poly <- h3_to_geo_boundary_sf(res_z$H3)
+  # plot(H3_poly)
+  
+  cat("..Adding Z-scores of diversity estimates to polygons\n")
+  H3_poly <- cbind(H3_poly, res_z[, ..VARIABLES])
+}
 
 
 ## Find plot limits
@@ -172,35 +195,62 @@ xx <- pretty(c(boxx["xmin"], boxx["xmax"]))
 yy <- pretty(c(boxx["ymin"], boxx["ymax"]))
 
 
-if(is.na(WORLD)){
-  PP <- ggplot(H3_poly) +
-    geom_sf(aes_string(fill = VARIABLES), color = NA) +
-    scale_fill_distiller(palette = "Spectral") + 
-    ggtitle(VARIABLES) +
-    xlim(xx[1], xx[length(xx)]) +
-    ylim(yy[1], yy[length(yy)])
+## Plotting function
+plot_function <- function(varname){
+
+  if(is.na(WORLD)){
+    PP <- ggplot(H3_poly) +
+      geom_sf(aes_string(fill = varname), color = NA) +
+      scale_fill_distiller(palette = "Spectral") + 
+      ggtitle(varname) +
+      xlim(xx[1], xx[length(xx)]) +
+      ylim(yy[1], yy[length(yy)])
+  }
+
+  if(!is.na(WORLD)){
+    PP <- ggplot(H3_poly) +
+      geom_sf(data = world, fill = "grey95", color = "grey80") + 
+      geom_sf(aes_string(fill = varname), color = NA) +
+      scale_fill_distiller(palette = "Spectral") + 
+      ggtitle(varname) +
+      xlim(xx[1], xx[length(xx)]) +
+      ylim(yy[1], yy[length(yy)])
+  }
+
+  return(PP)
 }
 
-if(!is.na(WORLD)){
-  PP <- ggplot(H3_poly) +
-    geom_sf(data = world, fill = "grey95", color = "grey80") + 
-    geom_sf(aes_string(fill = VARIABLES), color = NA) +
-    scale_fill_distiller(palette = "Spectral") + 
-    ggtitle(VARIABLES) +
-    xlim(xx[1], xx[length(xx)]) +
-    ylim(yy[1], yy[length(yy)])
+
+## Function to export plot
+plot_export <- function(varname){
+
+  cat("..Plotting ", varname, "\n")
+
+  ## Create a plot
+  PP <- plot_function(varname)
+
+  ## Make output file name
+  OUTNAME <- file.path(OUTPUT, paste0(varname, ".", FORMAT))
+
+  ## Export plot
+  ggsave(filename = OUTNAME, plot = PP,
+    width = WIDTH, height = HEIGTH, units = UNITS)
+
 }
 
-OUTNAME <- file.path(OUTPUT, paste0(VARIABLES, ".", FORMAT))
 
-ggsave(filename = OUTNAME,
-  plot = PP, width = 18, height = 18)
+## Plot all variables
+cat("Start plotting\n")
+
+a_ply(.data = VARIABLES, .margins = 1, .fun = plot_export)
+
+cat("Plotting finished\n")
 
 
 
 #####################
 
-cat("Plotting finished\n")
+cat("All done!\n")
 
 ## Check time
 end_time <- Sys.time()
