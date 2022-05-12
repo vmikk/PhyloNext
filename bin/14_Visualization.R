@@ -7,9 +7,16 @@
 #   --observed "02.Biodiverse_input/occ.bds.csv" \
 #   --zscores "02.Biodiverse_results/RND_rand--z_scores--SPATIAL_RESULTS.csv" \
 #   --threads 1 \
-#   --variables "PHYLO_RPD1" \
+#   --variables "RICHNESS_ALL,PD,PD_P" \
+#   --plotz "raw" \
 #   --world "pipeline_data/WorldMap_NaturalEarth_Medium.RData" \
-#   --output "03.Plots"
+#   --output "03.Plots" \
+#   --format "pdf" --width 18 --height 18 --units "in"
+
+
+## TO DO:
+# - fix dingbats symbols in PDF
+
 
 ############################################## Parse input parameters
 
