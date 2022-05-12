@@ -672,6 +672,23 @@ if(!is.null(removed_dbscan)){
 attr(datt_h3, which = "number_of_records") <- NRECORDS
 
 
+
+## Summarize filtering results
+OUTLIERS_REMOVED <- rbind(
+  data.frame(OutlierType = "NonTerrestrial",   N = attr(datt_h3, which = "removed_nonterrestrial_n"), NH3 = length(attr(datt_h3, which = "removed_nonterrestrial_h3"))),
+  data.frame(OutlierType = "WGSRPD",           N = attr(datt_h3, which = "removed_WGSRPD_n"),         NH3 = length(attr(datt_h3, which = "removed_WGSRPD_h3"))),
+  data.frame(OutlierType = "CountryCentroids", N = attr(datt_h3, which = "removed_CC_COUNTRY_n"),     NH3 = length(attr(datt_h3, which = "removed_CC_COUNTRY_h3"))),
+  data.frame(OutlierType = "Capitals",         N = attr(datt_h3, which = "removed_CC_CAPITAL_n"),     NH3 = length(attr(datt_h3, which = "removed_CC_CAPITAL_h3"))),
+  data.frame(OutlierType = "Institutions",     N = attr(datt_h3, which = "removed_CC_INSTIT_n"),      NH3 = length(attr(datt_h3, which = "removed_CC_INSTIT_h3"))),
+  data.frame(OutlierType = "UrbanAreas",       N = attr(datt_h3, which = "removed_CC_URBAN_n"),       NH3 = length(attr(datt_h3, which = "removed_CC_URBAN_h3"))),
+  data.frame(OutlierType = "DBSCAN",           N = attr(datt_h3, which = "removed_dbscan_n"),         NH3 = length(attr(datt_h3, which = "removed_dbscan_h3")))
+  )
+OUTLIERS_REMOVED <- cbind(SpeciesKey = SPECIESKEY, OUTLIERS_REMOVED)
+setDT(OUTLIERS_REMOVED)
+OUTLIERS_REMOVED[ is.na(N), NH3 := 0 ]
+
+
+
 ## Export
 cat("Exporting filtered occurrence data\n")
 
@@ -697,6 +714,12 @@ saveRDS(
 # fwrite(x = datt_h3,
 #   file = "export.txt.gz",
 #   quote = F, sep = "\t", compress = "gzip")
+
+
+## Export outlier removal summary
+fwrite(x = OUTLIERS_REMOVED,
+  file = gsub(pattern = ".RData$", replacement = "_OutlierCounts.txt", x = OUTFILE),
+  quote = F, sep = "\t")
 
 
 
