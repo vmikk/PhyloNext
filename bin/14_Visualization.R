@@ -263,6 +263,13 @@ a_ply(.data = VARIABLES, .margins = 1, .fun = plot_export)
 cat("Plotting finished\n")
 
 
+## Export simple feature collection
+cat("Exporting sf object\n")
+
+saveRDS(object = H3_poly,
+  file = file.path(OUTPUT, "H3_polygons.RData"),
+  compress = "xz")
+
 
 #####################
 
