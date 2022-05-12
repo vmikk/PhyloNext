@@ -301,6 +301,7 @@ process outl_low {
 
     output:
       path "NoSpKey.RData", emit: lowabsp
+      path "NoSpKey_OutlierCounts.txt", emit: outlierslow
 
     script:
     """
@@ -343,6 +344,7 @@ process outl_high {
 
     output:
       path "${sp}.RData", emit: sp
+      path "${sp}_OutlierCounts.txt", emit: outliers
 
     script:
     """
@@ -660,6 +662,16 @@ workflow {
 
     // Run stage-II filtering for abundant species (with DBSCAN)
     outl_high(species_ch, occ_filter.out.part_high)
+
+    // Collect outlier removal statistics
+    // out_high_ch = outl_high.out.outliers.collect()
+    // out_low_ch = outl_low.out.outlierslow.collect()
+    // Channel
+    //     .from('out_high_ch', 'out_low_ch')
+    //     .collectFile(name: 'OutlierCounts.txt', newLine: true, keepHeader: true)
+    //     .subscribe {
+    //         println "${it.text}"
+    //     }
 
     // Use output of for Biodiverse
     flt_ch = outl_high.out.sp.mix(outl_low.out.lowabsp).collect()
