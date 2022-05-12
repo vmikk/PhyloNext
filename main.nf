@@ -363,25 +363,27 @@ process outl_high {
 }
 
 
-// Create a file with paths to all chunks with filtered results
-process filtered_filelist {
-
-    // container image is required for Cloud only
-    label "container_r"
-
-    input:
-    val spp
-
-    output:
-    path "filtered_results.txt", emit: FLT
-
-    shell:
-    $/
-    echo "${spp}" \
-      | sed -z 's/, /\n/g; s/^\[//; s/\]//' \
-      > filtered_results.txt
-    /$
-}
+// // Create a file with paths to all chunks with filtered results
+// // If there are a lot of files - it triggers and error:
+// // String too long. The given string is 265799 Unicode code units long, but only a maximum of 65535 is allowed.
+// process filtered_filelist {
+// 
+//     // container image is required for Cloud only
+//     label "container_r"
+// 
+//     input:
+//     val spp
+// 
+//     output:
+//     path "filtered_results.txt", emit: FLT
+// 
+//     shell:
+//     $/
+//     echo "${spp}" \
+//       | sed -z 's/, /\n/g; s/^\[//; s/\]//' \
+//       > filtered_results.txt
+//     /$
+// }
 
 
 // Merge filtered species occurrences and prep data for Biodiverse
@@ -656,10 +658,11 @@ workflow {
     // flt_ch.view()
 
     // Prepare a file with paths to occurrence filtering results
-    filtered_filelist(flt_ch)
+    // filtered_filelist(flt_ch)
 
     // Merge species occurrences into a single file
-    merge_occ(filtered_filelist.out.FLT)
+    // merge_occ(filtered_filelist.out.FLT)   // using inputfile (fail if there are a lot of species)
+    merge_occ(flt_ch)
 
     // Prepare Biodiverse input files
     prep_biodiv(merge_occ.out.occurrences, merge_occ.out.tree)
