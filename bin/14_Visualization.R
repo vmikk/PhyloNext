@@ -30,6 +30,9 @@ option_list <- list(
   make_option(c("-w", "--world"), action="store", default=NA, type='character', help="File with contour map of the world"),
   make_option(c("-t", "--threads"), action="store", default=1L, type='integer', help="Number of CPU threads for arrow, default 4"),
   make_option(c("-f", "--format"), action="store", default="pdf", type='character', help="Image format (pdf, png, svg, jpg)"),
+  make_option(c("-n", "--width"), action="store", default=18, type='double', help="Image size, width"),
+  make_option(c("-m", "--height"), action="store", default=18, type='double', help="Image size, height"),
+  make_option(c("-u", "--units"), action="store", default="in", type='character', help="Image size units (in, cm, mm, px)"),
   make_option(c("-o", "--output"), action="store", default=NA, type='character', help="Output directory")
 )
 opt <- parse_args(OptionParser(option_list=option_list))
@@ -61,6 +64,9 @@ WORLD <- to_na( opt$world )
 
 CPUTHREADS <- as.numeric(opt$threads)
 FORMAT <- opt$format
+WIDTH <- as.numeric(opt$width)
+HEIGTH <- as.numeric(opt$height)
+UNITS <- opt$units
 OUTPUT <- opt$output
 
 
@@ -72,6 +78,9 @@ cat(paste("Variable type to plot (raw or Z-scores): ", PLOTZ, "\n", sep=""))
 cat(paste("Adding world map: ", WORLD, "\n", sep=""))
 cat(paste("Number of CPU threads to use: ", CPUTHREADS, "\n", sep=""))
 cat(paste("Output image format: ", FORMAT, "\n", sep=""))
+cat(paste("Output image width: ", WIDTH, "\n", sep=""))
+cat(paste("Output image height: ", HEIGTH, "\n", sep=""))
+cat(paste("Output image size units: ", UNITS, "\n", sep=""))
 cat(paste("Output directory: ", OUTPUT, "\n", sep=""))
 
 cat("\n")
