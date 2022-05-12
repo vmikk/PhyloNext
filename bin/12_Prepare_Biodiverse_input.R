@@ -83,7 +83,9 @@ cat("\n")
 
 
 ## Create output directory
-dir.create(path = OUTPUT, showWarnings = F, recursive = TRUE)
+if(!OUTPUT %in% "."){
+  dir.create(path = OUTPUT, showWarnings = F, recursive = TRUE)
+}
 
 
 ############################################## Load packages
