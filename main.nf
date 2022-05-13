@@ -418,7 +418,7 @@ process merge_occ {
       --phytree ${params.phytree} \
       --taxgroup ${params.taxgroup} \
       --threads ${task.cpus} \
-      --output  "\$PWD"     # ${out_biod}
+      --output  "."     # ${out_biod}
 
     # --inputfile ${spp} \
 
