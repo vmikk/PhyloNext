@@ -185,7 +185,7 @@ aws s3 sync \
   --no-sign-request
 ```
 
-Alternative GBIF snapshot is also [hosted by the Microsoft AI for Earth program](https://github.com/microsoft/AIforEarthDataSets/blob/main/data/gbif.md) and is availble by the following link: `https://ai4edataeuwest.blob.core.windows.net/gbif/occurrence/2022-03-01/occurrence.parquet/`
+Alternative GBIF snapshot is also [hosted by the Microsoft AI for Earth program](https://github.com/microsoft/AIforEarthDataSets/blob/main/data/gbif.md). To download it using the [AzCopy command-line utility](https://docs.microsoft.com/en-us/azure/storage/common/storage-use-azcopy-v10) run:
 ```
 azcopy copy \
   "https://ai4edataeuwest.blob.core.windows.net/gbif/occurrence/2022-05-01/occurrence.parquet/*" \
