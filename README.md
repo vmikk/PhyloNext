@@ -186,6 +186,13 @@ aws s3 sync \
 ```
 
 Alternative GBIF snapshot is also [hosted by the Microsoft AI for Earth program](https://github.com/microsoft/AIforEarthDataSets/blob/main/data/gbif.md) and is availble by the following link: `https://ai4edataeuwest.blob.core.windows.net/gbif/occurrence/2022-03-01/occurrence.parquet/`
+```
+azcopy copy \
+  "https://ai4edataeuwest.blob.core.windows.net/gbif/occurrence/2022-05-01/occurrence.parquet/*" \
+  "~/GBIF/" \
+  --recursive=true
+```
+
 
 
 
