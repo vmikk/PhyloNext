@@ -248,9 +248,6 @@ log.info "\n"
 process occ_filter {
 
     label "container_r"
-    containerOptions = { workflow.containerEngine == "docker" ? 
-        "--volume ${params.input}:${params.input} --volume ${params.outdir}:${params.outdir} --volume ${params.scripts_path}:${params.scripts_path} --volume ${params.data_path}:${params.data_path}"
-        : null }
 
     publishDir "${out_flt1}", mode: 'copy'
     // cpus 10
@@ -294,9 +291,6 @@ process occ_filter {
 process outl_low {
 
     label "container_r"
-    containerOptions = { workflow.containerEngine == "docker" ?
-        "--volume ${params.outdir}:${params.outdir} --volume ${params.data_path}:${params.data_path}"
-        : null }
 
     publishDir "${out_flt2}", mode: 'copy'
     // cpus 5
@@ -332,9 +326,6 @@ process outl_low {
 process outl_high {
 
     label "container_r"
-    containerOptions = { workflow.containerEngine == "docker" ?
-        "--volume ${params.outdir}:${params.outdir} --volume ${params.data_path}:${params.data_path}"
-        : null }
 
     publishDir "${out_flt2}", mode: 'copy'
     // cpus 1
@@ -401,9 +392,6 @@ process outl_high {
 process merge_occ {
 
     label "container_r"
-    containerOptions = { workflow.containerEngine == "docker" ?
-        "--volume ${params.outdir}:${params.outdir} --volume ${params.phytree}:${params.phytree}"
-        : null }
 
     publishDir "$params.outdir/02.Biodiverse_input", mode: 'copy'
     // cpus 10
@@ -434,9 +422,6 @@ process merge_occ {
 process prep_biodiv {
 
     label "container_biodiverse"
-    containerOptions = { workflow.containerEngine == "docker" ?
-        "--volume ${params.outdir}:${params.outdir}"
-        : null }
 
     publishDir "$params.outdir/02.Biodiverse_input", mode: 'copy'
 
@@ -492,9 +477,6 @@ process prep_biodiv {
 process phylodiv {
 
     label "container_biodiverse"
-    containerOptions = { workflow.containerEngine == "docker" ?
-        "--volume ${params.outdir}:${params.outdir}"
-        : null }
 
     // publishDir "$params.outdir/02.Biodiverse_results", mode: 'copy'
     // cpus 1
@@ -549,9 +531,6 @@ process rand_filelist {
 process aggregate_rnds_biodiv {
 
     label "container_biodiverse"
-    containerOptions = { workflow.containerEngine == "docker" ?
-        "--volume ${params.outdir}:${params.outdir}"
-        : null }
 
     publishDir "$params.outdir/02.Biodiverse_results", mode: 'copy'
     // cpus 1
@@ -575,9 +554,6 @@ process aggregate_rnds_biodiv {
 process div_to_csv {
 
     label "container_biodiverse"
-    containerOptions = { workflow.containerEngine == "docker" ?
-        "--volume ${params.outdir}:${params.outdir}"
-        : null }
 
     publishDir "$params.outdir/02.Biodiverse_results", mode: 'copy'
 
@@ -609,9 +585,6 @@ process div_to_csv {
 process plot_pd {
 
     label "container_r"
-    containerOptions = { workflow.containerEngine == "docker" ?
-        "--volume ${params.outdir}:${params.outdir} --volume ${params.data_path}:${params.data_path}"
-        : null }
 
     publishDir "$params.outdir/03.Plots", mode: 'copy'
 
