@@ -256,7 +256,7 @@ process occ_filter {
     // cpus 10
 
     input:
-      val input
+      path input
 
     output:
       path "Partition=low", emit: part_low
@@ -409,7 +409,7 @@ process merge_occ {
     // cpus 10
 
     input:
-      val spp
+      path spp
 
     output:
       path "H3_GridCell_Centres.csv", emit: h3coords
@@ -443,8 +443,8 @@ process prep_biodiv {
     // cpus 1
 
     input:
-      val occurrences
-      val tree
+      path occurrences
+      path tree
 
     output:
       path "occ.bds", emit: BDS
@@ -500,8 +500,8 @@ process phylodiv {
     // cpus 1
 
     input:
-      val BDA
-      val chunkid
+      path BDA
+      path chunkid
 
     output:
       path "Biodiv_randomized.bds", emit: BDArand
@@ -557,7 +557,7 @@ process aggregate_rnds_biodiv {
     // cpus 1
     
     input:
-      val RND
+      path RND
 
     output:
       path "Biodiverse.bds", emit: Biodiv
@@ -584,7 +584,7 @@ process div_to_csv {
     // cpus 1
 
     input:
-      val Biodiv
+      path Biodiv
 
     output:
       path "RND_groups.csv", emit: RND1
@@ -616,8 +616,8 @@ process plot_pd {
     publishDir "$params.outdir/03.Plots", mode: 'copy'
 
     input:
-      val BDOBS   // observed indices
-      val RND4    // randomized indices
+      path BDOBS   // observed indices
+      path RND4    // randomized indices
 
     output:
       path "*.${params.plotformat}"
