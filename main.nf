@@ -462,12 +462,6 @@ process prep_biodiv {
       --input_bts_file "tree.bts" \
       --calcs ${params.indices}
  
-    # cp "occ.bds.csv" "${params.outdir}/02.Biodiverse_input/Biodiverse_ObservedIndices.csv"
-    # 
-    # cp "occ.bds"  "${params.outdir}/02.Biodiverse_input/occ.bds"
-    # cp "tree.bts" "${params.outdir}/02.Biodiverse_input/tree.bts"
-    # cp "occ_analysed.bds" "${params.outdir}/02.Biodiverse_input/occ_analysed.bds"
-
     """
 }
 
