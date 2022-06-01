@@ -13,6 +13,10 @@
 */
 
 // TO DO:
+// - add country filter (gbif issues)
+// - local OTOL tax dump
+// - upd startup message (add coordinatecleaner params)
+// - add script names and descriptions to log files
 // - add filtering summary (per species)
 // - autoname outdir (with current date?)
 // - add a text file with parameter summary to the results
@@ -33,6 +37,7 @@
 // - Split the pipeline into workflows?
 // - Colorize verbose messages
 // - Choose location for singularity image caching: with `singularity.cacheDir` or `NXF_SINGULARITY_CACHEDIR`
+// - Convert country names and codes with  https://vincentarelbundock.github.io/countrycode/
 
 
 // Enable DSL2 syntax
