@@ -131,7 +131,6 @@ out_flt1 = params.outdir + "/00.filtered1.parquet"
 out_flt2 = params.outdir + "/01.filtered2"
 out_biod = params.outdir + "/02.Biodiverse_input"
 out_plot = params.outdir + "/03.Plots"
-out_logs = params.outdir + "/logs"
 
 
 // Pipeline help message
