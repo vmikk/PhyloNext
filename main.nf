@@ -442,8 +442,8 @@ process merge_occ {
     custom_phytree = params.phytree ? "--phytree $phytree" : ""
 
     """
-      --input ${out_flt2} \
     12_Prepare_Biodiverse_input.R \
+      --input "." \
       ${custom_phytree} \
       --taxgroup ${params.taxgroup} \
       --threads ${task.cpus} \
@@ -452,6 +452,9 @@ process merge_occ {
     # --inputfile ${spp} \
 
     """
+
+    // Nextflow gets the names of the input files from `spp` (`flt_ch` channel)
+    // and copies/symlinks them to the current dir --> `--input` arg = current dir
 }
 
 // Create Biodiverse input files
