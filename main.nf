@@ -637,7 +637,15 @@ workflow {
         noextinct)
 
     // Run stage-II filtering for species with low abundance (no DBSCAN)
-    outl_low( occ_filter.out.part_low )
+    outl_low(
+        occ_filter.out.part_low,
+        terrestrial,
+        rmcountrycentroids,
+        rmcountrycapitals,
+        rminstitutions,
+        rmurban,
+        wgsrpd
+        )
 
     // Channel for DBSCAN-based filtering (iterate for each species)
     //species_ch = Channel.fromPath("${params.outdir}/spp.txt").splitText().map{it -> it.trim()}
