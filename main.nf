@@ -667,7 +667,16 @@ workflow {
     // species_ch.view()
 
     // Run stage-II filtering for abundant species (with DBSCAN)
-    outl_high(species_ch, occ_filter.out.part_high)
+    outl_high(
+        species_ch,
+        occ_filter.out.part_high,
+        terrestrial,
+        rmcountrycentroids,
+        rmcountrycapitals,
+        rminstitutions,
+        rmurban,
+        wgsrpd
+        )
 
     // Collect outlier removal statistics
     // out_high_ch = outl_high.out.outliers.collect()
