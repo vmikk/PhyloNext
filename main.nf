@@ -119,13 +119,6 @@ params.world = params.data_path + "/WorldMap_NaturalEarth_Medium.RData"
 params.helpMsg = false
 
 
-// Number of CPUs to use at different steps --> configure as ${task.cpus}
-// params.cpusfilt1 = 10
-// params.cpusfilt2l = 5
-// params.cpusfilt2h = 1
-// params.cpusbioprep = 10
-
-
 // Define output paths for different steps
 out_flt1 = params.outdir + "/00.filtered1.parquet"
 out_flt2 = params.outdir + "/01.filtered2"
