@@ -494,7 +494,7 @@ process rand_filelist {
     // container image is required for Cloud only
     label "container_r"
 
-    input:  val randfiles
+    input: path randfiles
     output: path "randomization_results.txt", emit: RND
 
     shell:
