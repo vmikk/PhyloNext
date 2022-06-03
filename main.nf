@@ -25,8 +25,6 @@
 // - include sha256 hash of the image in the container reference: https://www.nextflow.io/blog/2016/docker-and-nextflow.html
 // - add local and azure profiles
 // - move params into a config
-// - In Nextflow, any binaries within the the bin directory of a repository are added to the path
-//   --> deprecate `scripts_path`
 //   make scripts executable + remove Rscript and perl ??
 // - Fix `10_Filter_occurrences.R`   In value[[3L]](cond) : double expected, got “NA”
 // - Add spatial constraints for the randomizations (e.g., shapefile with biomes?)
@@ -262,7 +260,7 @@ process occ_filter {
 
     script:
     """
-    Rscript ${params.scripts_path}/10_Filter_occurrences.R \
+    10_Filter_occurrences.R \
       --input ${input} \
       --phylum ${params.phylum} \
       --class ${params.class} \
@@ -304,7 +302,7 @@ process outl_low {
 
     script:
     """
-    Rscript ${params.scripts_path}/11_Additional_filtering_and_aggregation.R \
+    11_Additional_filtering_and_aggregation.R \
       --input "${part_low}" \
       --dbscan false \
       --resolution ${params.h3resolution} \
@@ -344,7 +342,7 @@ process outl_high {
 
     script:
     """
-    Rscript ${params.scripts_path}/11_Additional_filtering_and_aggregation.R \
+    11_Additional_filtering_and_aggregation.R \
       --input "${part_high}" \
       --specieskey ${sp} \
       --dbscan ${params.dbscan} \
@@ -406,9 +404,9 @@ process merge_occ {
 
     script:
     """
-    Rscript ${params.scripts_path}/12_Prepare_Biodiverse_input.R \
       --input ${out_flt2} \
       --phytree ${params.phytree} \
+    12_Prepare_Biodiverse_input.R \
       --taxgroup ${params.taxgroup} \
       --threads ${task.cpus} \
       --output  "."     # ${out_biod}
@@ -444,7 +442,7 @@ process prep_biodiv {
     # perl --version
 
     ## Prepare Biodiverse input file
-    perl ${params.scripts_path}/00_create_bds.pl \
+    00_create_bds.pl \
       --csv_file ${occurrences} \
       --out_file "occ.bds" \
       --label_column_number '0' \
@@ -452,12 +450,12 @@ process prep_biodiv {
       --cell_size_x '-1'
     
     ## Prepare the tree for Biodiverse
-    perl ${params.scripts_path}/00_create_bts.pl \
+    00_create_bts.pl \
       --input_tree_file ${tree} \
       --out_file "tree.bts"
     
     ## Run the analyses
-    perl ${params.scripts_path}/02_biodiverse_analyses.pl \
+    02_biodiverse_analyses.pl \
       --input_bds_file "occ.bds" \
       --input_bts_file "tree.bts" \
       --calcs ${params.indices}
@@ -484,8 +482,7 @@ process phylodiv {
 
     script:
     """
-
-    perl ${params.scripts_path}/03_run_randomisation.pl \
+    03_run_randomisation.pl \
       --basedata ${BDA} \
       --bd_name ${BDA} \
       --out_file "Biodiv_randomized.bds" \
@@ -537,7 +534,7 @@ process aggregate_rnds_biodiv {
 
     script:
     """
-    perl ${params.scripts_path}/05_reintegrate_basedatas_post_rand.pl \
+    05_reintegrate_basedatas_post_rand.pl \
       --glob ${RND} \
       --output_prefix Biodiverse
     """
