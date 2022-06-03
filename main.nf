@@ -662,7 +662,6 @@ workflow {
         )
 
     // Channel for DBSCAN-based filtering (iterate for each species)
-    //species_ch = Channel.fromPath("${params.outdir}/spp.txt").splitText().map{it -> it.trim()}
     species_ch = occ_filter.out.spp.splitText().map{it -> it.trim()}
     // species_ch.view()
 
