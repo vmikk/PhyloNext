@@ -554,8 +554,7 @@ process div_to_csv {
 
     script:
     """
-
-    perl ${params.scripts_path}/04_load_bds_and_export_results.pl \
+    04_load_bds_and_export_results.pl \
       --input_bds_file ${Biodiv} \
       --output_csv_prefix 'RND'
 
@@ -580,7 +579,7 @@ process plot_pd {
 
     script:
     """
-    Rscript ${params.scripts_path}/14_Visualization.R \
+    14_Visualization.R \
       --observed ${BDOBS} \
       --zscores ${RND4} \
       --threads ${task.cpus} \
