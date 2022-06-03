@@ -355,12 +355,26 @@ process outl_high {
     input:
       val sp
       path(part_high)
+      path(terrestrial)
+      path(rmcountrycentroids)
+      path(rmcountrycapitals)
+      path(rminstitutions)
+      path(rmurban)
+      path(wgsrpd)
 
     output:
       path "${sp}.RData", emit: sp
       path "${sp}_OutlierCounts.txt", emit: outliers
 
     script:
+
+    filter_terrestrial  = params.terrestrial        ? "--terrestrial $terrestrial" : ""
+    filter_country      = params.rmcountrycentroids ? "--rmcountrycentroids $rmcountrycentroids" : ""
+    filter_capitals     = params.rmcountrycapitals  ? "--rmcountrycapitals $rmcountrycapitals" : ""
+    filter_institutions = params.rminstitutions     ? "--rminstitutions $rminstitutions" : ""
+    filter_urban        = params.rmurban            ? "--rmurban $rmurban" : ""
+    filter_wgsrpd       = params.wgsrpd             ? "--wgsrpd $wgsrpd" : ""
+
     """
     11_Additional_filtering_and_aggregation.R \
       --input "${part_high}" \
@@ -369,12 +383,12 @@ process outl_high {
       --epsilon ${params.dbscanepsilon} \
       --minpts ${params.dbscanminpts} \
       --resolution ${params.h3resolution} \
-      --terrestrial ${params.terrestrial} \
-      --rmcountrycentroids ${params.rmcountrycentroids} \
-      --rmcountrycapitals ${params.rmcountrycapitals} \
-      --rminstitutions ${params.rminstitutions} \
-      --rmurban ${params.rmurban} \
-      --wgsrpd ${params.wgsrpd} \
+      ${filter_terrestrial} \
+      ${filter_country} \
+      ${filter_capitals} \
+      ${filter_institutions} \
+      ${filter_urban} \
+      ${filter_wgsrpd} \
       --regions ${params.regions} \
       --threads ${task.cpus} \
       --output "."
