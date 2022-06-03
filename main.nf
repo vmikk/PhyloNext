@@ -62,7 +62,7 @@ params.latmax = "NA"
 params.lonmin = "NA"
 params.lonmax = "NA"
 params.minyear = 1945
-params.noextinct = "NA"          // params.data_path + "/Fossil_IDs.RData"
+params.noextinct = null          // params.data_path + "/Fossil_IDs.RData"
 params.roundcoords = true
 params.dbscannoccurrences = 30
 
@@ -74,13 +74,13 @@ params.dbscanminpts = 3
 params.terrestrial = params.data_path + "/Land_Buffered_025_dgr.RData"
 params.wgsrpd = params.data_path + "/WGSRPD.RData"
 params.regions = "NA"
-params.rmcountrycentroids = "NA"    // pipeline_data/CC_CountryCentroids_buf_1000m.RData
-params.rmcountrycapitals = "NA"     // pipeline_data/CC_Capitals_buf_10000m.RData
-params.rminstitutions = "NA"        // pipeline_data/CC_Institutions_buf_100m.RData
-params.rmurban = "NA"               // pipeline_data/CC_Urban.RData
+params.rmcountrycentroids = null    // pipeline_data/CC_CountryCentroids_buf_1000m.RData
+params.rmcountrycapitals = null     // pipeline_data/CC_Capitals_buf_10000m.RData
+params.rminstitutions = null        // pipeline_data/CC_Institutions_buf_100m.RData
+params.rmurban = null               // pipeline_data/CC_Urban.RData
 
 // Filtered data aggregation - "12_Prepare_Biodiverse_input.R"
-params.phytree = "NA"
+params.phytree = null
 params.taxgroup = "All_life"
 
 // Biodiverse
