@@ -118,6 +118,16 @@ params.world = params.data_path + "/WorldMap_NaturalEarth_Medium.RData"
 // Help message flag
 params.helpMsg = false
 
+// Optional input files
+noextinct          = params.noextinct          ? file(params.noextinct)          : file("${params.outdir}/no_file1") 
+terrestrial        = params.terrestrial        ? file(params.terrestrial)        : file("${params.outdir}/no_file2") 
+rmcountrycentroids = params.rmcountrycentroids ? file(params.rmcountrycentroids) : file("${params.outdir}/no_file3") 
+rmcountrycapitals  = params.rmcountrycapitals  ? file(params.rmcountrycapitals)  : file("${params.outdir}/no_file4") 
+rminstitutions     = params.rminstitutions     ? file(params.rminstitutions)     : file("${params.outdir}/no_file5") 
+rmurban            = params.rmurban            ? file(params.rmurban)            : file("${params.outdir}/no_file6") 
+wgsrpd             = params.wgsrpd             ? file(params.wgsrpd)             : file("${params.outdir}/no_file7") 
+phytree            = params.phytree            ? file(params.phytree)            : file("${params.outdir}/no_file8") 
+world              = params.world              ? file(params.world)              : file("${params.outdir}/no_file9") 
 
 // Define output paths for different steps
 out_flt1 = params.outdir + "/00.filtered1.parquet"
