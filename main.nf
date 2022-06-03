@@ -254,6 +254,7 @@ process occ_filter {
 
     input:
       path input
+      path noextinct
 
     output:
       path "Partition=low", emit: part_low
@@ -261,6 +262,9 @@ process occ_filter {
       path "spp.txt", emit: spp
 
     script:
+
+    filter_extinct = params.noextinct ? "--noextinct $noextinct" : ""
+
     """
     10_Filter_occurrences.R \
       --input ${input} \
@@ -274,7 +278,7 @@ process occ_filter {
       --lonmin ${params.lonmin} \
       --lonmax ${params.lonmax} \
       --minyear ${params.minyear} \
-      --noextinct ${params.noextinct} \
+      ${filter_extinct} \
       --roundcoords ${params.roundcoords} \
       --threads ${task.cpus} \
       --noccurrences ${params.dbscannoccurrences} \
