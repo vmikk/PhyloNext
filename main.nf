@@ -618,10 +618,9 @@ workflow {
     input_ch = Channel.value(params.input)
 
     // Run stage-I filtering
-    occ_filter(input_ch)
-
-    // Channel with land shapefile
-    // land_ch = Channel.value(params.terrestrial)
+    occ_filter(
+        input_ch,
+        noextinct)
 
     // Run stage-II filtering for species with low abundance (no DBSCAN)
     outl_low( occ_filter.out.part_low )
