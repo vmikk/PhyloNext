@@ -592,11 +592,8 @@ process plot_pd {
       --units "${params.plotunits}" \
       --output "."
 
-      # --output "${out_plot}"
-
     """
 }
-
 
 
 
@@ -646,7 +643,6 @@ workflow {
 
     // Prepare Biodiverse input files
     prep_biodiv(merge_occ.out.occurrences, merge_occ.out.tree)
-
 
     // Channel of randomization chunks
     rnd_ch = Channel.fromList( randomization_chunks )
