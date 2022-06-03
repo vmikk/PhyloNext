@@ -430,6 +430,7 @@ process merge_occ {
 
     input:
       path spp
+      path phytree
 
     output:
       path "H3_GridCell_Centres.csv", emit: h3coords
@@ -437,13 +438,16 @@ process merge_occ {
       path "Trimmed_tree.nex", emit: tree
 
     script:
+
+    custom_phytree = params.phytree ? "--phytree $phytree" : ""
+
     """
       --input ${out_flt2} \
-      --phytree ${params.phytree} \
     12_Prepare_Biodiverse_input.R \
+      ${custom_phytree} \
       --taxgroup ${params.taxgroup} \
       --threads ${task.cpus} \
-      --output  "."     # ${out_biod}
+      --output  "."
 
     # --inputfile ${spp} \
 
