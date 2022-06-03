@@ -467,7 +467,7 @@ process phylodiv {
 
     input:
       path BDA
-      path chunkid
+      val chunkid
 
     output:
       path "Biodiv_randomized.bds", emit: BDArand
