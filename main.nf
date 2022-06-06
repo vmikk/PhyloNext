@@ -624,20 +624,24 @@ process plot_pd {
     publishDir "$params.outdir/03.Plots", mode: 'copy'
 
     input:
-      path BDOBS   // observed indices
-      path RND4    // randomized indices
+      path BDOBS     // observed indices
+      path RND4      // randomized indices
+      path world
 
     output:
       path "*.${params.plotformat}"
 
     script:
+
+    add_world_map = params.world ? "--world $world" : ""
+
     """
     14_Visualization.R \
       --observed ${BDOBS} \
       --zscores ${RND4} \
       --threads ${task.cpus} \
       --variables ${params.plotvar} \
-      --world "${params.world}" \
+      ${add_world_map} \
       --format "${params.plotformat}" \
       --plotz "${params.plottype}" \
       --width "${params.plotwidth}" \
