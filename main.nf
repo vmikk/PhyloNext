@@ -572,6 +572,7 @@ process aggregate_rnds_biodiv {
     
     input:
       path RND
+      path BDArand
 
     output:
       path "Biodiverse.bds", emit: Biodiv
