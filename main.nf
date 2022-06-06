@@ -737,9 +737,10 @@ workflow {
     div_to_csv(aggregate_rnds_biodiv.out.Biodiv)
 
     // Plot PD indices
-    plot_pd(div_to_csv.out.RND5, div_to_csv.out.RND4)
-    // plot_pd(prep_biodiv.out.BDOBS, div_to_csv.out.RND4)
-
+    plot_pd(
+        div_to_csv.out.RND5,
+        div_to_csv.out.RND4,
+        world)
 
 }
 
