@@ -519,7 +519,7 @@ process phylodiv {
       val chunkid
 
     output:
-      path "Biodiv_randomized.bds", emit: BDArand
+      path "Biodiv_randomized_${chunkid}.bds", emit: BDArand
 
     script:
     """
@@ -530,6 +530,9 @@ process phylodiv {
       --rand_name 'rand' \
       --iterations ${params.iterations} \
       --args ${biodiverse_args}
+
+    ## Add chunk ID into the file name
+    mv "Biodiv_randomized.bds" "Biodiv_randomized_${chunkid}.bds"
 
     """
 }
