@@ -729,7 +729,9 @@ workflow {
     rand_filelist(phylodiv.out.BDArand.collect())
 
     // Aggregate randomization results (with Biodiverse script)
-    aggregate_rnds_biodiv(rand_filelist.out.RND)
+    aggregate_rnds_biodiv(
+        rand_filelist.out.RND,
+        phylodiv.out.BDArand.collect())
 
     // Output results as CSV
     div_to_csv(aggregate_rnds_biodiv.out.Biodiv)
