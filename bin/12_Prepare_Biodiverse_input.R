@@ -67,8 +67,9 @@ TAXGROUP <- opt$taxgroup
 CPUTHREADS <- as.numeric(opt$threads)
 OUTPUT <- opt$output
 
-## Modify tax group argument (no spaces are allowed)
-if(TAXGROUP %in% "All_life"){ TAXGROUP <- "All life" }
+## Modify tax group argument (no spaces are allowed in arguments)
+# if(TAXGROUP %in% "All_life"){ TAXGROUP <- "All life" }
+TAXGROUP <- gsub(pattern = "_", replacement = " ", x = TAXGROUP)
 
 
 ## Log assigned variables
@@ -171,7 +172,6 @@ if(!is.na(INPUTFILE)){
     file = INPUTFILE,
     header = F, sep = "\t", col.names = "FilePath")$FilePath
 }
-
 
 cat("..Files found: ", length(fls), "\n")
 if(length(fls) == 0){
@@ -298,11 +298,20 @@ species_uniq <- merge(
 ## Remove species without OTT matches
 species_uniq <- species_uniq[ !is.na(ott_id) ]
 
-## Check for duplicates
+## Check for duplicates in OTT IDs
 if(any(duplicated(species_uniq$ott_id))){
-  cat("Warning: There are OTT IDs matching multiple GBIF specieskeys. These recodes will be merged\n")
+  cat("Warning: There are OTT IDs matching multiple GBIF specieskeys. These records will be merged\n")
+
+  ## Inspect the records
+  # species_uniq[ OTT %in% species_uniq$OTT[ duplicated(species_uniq$OTT) ] ]
 }
 
+
+## Check for duplicates in species keys
+# species_uniq[ specieskey %in% species_uniq$specieskey[ duplicated(species_uniq$specieskey) ] ]
+
+## Remove duplicates
+species_uniq <- unique(species_uniq, by = c("ott_id", "specieskey") )
 
 # cat("Exporting OTT IDs\n")
 # saveRDS(object = species, file = "species_OTT.RData", compress = "xz")
@@ -325,7 +334,7 @@ in_tree_total <- sum(uniq_otts %in% TREE$tip.label)
 in_tree_percent <- round(in_tree_total / length(uniq_otts) * 100, 1)
 
 cat("..Phylogenetic tree contains ", length(TREE$tip.label), "tips\n")
-cat("..In total, there are ", nrow(species_uniq), " unique specieskeys (with OTT matches) in GBIF data.\n")
+cat("..In total, there are ", length(unique(species_uniq$specieskey)), " unique specieskeys (with OTT matches) in GBIF data.\n")
 cat("..Of them, ", in_tree_total, "(", in_tree_percent, "%) are present at the tips of the tree.\n")
 
 
@@ -356,6 +365,10 @@ records_before_filtering <- nrow(datt)
 
 ## Add OTT IDs to occurrences
 cat("..Adding OTT IDs to occurrences\n")
+
+if(any(duplicated(species_uniq$OTT))){
+  cat("WARNING: duplicated")
+}
 
 datt <- merge(
   x = datt,
