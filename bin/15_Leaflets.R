@@ -170,3 +170,196 @@ plot(H3_poly)
 # yy <- pretty(c(boxx["ymin"], boxx["ymax"]))
 
 
+
+############################################## Leaflet choropleths
+
+cat("Creating leaflet map\n")
+
+## Set value for the minZoom and maxZoom settings
+leaflet(options = leafletOptions(minZoom = 0, maxZoom = 18))
+
+
+## Function to create a label with single variable
+single_label <- function(num, name){
+
+  sprintf(
+    "<strong>%s:</strong> %.3g<br/>",
+    rep(name, times = length(num)),
+    num
+    )
+}
+# single_label(H3_poly$PD, name = "PD")
+
+## Create labels for all variables
+cat("..Generating polygon labels\n")
+labels <- alply(.data = VARIABLES, .margins = 1, .fun = function(v){
+  single_label(num = H3_poly[[ v ]], name = v)
+  })
+
+## Concatenate labels from all variables
+labels <- do.call(paste0, labels)
+
+## Mark labels as HTML
+labels <- labels %>% lapply(htmltools::HTML)
+
+
+## Create a map, add OpenStreetMap map tiles as background
+cat("..Building basemap\n")
+m <- leaflet() %>% addTiles()
+
+
+## Color palette
+# pal <- colorQuantile(palette = "RdYlBu", domain = H3_poly$PD, n = 5, reverse = TRUE)
+#
+# bins <- c(0, 10, 20, 50, 100, 200, 500, 1000, Inf)
+# pal <- colorBin("YlOrRd", domain = H3_poly$PD, bins = 7, reverse = TRUE) # , bins = bins)
+#
+# pal <- colorNumeric(palette = "YlGnBu", domain = H3_poly$PD, reverse = TRUE)
+
+
+
+cat("..Preparing color palettes\n")
+
+## Function to create color palette
+gen_color_palette <- function(x, type = "quantile", col = "RdYlBu", nbins = 5, rev = TRUE){
+
+  ## Bin numeric data via the quantile function
+  if(type %in% "quantile"){
+    pal <- colorQuantile(palette = col, domain = x, n = nbins, reverse = rev, na.color = "#808080")
+  }
+
+  ## Equal-interval binning (based on `cut` function)
+  if(type %in% "equal"){
+    pal <- colorBin(palette = col, domain = x, bins = nbins, reverse = rev, na.color = "#808080")
+  }
+
+  ## Simple linear mapping from continuous numeric data to an interpolated palette
+  if(type %in% "continuous"){
+    pal <- colorNumeric(palette = col, domain = x, reverse = rev, na.color = "#808080")
+  }
+
+  return(pal)
+}
+# e.g., gen_color_palette(1:10, type = "quantile", nbins = 5)
+#       gen_color_palette(1:10, type = "equal",    nbins = 5)
+#       gen_color_palette(1:10, type = "continuous")
+
+## Make color palette for all variables
+pals <- alply(.data = VARIABLES, .margins = 1,
+  .fun = function(v, ...){ gen_color_palette(x = H3_poly[[ v ]], ...) }, 
+  type = PALETTE, col = COLOR, nbins = BINS, rev = TRUE)
+
+names(pals) <- VARIABLES
+
+
+
+
+
+
+cat("..Adding polygons\n")
+
+# ## Add PD polygons to the map
+# m <- m %>% 
+#   addPolygons(data = H3_poly,
+#     fillColor = ~pal(PD),
+#     group = "PD",
+#     opacity = 0.8,
+#     fillOpacity = 0.8,
+#     weight = 0.3, color = "white", dashArray = "1",
+#     highlightOptions = highlightOptions(
+#       weight = 2, color = "#777777", dashArray = "1",
+#       opacity = 0.8, bringToFront = TRUE),
+#     label = labels,
+#     labelOptions = labelOptions(
+#       style = list("font-weight" = "normal", padding = "3px 8px"),
+#       textsize = "10px", direction = "auto")
+#     ) %>%
+#   addLegend("bottomright", pal = pal, values = H3_poly$PD,
+#     title = "PD", group = "PD",  opacity = 1
+#     )
+
+
+for(v in VARIABLES){
+
+  cat("... ", v, "\n")
+
+  m <- m %>% 
+    addPolygons(data = H3_poly,
+      fillColor = ~ pals[[v]]( H3_poly[[v]] ),
+      group = v,
+      opacity = 0.8,
+      fillOpacity = 0.8,
+      weight = 0.3, color = "white", dashArray = "1",
+      highlightOptions = highlightOptions(
+        weight = 2, color = "#777777", dashArray = "1",
+        opacity = 0.8, bringToFront = TRUE),
+      label = labels,
+      labelOptions = labelOptions(
+        style = list("font-weight" = "normal", padding = "3px 8px"),
+        textsize = "10px", direction = "auto")
+      ) %>%
+    addLegend("bottomright", pal = pals[[v]], values = H3_poly[[v]],
+      title = v, group = v,  opacity = 1
+      )
+
+}
+rm(v)
+
+
+
+
+## Add variable selector
+cat("..Adding variable selector\n")
+m <- m %>%
+  addLayersControl(
+    overlayGroups = c(VARIABLES),
+    options = layersControlOptions(collapsed = FALSE)
+    )
+
+## Hide all vars except the first one
+cat("..Hiding variables\n")
+m <- m %>% 
+  hideGroup(VARIABLES[-1])
+
+
+
+
+cat("..Exporting the results\n")
+
+## Use mapdeck as the rendering platform instead of leaflet
+# mapviewOptions(platform = "mapdeck")
+
+## Save a leaflet map as .html
+mapshot(
+  m,
+  url = OUTPUT,
+  file = NULL,
+  selfcontained = TRUE
+)
+
+# remove_controls = c("zoomControl", "layersControl",
+#    "homeButton", "scaleBar", "drawToolbar", "easyButton")
+
+
+# library(htmlwidgets)
+# saveWidget(m, file="m.html")
+
+
+cat("Plotting finished\n")
+
+
+#####################
+
+cat("All done!\n")
+
+## Check time
+end_time <- Sys.time()
+
+tmm <- as.numeric(difftime(end_time, start_time, units = "min"))
+cat("\nElapsed time: ", tmm, " minutes\n")
+
+
+cat("\n")
+cat("Session info:\n")
+sessionInfo()
+cat("\n")
