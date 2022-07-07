@@ -2,6 +2,18 @@
 
 ## Visualization of Biodiverse results using intaractive maps (Leaflet-based)
 
+## Usage example:
+# ./15_Leaflets.R \
+#   --observed "02.Biodiverse_input/occ.bds.csv" \
+#   --zscores "02.Biodiverse_results/RND_rand--z_scores--SPATIAL_RESULTS.csv" \
+#   --variables "RICHNESS_ALL,PD,PD_P" \
+#   --output "03.Plots"
+
+## for Z-score-based variables, add `z` prefix (e.g., zPD)
+
+
+## TO DO:
+# - handle NA values (e.g., if Richness == 1)
 ############################################## Parse input parameters
 
 ## Check time
