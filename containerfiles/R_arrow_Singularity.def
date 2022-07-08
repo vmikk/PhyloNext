@@ -1,11 +1,11 @@
 # Singularity definition file: R environment + packages required for GBIF occurrence filtering
 
 Bootstrap: docker
-From: rocker/r-ver:4.1.2
+From: rocker/r-ver:4.2.1
 
 %labels
   Maintainer vladimir.mikryukov@ut.ee
-  R_Version 4.1.2
+  R_Version 4.2.1
 
 %runscript
   exec "$@"
@@ -18,7 +18,7 @@ From: rocker/r-ver:4.1.2
 
 ## Install the required dependencies
 %post
-  export R_VERSION=4.1.2
+  export R_VERSION=4.2.1
 
   apt-get update -qq \
   && apt-get -y --no-install-recommends install \
@@ -52,7 +52,11 @@ From: rocker/r-ver:4.1.2
     sf \
     dbscan \
     doFuture \
+    webshot \
     && R -e 'remotes::install_github("crazycapivara/h3-r")' \
+    && R -e 'remotes::install_github("chgrl/leafletR")' \
+    && R -e 'remotes::install_github("r-spatial/mapview")' \
+    && R -e 'webshot::install_phantomjs()' \
     && rm -rf /tmp/downloaded_packages/
 
   ## Install arrow
