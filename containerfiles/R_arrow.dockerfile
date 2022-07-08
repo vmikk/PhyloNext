@@ -1,6 +1,6 @@
 # Docker image with R packages required for GBIF occurrence filtering
 
-FROM rocker/r-ver:4.1.2
+FROM rocker/r-ver:4.2.1
 
 MAINTAINER vladimir.mikryukov@ut.ee
 
@@ -13,7 +13,8 @@ RUN apt-get update -qq \
     zip unzip \
     curl git wget less \
     build-essential \
-    libgeos-dev libudunits2-dev libproj-dev libgdal-dev
+    libgeos-dev libudunits2-dev libproj-dev libgdal-dev \
+    pandoc
 
 ## Install tidyverse packages along with arrow and data.table
 RUN /rocker_scripts/install_tidyverse.sh \
@@ -33,7 +34,11 @@ RUN install2.r --error --skipinstalled --ncpus -1 \
     sf \
     dbscan \
     doFuture \
+    webshot \
     && R -e 'remotes::install_github("crazycapivara/h3-r")' \
+    && R -e 'remotes::install_github("chgrl/leafletR")' \
+    && R -e 'remotes::install_github("r-spatial/mapview")' \
+    && R -e 'webshot::install_phantomjs()' \
     && rm -rf /tmp/downloaded_packages/
 
 ## Install arrow
