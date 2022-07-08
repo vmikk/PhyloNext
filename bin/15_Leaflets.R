@@ -117,10 +117,13 @@ cat("\n")
 
 ############################################## Prepare data
 
-# INPUTO <- "/mnt/Dat2/GBIF/Fabaceae_Nextflow_220324/02.Biodiverse_results/RND_SPATIAL_RESULTS.csv"
-# INPUTZ <- "/mnt/Dat2/GBIF/Fabaceae_Nextflow_220324/02.Biodiverse_results/RND_rand--z_scores--SPATIAL_RESULTS.csv"
+## Parameters for debugging
+# INPUTO <- "RND_SPATIAL_RESULTS.csv"
+# INPUTZ <- "RND_rand--z_scores--SPATIAL_RESULTS.csv"
 # VARIABLES <- "RICHNESS_ALL,PD,zPD,PD_P,zPD_P"
-
+# PALETTE <- "quantile"
+# COLOR <- "RdYlBu"
+# BINS <- 5 
 
 ## Load input data
 cat("Loading Biodiverse results\n")
