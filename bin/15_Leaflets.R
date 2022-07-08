@@ -248,7 +248,16 @@ gen_color_palette <- function(x, type = "quantile", col = "RdYlBu", nbins = 5, r
 
   ## Bin numeric data via the quantile function
   if(type %in% "quantile"){
+
+    ## To fix `'breaks' are not unique` error, check the number of potential bins in advance
+    testbins <- quantile(x,
+      probs = seq(0, 1, length.out = nbins + 1),
+      na.rm = TRUE, names = FALSE)
+    
+    nbins <- length(unique(testbins)) - 1
+
     pal <- colorQuantile(palette = col, domain = x, n = nbins, reverse = rev, na.color = "#808080")
+    attr(pal, which = "newbins") <- nbins
   }
 
   ## Equal-interval binning (based on `cut` function)
@@ -302,6 +311,10 @@ cat("..Adding polygons\n")
 for(v in VARIABLES){
 
   cat("... ", v, "\n")
+
+  if(PALETTE %in% "quantile"  &  attr(pals[[1]], "newbins") != BINS){ 
+    cat(".... number of bins was adjusted to ", attr(pals[[1]], "newbins"), "\n")
+  }
 
   m <- m %>% 
     addPolygons(data = H3_poly,
