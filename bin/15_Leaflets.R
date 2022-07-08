@@ -156,6 +156,9 @@ if(any(grepl(pattern = ",", x = VARIABLES))){
   VARIABLES <- strsplit(x = VARIABLES, split = ",")[[1]]
 }
 
+## ?? Remove "monomorphic" variables
+## They could cause an error with color gradients and binning
+
 
 ## Check if the selected index is in the tables
 colz <- colnames(res)
@@ -181,7 +184,7 @@ H3_poly <- h3_to_geo_boundary_sf(res$H3)
 cat("..Adding diversity estimates to polygons\n")
 H3_poly <- cbind(H3_poly, res[, ..VARIABLES])
 
-plot(H3_poly)
+# plot(H3_poly)
 
 
 ## Find plot limits
@@ -273,9 +276,6 @@ names(pals) <- VARIABLES
 
 
 
-
-
-
 cat("..Adding polygons\n")
 
 # ## Add PD polygons to the map
@@ -324,7 +324,6 @@ for(v in VARIABLES){
 
 }
 rm(v)
-
 
 
 
