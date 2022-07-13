@@ -281,7 +281,7 @@ get_ott_ids <- function(x, fuzzy = FALSE, group = "All life", progr = "text"){
 #       Rosids, Asterids, Asterales, Asteraceae, Aster 
 #       Symphyotrichum, Campanulaceae, Lobelia 
 
-cat("Matching species names to the Open Tree Taxonomy\n")
+cat("Matching species names to the Open Tree Taxonomy with `rotl` package\n")
 
 species_ott <- get_ott_ids(x = species_uniq$species,
   fuzzy = FALSE, group = TAXGROUP, progr = "none")
@@ -405,7 +405,7 @@ otts_to_keep <- uniq_otts[ uniq_otts %in% TREE$tip.label ]
 
 ## Subset tree
 ## NB. only tree tips are considered now, but there could be named nodes!
-cat("..Timming phylogentic tree:\n")
+cat("..Trimming phylogentic tree:\n")
 cat("..Number of tips to remove from the tree: ", length(TREE$tip.label) - length(otts_to_keep), "\n")
 tree_trimmed <- ape::keep.tip(phy = TREE, tip = otts_to_keep)
 
