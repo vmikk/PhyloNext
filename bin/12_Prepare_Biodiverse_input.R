@@ -370,12 +370,12 @@ cat("Preparing phylogenetic tree\n")
 species_uniq[, OTT := paste0("ott", ott_id)]
 
 ## Summary
-uniq_otts <- unique(species_uniq$OTT)                 # there could be duplicates
+uniq_otts <- unique(species_uniq$TreeTip)                 # there could be duplicates
 in_tree_total <- sum(uniq_otts %in% TREE$tip.label)
 in_tree_percent <- round(in_tree_total / length(uniq_otts) * 100, 1)
 
 cat("..Phylogenetic tree contains ", length(TREE$tip.label), "tips\n")
-cat("..In total, there are ", length(unique(species_uniq$specieskey)), " unique specieskeys (with OTT matches) in GBIF data.\n")
+cat("..In total, there are ", length(unique(species_uniq$specieskey)), " unique specieskeys (with tree matches) in GBIF data.\n")
 cat("..Of them, ", in_tree_total, "(", in_tree_percent, "%) are present at the tips of the tree.\n")
 
 
@@ -404,24 +404,24 @@ cat("Preparing occurrence data\n")
 
 records_before_filtering <- nrow(datt)
 
-## Add OTT IDs to occurrences
-cat("..Adding OTT IDs to occurrences\n")
+## Add tree tip IDs to occurrences
+cat("..Adding tree tip IDs to occurrences\n")
 
-if(any(duplicated(species_uniq$OTT))){
-  cat("WARNING: duplicated")
+if(any(duplicated(species_uniq$TreeTip))){
+  cat("WARNING: duplicated IDs found\n")
 }
 
 datt <- merge(
   x = datt,
-  y = species_uniq[, .(specieskey, OTT)],
+  y = species_uniq[, .(specieskey, TreeTip)],
   by = "specieskey", all.x = TRUE)
 
 
 ## Remove taxa
 cat("..Removing taxa without OTT IDs\n")
 
-# datt <- datt[ !is.na(OTT) ]
-datt <- datt[ OTT %in% otts_to_keep  ]
+# datt <- datt[ !is.na(TreeTip) ]
+datt <- datt[ TreeTip %in% otts_to_keep  ]
 
 records_after_filtering <- nrow(datt)
 records_precent <- round(records_after_filtering / records_before_filtering * 100, 1)
@@ -431,20 +431,20 @@ cat("..After removal of not-in-tree taxa, dataset is comprised of ",
 
 
 ## Remove duplicated IDs
-if(any(duplicated(species_uniq$ott_id))){
-  cat("..Merging duplicated OTT IDs\n")
-  datt <- unique(datt, by = c("OTT", "H3"))
+if(any(duplicated(species_uniq$TreeTip))){
+  cat("..Merging duplicated tree IDs\n")
+  datt <- unique(datt, by = c("TreeTip", "H3"))
   cat("..Number of records without duplicates: ", nrow(datt), "\n")
 }
 
-# any(is.na(datt$OTT))
-# any(datt$OTT %in% "")
+# any(is.na(datt$TreeTip))
+# any(datt$TreeTip %in% "")
 
 
 ## Export data (in long format) for Biodiverse
 cat("..Exporting trimmed occurrence data for Biodiverse\n")
 fwrite(
-  x = datt[, .(OTT, H3, specieskey, species, decimallatitude, decimallongitude)],
+  x = datt[, .(TreeTip, H3, specieskey, species, decimallatitude, decimallongitude)],
   file = file.path(OUTPUT, "Trimmed_occurrences.csv"),
   sep = ",", quote = T, row.names = FALSE, col.names = TRUE)
 
