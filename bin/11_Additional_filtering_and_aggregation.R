@@ -547,7 +547,7 @@ cat("Spatial aggregation using H3 system\n")
 ## H3 system
 datt[ , H3 := h3::geo_to_h3(datt[, .(decimallatitude, decimallongitude)], res = RESOLUTION) ]
 
-## Aggregate species by OTT IDs
+## Aggregate species by species key and gridcell
 datt_h3 <- unique(datt, by = c("specieskey", "H3"))
 
 cat("..Number of H3-based gridcells: ", length(unique(datt_h3$H3)), "\n")
