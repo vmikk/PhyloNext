@@ -107,7 +107,7 @@ load_pckg <- function(pkg = "data.table"){
 load_pckg("data.table")
 load_pckg("plyr")
 load_pckg("rotl")     # Interface to the 'Open Tree of Life' API
-# load_pckg("rgbif")
+load_pckg("rgbif")
 load_pckg("ape")
 
 cat("\n")
