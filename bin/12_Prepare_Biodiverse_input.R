@@ -160,6 +160,50 @@ if(!is.na(PHYTREE)){
 }
 
 
+## Verify the format of tip labels in the phylogenetic tree
+if(exists("TREE")){
+
+  if(!LABELS %in% c("OTT", "Latin")){
+    stop("ERROR: please specify the `--phylabels` argument either as `OTT`, or as `Latin`.\n")
+  }
+
+  ## Get the first N tip labels
+  N <- 20
+  cat("Checking the first", N, "tree tip labels\n")
+  tiplabs <- TREE$tip.label[1:N]
+  tiplabs <- na.omit(tiplabs)      # in the case if tree is smaller
+
+  ## OTT-style labels?
+  ottlabs <- grepl(pattern = "^ott", x = tiplabs)
+  ottlabs <- sum(ottlabs) == N
+
+  ## Binomial Latin names? (Genus_species)
+  binlabs <- do.call(rbind, strsplit(x = tiplabs, split = "_"))
+  if(ncol(binlabs) == 2){
+    if(sum(!is.na(binlabs[,2])) == N){
+      binlabs <- TRUE
+    } else {
+      binlabs <- FALSE
+    }
+  } else {
+    binlabs <- FALSE
+  }
+
+  ## OTT-style labels selected
+  if(LABELS %in% "OTT" & !ottlabs){
+    stop("ERROR: Argument `--phylabels` is set to `OTT`, but phylogenetic tree tip names are in different format.\n")
+  }
+
+  ## Latin-style labels selected
+  if(LABELS %in% "Latin" & !binlabs){
+    stop("ERROR: Argument `--phylabels` is set to `Latin`, but phylogenetic tree tip names are in different format.\n")
+  }
+
+  cat("..Tip labels looks OK\n")
+}
+
+
+
 
 ## Load and combine filtered data
 cat("Loading filtered occurrences\n")
