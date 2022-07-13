@@ -317,6 +317,47 @@ species_uniq <- unique(species_uniq, by = c("ott_id", "specieskey") )
 # saveRDS(object = species, file = "species_OTT.RData", compress = "xz")
 
 
+## Unique species IDs
+species_uniq <- unique(datt[, .(specieskey, species)])
+
+cat("Matching tree tips to the GBIF backbone with `rgbif` package\n")
+
+## Species in the phylogeny
+species_phy <- TREE$tip.label
+
+## Look up taxonomic names in GBIF backbone
+spp <- rgbif::name_backbone_checklist(species_phy)
+
+## Subset to the species present in occurrences
+setDT(spp)
+spp <- spp[ usageKey %in% species_uniq$specieskey ]
+
+## Check for duplicates in species keys
+if(any(duplicated(spp$usageKey))){
+  cat("Warning: There are GBIF specieskeys matching multiple tree tips.\n")
+  cat("         Only a single tip per species will be used.\n")
+
+  spp <- unique(spp, by = "usageKey")
+}
+
+
+cat("..Tree tips matched to the GBIF backbone", nrow(spp), "\n")
+cat("...Number of exact matches", sum(spp$matchType %in% "EXACT"), "\n")
+cat("...Number of fuzzy matches", sum(!spp$matchType %in% "EXACT"), "\n")
+
+## Add tip IDs to the species table
+species_uniq <- merge(
+  x = species_uniq,
+  y = spp[ , .(verbatim_name, usageKey)],
+  by.x = "specieskey", by.y = "usageKey", all.x = TRUE)
+
+setnames(x = species_uniq, old = "verbatim_name", new = "TreeTip")
+
+cat("..Species names not found in the phylogenetic tree", sum(is.na(species_uniq$TreeTip)), "\n")
+
+## Remove species without tree matches
+species_uniq <- species_uniq[ !is.na(TreeTip) ]
+
 
 ######################################
 ###################################### Trim the phylogenetic tree
