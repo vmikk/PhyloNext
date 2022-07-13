@@ -17,6 +17,7 @@
 # ./12_Prepare_Biodiverse_input.R \
 #   --input "filtered_data" \
 #   --phytree "phy_trees/Fabaceae_Australian.nwk" \
+#   --phylabels "OTT" \
 #   --taxgroup "Rosids" \
 #   --threads 12 \
 #   --output "Biodiverse_input"
@@ -36,7 +37,10 @@ suppressPackageStartupMessages(require(optparse))
 option_list <- list(
   make_option(c("-i", "--input"), action="store", default=NA, type='character', help="Path to the directory with filtered data"),
   make_option(c("-f", "--inputfile"), action="store", default=NA, type='character', help="Text file with paths to the filtered data"),
+  
   make_option(c("-p", "--phytree"), action="store", default=NA, type='character', help="Phylogenetic tree (pre-computed in Newick format or get it from API)"),
+  make_option(c("-l", "--phylabels"), action="store", default="OTT", type='character', help="Type of phylogenetic tree labels (OTT or Latin)"),
+
   make_option(c("-g", "--taxgroup"), action="store", default="All life", type='character', help="Taxonomy group in OpenTree"),
 
   make_option(c("-t", "--threads"), action="store", default=2L, type='integer', help="Number of CPU threads for arrow, default 4"),
@@ -63,6 +67,7 @@ to_na <- function(x){
 INPUT <- opt$input
 INPUTFILE <- opt$inputfile
 PHYTREE <- to_na( opt$phytree )
+LABELS <- opt$phylabels
 TAXGROUP <- opt$taxgroup
 CPUTHREADS <- as.numeric(opt$threads)
 OUTPUT <- opt$output
@@ -76,6 +81,7 @@ TAXGROUP <- gsub(pattern = "_", replacement = " ", x = TAXGROUP)
 cat(paste("Input directory with filtered occurrences: ", INPUT, "\n", sep=""))
 cat(paste("Input file with paths to the filtered occurrences: ", INPUTFILE, "\n", sep=""))
 cat(paste("Pre-computed phylogenetic tree: ", PHYTREE, "\n", sep=""))
+cat(paste("Type of tip labels on the phylogenetic tree: ", LABELS, "\n", sep=""))
 cat(paste("Taxonomy group in OpenTree: ", TAXGROUP, "\n", sep=""))
 cat(paste("Number of CPU threads to use: ", CPUTHREADS, "\n", sep=""))
 cat(paste("Output directory: ", OUTPUT, "\n", sep=""))
@@ -216,6 +222,8 @@ cat("..Number of unique gridcells: ", length(unique(datt$H3)), "\n")
 ###################################### Map GBIF IDs to Open Tree of Life (OTT) IDs
 ######################################
 
+if(LABELS %in% "OTT"){
+
 ## Unique species IDs
 species_uniq <- unique(datt[, .(specieskey, species)])
 
@@ -316,6 +324,20 @@ species_uniq <- unique(species_uniq, by = c("ott_id", "specieskey") )
 # cat("Exporting OTT IDs\n")
 # saveRDS(object = species, file = "species_OTT.RData", compress = "xz")
 
+## In the tree, tip names have "ott" prefix (e.g., "ott114")
+## Add this prefix to OTT IDs
+species_uniq[, TreeTip := paste0("ott", ott_id)]
+
+} # end of LABELS %in% "OTT"
+
+
+
+######################################
+###################################### Map GBIF IDs to the phylogenetic tree labels (latin names) - Genus_species
+######################################
+
+
+if(LABELS %in% "Latin"){
 
 ## Unique species IDs
 species_uniq <- unique(datt[, .(specieskey, species)])
@@ -358,16 +380,15 @@ cat("..Species names not found in the phylogenetic tree", sum(is.na(species_uniq
 ## Remove species without tree matches
 species_uniq <- species_uniq[ !is.na(TreeTip) ]
 
+} # end of if(LABELS %in% "Latin")
+
+
 
 ######################################
 ###################################### Trim the phylogenetic tree
 ######################################
 
 cat("Preparing phylogenetic tree\n")
-
-## In the tree, tip names have "ott" prefix (e.g., "ott114")
-## Add this prefix to OTT IDs
-species_uniq[, OTT := paste0("ott", ott_id)]
 
 ## Summary
 uniq_otts <- unique(species_uniq$TreeTip)                 # there could be duplicates
