@@ -82,6 +82,7 @@ params.rmurban = null               // pipeline_data/CC_Urban.RData
 // Filtered data aggregation - "12_Prepare_Biodiverse_input.R"
 params.phytree = null
 params.taxgroup = "All_life"
+params.phylabels = "OTT"
 
 // Biodiverse
 params.indices = "calc_richness,calc_simpson_shannon,calc_endemism_whole,calc_pd,calc_pe,calc_phylo_rpd1,calc_phylo_rpd2,calc_phylo_rpe1,calc_phylo_rpe2,calc_phylo_mpd_mntd2"
@@ -451,6 +452,7 @@ process merge_occ {
     12_Prepare_Biodiverse_input.R \
       --input "." \
       ${custom_phytree} \
+      --phylabels ${params.phylabels} \
       --taxgroup ${params.taxgroup} \
       --threads ${task.cpus} \
       --output  "."
