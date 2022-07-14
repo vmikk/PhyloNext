@@ -308,6 +308,33 @@ cat("..Adding polygons\n")
 #     )
 
 
+
+## Shortcut to add polygons with legend to the map
+add_polygons_with_legend <- function(m, v, pal){
+  res <- m %>% 
+      addPolygons(data = H3_poly,
+        fillColor = ~ pal( H3_poly[[v]] ),
+        group = v,
+        opacity = 0.8,
+        fillOpacity = 0.8,
+        weight = 0.3, color = "white", dashArray = "1",
+        highlightOptions = highlightOptions(
+          weight = 2, color = "#777777", dashArray = "1",
+          opacity = 0.8, bringToFront = TRUE),
+        label = labels,
+        labelOptions = labelOptions(
+          style = list("font-weight" = "normal", padding = "3px 8px"),
+          textsize = "10px", direction = "auto")
+      ) %>%
+      addLegend("bottomright", pal = pal, values = H3_poly[[v]],
+        title = v, group = v,  opacity = 1)
+
+  return(res)
+}
+## Example:
+# add_polygons_with_legend(m, "PD", pal = pals[[ "PD" ]])
+
+
 for(v in VARIABLES){
 
   cat("... ", v, "\n")
@@ -316,26 +343,25 @@ for(v in VARIABLES){
     cat(".... number of bins was adjusted to ", attr(pals[[v]], "newbins"), "\n")
   }
 
-  m <- m %>% 
-    addPolygons(data = H3_poly,
-      fillColor = ~ pals[[v]]( H3_poly[[v]] ),
-      group = v,
-      opacity = 0.8,
-      fillOpacity = 0.8,
-      weight = 0.3, color = "white", dashArray = "1",
-      highlightOptions = highlightOptions(
-        weight = 2, color = "#777777", dashArray = "1",
-        opacity = 0.8, bringToFront = TRUE),
-      label = labels,
-      labelOptions = labelOptions(
-        style = list("font-weight" = "normal", padding = "3px 8px"),
-        textsize = "10px", direction = "auto")
-      ) %>%
-    addLegend("bottomright", pal = pals[[v]], values = H3_poly[[v]],
-      title = v, group = v,  opacity = 1
-      )
+  tmp <- try( add_polygons_with_legend(m = m, v = v, pal = pals[[v]] ) )
 
-}
+  ## Quantile palette may fail
+  if(("try-error" %in% class(tmp) | attr(pals[[v]], "newbins") == 1) & PALETTE %in% "quantile"){
+   cat(".... Warning: quantile palette failed, trying continuous palette.\n") 
+
+   ## Generate new color palette (continuous)
+   tmppal <- gen_color_palette(x = H3_poly[[ v ]],
+    type = "continuous", col = COLOR, nbins = BINS, rev = TRUE)
+
+   tmp <- add_polygons_with_legend(m = m, v = v, pal = tmppal )
+
+   rm(tmppal)
+  } # end of `try-error`
+
+  m <- tmp
+  rm(tmp)
+
+}   # end of loop
 rm(v)
 
 
