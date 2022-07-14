@@ -775,11 +775,16 @@ workflow {
     // Output results as CSV
     div_to_csv(aggregate_rnds_biodiv.out.Biodiv)
 
-    // Plot PD indices
+    // Plot PD indices (static map)
     plot_pd(
         div_to_csv.out.RND5,
         div_to_csv.out.RND4,
         world)
+
+    // Plot PD indices (interactive map - Leaflet-based choropleth)
+    plot_leaflet(
+        div_to_csv.out.RND5,
+        div_to_csv.out.RND4)
 
 }
 
