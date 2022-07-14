@@ -194,7 +194,7 @@ if (params.helpMsg){
 
 // Check if input path was provided
 if (params.input == false) {
-    println( "Please provide the directory with input data wuth `--input`")
+    println( "Please provide the directory with input data with `--input`")
     exit(1)
 }
 
