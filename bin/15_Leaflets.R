@@ -312,8 +312,8 @@ for(v in VARIABLES){
 
   cat("... ", v, "\n")
 
-  if(PALETTE %in% "quantile"  &  attr(pals[[1]], "newbins") != BINS){ 
-    cat(".... number of bins was adjusted to ", attr(pals[[1]], "newbins"), "\n")
+  if(PALETTE %in% "quantile"  &  attr(pals[[v]], "newbins") != BINS){ 
+    cat(".... number of bins was adjusted to ", attr(pals[[v]], "newbins"), "\n")
   }
 
   m <- m %>% 
