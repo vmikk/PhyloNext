@@ -255,6 +255,7 @@ log.info "\n"
 process occ_filter {
 
     label "container_r"
+    queue "custom_pool"
 
     publishDir "${out_flt1}", mode: 'copy'
     // cpus 10
@@ -306,6 +307,7 @@ process occ_filter {
 process outl_low {
 
     label "container_r"
+    queue "custom_pool"
 
     publishDir "${out_flt2}", mode: 'copy'
     // cpus 5
@@ -355,6 +357,7 @@ process outl_low {
 process outl_high {
 
     label "container_r"
+    queue "custom_pool"
 
     publishDir "${out_flt2}", mode: 'copy'
     // cpus 1
@@ -435,6 +438,7 @@ process outl_high {
 process merge_occ {
 
     label "container_r"
+    queue "custom_pool"
 
     publishDir "$params.outdir/02.Biodiverse_input", mode: 'copy'
     // cpus 10
@@ -473,6 +477,7 @@ process merge_occ {
 process prep_biodiv {
 
     label "container_biodiverse"
+    queue "custom_pool"
 
     publishDir "$params.outdir/02.Biodiverse_input", mode: 'copy'
 
@@ -522,6 +527,7 @@ process prep_biodiv {
 process phylodiv {
 
     label "container_biodiverse"
+    queue "custom_pool"
 
     // publishDir "$params.outdir/02.Biodiverse_results", mode: 'copy'
     // cpus 1
@@ -557,6 +563,7 @@ process rand_filelist {
 
     // container image is required for Cloud only
     label "container_r"
+    queue "custom_pool"
 
     input: path randfiles
     output: path "randomization_results.txt", emit: RND
@@ -578,6 +585,7 @@ process rand_filelist {
 process aggregate_rnds_biodiv {
 
     label "container_biodiverse"
+    queue "custom_pool"
 
     publishDir "$params.outdir/02.Biodiverse_results", mode: 'copy'
     // cpus 1
@@ -602,6 +610,7 @@ process aggregate_rnds_biodiv {
 process div_to_csv {
 
     label "container_biodiverse"
+    queue "custom_pool"
 
     publishDir "$params.outdir/02.Biodiverse_results", mode: 'copy'
 
@@ -632,6 +641,7 @@ process div_to_csv {
 process plot_pd {
 
     label "container_r"
+    queue "custom_pool"
 
     publishDir "$params.outdir/03.Plots", mode: 'copy'
 
