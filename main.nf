@@ -106,7 +106,7 @@ biodiverse_args = "function=" + params.randname + " max_iters=" + iterations_per
 
 
 
-// Visualization
+// Visualization - static
 params.plotvar = "RICHNESS_ALL,PD,PD_P"
 params.plotformat = "pdf"
 params.plottype = "raw"
@@ -114,6 +114,12 @@ params.plotwidth = 18
 params.plotheight = 18
 params.plotunits = "in"
 params.world = params.data_path + "/WorldMap_NaturalEarth_Medium.RData"
+
+// Visualization - Leaflet
+params.leaflet_var = "RICHNESS_ALL,PD,zPD,PD_P,zPD_P"
+params.leaflet_palette = "quantile"
+params.leaflet_color = "RdYlBu"
+params.leaflet_bins = 5
 
 // Help message flag
 params.helpMsg = false
@@ -651,6 +657,39 @@ process plot_pd {
 
     """
 }
+
+
+// Plot PD indices (interactive map - Leaflet-based choropleth)
+process plot_leaflet {
+
+    label "container_r"
+    queue "custom_pool"
+
+    publishDir "$params.outdir/03.Plots", mode: 'copy'
+
+    input:
+      path BDOBS     // observed indices
+      path RND4      // randomized indices
+
+    output:
+      path "Choropleth.html"
+      path "Choropleth_files", optional: true
+
+    script:
+
+    """
+    15_Leaflets.R \
+      --observed ${BDOBS} \
+      --zscores ${RND4} \
+      --variables ${params.leaflet_var} \
+      --palette ${params.leaflet_palette} \
+      --color ${params.leaflet_color} \
+      --bins ${params.leaflet_bins} \
+      --output "Choropleth.html"
+
+    """
+}
+
 
 
 
