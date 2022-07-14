@@ -320,8 +320,8 @@ process outl_low {
       path(wgsrpd)
 
     output:
-      path "NoSpKey.RData", emit: lowabsp
-      path "NoSpKey_OutlierCounts.txt", emit: outlierslow
+      path "NoSpKey.RData", emit: lowabsp, optional: true
+      path "NoSpKey_OutlierCounts.txt", emit: outlierslow, optional: true
 
     script:
 
@@ -374,8 +374,8 @@ process outl_high {
       path(wgsrpd)
 
     output:
-      path "${sp}.RData", emit: sp
-      path "${sp}_OutlierCounts.txt", emit: outliers
+      path "${sp}.RData", emit: sp, optional: true
+      path "${sp}_OutlierCounts.txt", emit: outliers, optional: true
 
     script:
 
