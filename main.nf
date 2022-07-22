@@ -2,11 +2,11 @@
 /*
 
 ========================================================================================
-    GBIF phylogenetic diversity pipeline
+    PhyloNext: GBIF phylogenetic diversity pipeline
 ========================================================================================
-    Version: v0.0.1
+    Version: v0.0.2
     License: MIT
-    Github : https://github.com/vmikk/biodiverse-scripts
+    Github : https://github.com/vmikk/phylonext
     Website: TBA
     Slack  : TBA
 ----------------------------------------------------------------------------------------
@@ -146,13 +146,13 @@ out_plot = params.outdir + "/03.Plots"
 // Pipeline help message
 def helpMsg() {
     log.info"""
-    ====================================================================
-    GBIF phylogenetic diversity pipeline :  Version ${version}
-    ====================================================================
+    =====================================================================
+    PhyloNext: GBIF phylogenetic diversity pipeline :  Version ${version}
+    =====================================================================
     
     Pipeline Usage:
     To run the pipeline, enter the following in the command line:
-        nextflow run vmikk/biodiverse-scripts -r ${version} --input ... --outdir ...
+        nextflow run vmikk/phylonext -r ${version} --input ... --outdir ...
     
     Options:
     REQUIRED:
@@ -201,8 +201,9 @@ if (params.input == false) {
 
 // Print the parameters to the console and to the log
 log.info """
-        GBIF phylogenetic diversity pipeline: Version ${version}
-        ========================================================
+        ====================================================================
+        PhyloNext: GBIF phylogenetic diversity pipeline, Version ${version}
+        ====================================================================
         GBIF occurrence dump:     ${params.input}
         Output path:              ${params.outdir}
         H3 spatial resolution:    ${params.h3resolution}
