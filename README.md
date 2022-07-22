@@ -2,6 +2,7 @@
 
 [![Nextflow](https://img.shields.io/badge/Nextflow%20DSL2-%E2%89%A521.10.0-23aa62.svg?labelColor=000000)](https://www.nextflow.io/)
 [![run with docker](https://img.shields.io/badge/run%20with-docker-0db7ed?labelColor=000000&logo=docker)](https://www.docker.com/)
+[![run with singularity](https://img.shields.io/badge/run%20with-singularity-blue?style=flat&logo=singularity)](https://sylabs.io/docs/)
 [![Github_Status_Badge](https://img.shields.io/badge/GitHub-0.0.2-blue.svg)](https://github.com/vmikk/PhyloNext)
 [![GitHub license](https://img.shields.io/github/license/vmikk/PhyloNext)](https://github.com/vmikk/PhyloNext/blob/main/LICENSE)
 
