@@ -1,9 +1,9 @@
-# PD (Phylogenetic Diversity) in the cloud
+# PhyloNext - PD (Phylogenetic Diversity) in the cloud
 
 [![Nextflow](https://img.shields.io/badge/Nextflow%20DSL2-%E2%89%A521.10.0-23aa62.svg?labelColor=000000)](https://www.nextflow.io/)
 [![run with docker](https://img.shields.io/badge/run%20with-docker-0db7ed?labelColor=000000&logo=docker)](https://www.docker.com/)
-[![Github_Status_Badge](https://img.shields.io/badge/GitHub-0.0.1-blue.svg)](https://github.com/vmikk/biodiverse-scripts)
-[![GitHub license](https://img.shields.io/github/license/vmikk/biodiverse-scripts)](https://github.com/vmikk/biodiverse-scripts/blob/main/LICENSE)
+[![Github_Status_Badge](https://img.shields.io/badge/GitHub-0.0.1-blue.svg)](https://github.com/vmikk/PhyloNext)
+[![GitHub license](https://img.shields.io/github/license/vmikk/PhyloNext)](https://github.com/vmikk/PhyloNext/blob/main/LICENSE)
 
 The automated pipeline for the analysis of phylogenetic diversity using [GBIF occurrence data](https://www.gbif.org/occurrence/search?occurrence_status=present), species phylogenies from [Open Tree of Life](https://tree.opentreeoflife.org), and [Biodiverse software](https://shawnlaffan.github.io/biodiverse/).
 
@@ -35,18 +35,18 @@ The pipeline could be launched in a cloud environment (e.g., the [Microsoft Azur
 3. Download the pipeline and test it on a minimal dataset with a single command:
 
     ```console
-    nextflow run vmikk/biodiverse-scripts -r main -profile test
+    nextflow run vmikk/phylonext -r main -profile test
     ```
 4. Start running your own analysis!
 
     ```console
-    nextflow run vmikk/biodiverse-scripts -r main \
+    nextflow run vmikk/phylonext -r main \
       --input "/mnt/GBIF/Parquet/2022-01-01/occurrence.parquet/" \
       --class "Mammalia" --family  "Felidae,Canidae" \
       --country "DE,PL,CZ"  \
       --minyear 2000  \
       --dbscan true  \
-      --phytree  $(realpath "${HOME}/.nextflow/assets/vmikk/biodiverse-scripts/test_data/phy_trees/Mammals.nwk") \
+      --phytree  $(realpath "${HOME}/.nextflow/assets/vmikk/phylonext/test_data/phy_trees/Mammals.nwk") \
       --iterations 100  \
       --outdir "$PWD" \
       -resume
@@ -92,7 +92,7 @@ As Docker is NOT supported in most HPC systems, it's possible to run the pipelin
 
 
 ## Documentation
-To show a help message, run `nextflow run vmikk/biodiverse-scripts -r main --helpMsg`.
+To show a help message, run `nextflow run vmikk/phylonext -r main --helpMsg`.
 ```
 ====================================================================
 GBIF phylogenetic diversity pipeline :  Version 0.0.1
@@ -100,7 +100,7 @@ GBIF phylogenetic diversity pipeline :  Version 0.0.1
 
 Pipeline Usage:
 To run the pipeline, enter the following in the command line:
-    nextflow run vmikk/biodiverse-scripts -r main --input ... --outdir ...
+    nextflow run vmikk/phylonext -r main --input ... --outdir ...
 
 Options:
 REQUIRED:
@@ -138,7 +138,7 @@ NEXTFLOW-SPECIFIC:
 
 It is possible to pass the pipeline parameters via YAML or JSON file, e.g.:
 ```
-nextflow run vmikk/biodiverse-scripts -r main -resume -params-file Mammals.yaml
+nextflow run vmikk/phylonext -r main -resume -params-file Mammals.yaml
 ```
 The YAML file could contain the following:
 ```
@@ -158,21 +158,21 @@ outdir     : "${launchDir}"
 
 ```
 ## Download or update the pipeline
-## By default, the pipeiline is stored in the '~/.nextflow/assets/vmikk/biodiverse-scripts' directory
-nextflow pull vmikk/biodiverse-scripts
+## By default, the pipeiline is stored in the '~/.nextflow/assets/vmikk/PhyloNext' directory
+nextflow pull vmikk/phylonext
 
 ## Run the latest development version of the pipeline
-nextflow run vmikk/biodiverse-scripts -r main ...
+nextflow run vmikk/phylonext -r main ...
 
 ## Run the tagged version (e.g., v0.1) of the pipeline
-nextflow run vmikk/biodiverse-scripts -r v0.1 ...
+nextflow run vmikk/phylonext -r v0.1 ...
 
 ## Print the pipeline and system runtime information
 nextflow info
-nextflow info vmikk/biodiverse-scripts
+nextflow info vmikk/phylonext
 
 ## Delete the local copy of the pipeline
-nextflow drop vmikk/biodiverse-scripts
+nextflow drop vmikk/phylonext
 ```
 
 #### Obtaining a local snapshot of species occurrences from GBIF
