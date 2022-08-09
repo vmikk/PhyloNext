@@ -355,13 +355,23 @@ leaflet(options = leafletOptions(minZoom = 0, maxZoom = 18))
 ## Function to create a label with single variable
 single_label <- function(num, name){
 
-  sprintf(
-    "<strong>%s:</strong> %.3g<br/>",
-    rep(name, times = length(num)),
-    num
-    )
+  if( is.numeric(num) ){
+    res <- sprintf(
+      "<strong>%s:</strong> %.3g<br/>",
+      rep(name, times = length(num)),
+      num
+      )
+  } else {
+    res <- sprintf(
+      "<strong>%s:</strong> %s<br/>",
+      rep(name, times = length(num)),
+      num
+      )
+  }
+  return(res)
 }
-# single_label(H3_poly$PD, name = "PD")
+# single_label(H3_poly$PD, name = "PD")           # numeric labels
+# single_label(H3_poly$CANAPE, name = "CANAPE")   # factor labels
 
 ## Create labels for all variables
 cat("..Generating polygon labels\n")
