@@ -13,6 +13,13 @@
 #   --output "03.Plots/Choropleth.html"
 
 ## for Z-score-based variables, add `z` prefix (e.g., zPD)
+## For CANAPE (categorical analysis of neo- and paleoendemism; Mishler et al., 2014), add `CANAPE` to the variables list
+# CANAPE is able to distinguish different types of centres of endemism, and can thus give insights 
+# into different evolutionary and ecological processes that may be responsible for these patterns. 
+# - The centres of paleo-endemism indicate places where there are over-representation of long branches that are rare across the landscape.
+# - The centres of neo-endemism indicate an area where there is an over-representation of short branches that are rare on the landscape.
+# - Mixture of both paleo-endemism and neo-endemism
+# - Super-endemic sites
 
 
 ## TO DO:
@@ -33,6 +40,7 @@ suppressPackageStartupMessages(require(optparse))
 option_list <- list(
   make_option(c("-r", "--observed"), action="store", default=NA, type='character', help="Input file (CSV) with Biodiverse results - observed indices"),
   make_option(c("-s", "--sesscores"),  action="store", default=NA, type='character', help="Input file (CSV) with Biodiverse results - SES-scores"),
+  make_option(c("-q", "--sigscores"),  action="store", default=NA, type='character', help="Input file (CSV) with Biodiverse results - Randomization p-values"),
   make_option(c("-v", "--variables"), action="store", default="RICHNESS_ALL,PD,zPD,PD_P,zPD_P", type='character', help="Diversity variables to plot (comma-separated entries)"),
   make_option(c("-p", "--palette"), action="store", default="quantile", type='character', help="Color palette type"),
   make_option(c("-c", "--color"), action="store", default="RdYlBu", type='character', help="Color gradient scheme"),
@@ -50,6 +58,8 @@ if(is.na(opt$observed)){
 if(is.na(opt$sesscores)){
   stop("Input file with SES-scores is not specified.\n")
 }
+if(is.na(opt$sigscores)){
+  stop("Input file with radnomization-based p-values is not specified.\n")
 }
 if(is.na(opt$output)){
   stop("Output file is not specified.\n")
@@ -58,6 +68,7 @@ if(is.na(opt$output)){
 ## Assign variables
 INPUTR <- opt$observed          # observed results (raw index values)
 INPUTS <- opt$sesscores         # standardized index values (SES)
+INPUTP <- opt$sigscores         # randomisations for each index in SPATIAL_RESULTS
 VARIABLES <- opt$variables
 PALETTE <- opt$palette
 COLOR <- opt$color
@@ -67,6 +78,7 @@ OUTPUT <- opt$output
 ## Log assigned variables
 cat(paste("Input file (observed indices): ", INPUTR, "\n", sep=""))
 cat(paste("Input file (SES-scores): ", INPUTS, "\n", sep=""))
+cat(paste("Input file (p-values): ", INPUTP, "\n", sep=""))
 cat(paste("Indices to plot: ", VARIABLES, "\n", sep=""))
 cat(paste("Color palette type: ", PALETTE, "\n", sep=""))
 cat(paste("Color gradient scheme: ", COLOR, "\n", sep=""))
@@ -119,9 +131,10 @@ cat("\n")
 ############################################## Prepare data
 
 ## Parameters for debugging
-# VARIABLES <- "RICHNESS_ALL,PD,zPD,PD_P,zPD_P"
 # INPUTR <- "RND_SPATIAL_RESULTS.csv"
 # INPUTS <- "RND_rand--z_scores--SPATIAL_RESULTS.csv"
+# INPUTP <- "RND_rand--SPATIAL_RESULTS.csv"
+# VARIABLES <- "RICHNESS_ALL,PD,SES_PD,PD_P,ENDW_WE,SES_ENDW_WE,PE_WE,SES_PE_WE,CANAPE"
 # PALETTE <- "quantile"
 # COLOR <- "RdYlBu"
 # BINS <- 5 
@@ -137,13 +150,19 @@ res_r <- fread(INPUTR)
 cat("..SES-scores\n")
 res_s <- fread(INPUTS)
 
+## P-values
+cat("..P-values\n")
+res_p <- fread(INPUTP)
+
 ## The first columns should be a gridcell ID
 colnames(res_r)[1] <- "H3"
 colnames(res_s)[1] <- "H3"
+colnames(res_p)[1] <- "H3"
 
 ## Remove redundant column
 res_r[, Axis_0 := NULL ]
 res_s[, Axis_0 := NULL ]
+res_p[, Axis_0 := NULL ]
 
 ## Rename SES-scores (add `SES_` prefix)
 colnames(res_s)[-1] <- paste0("SES_", colnames(res_s)[-1])
@@ -159,6 +178,136 @@ if(any(grepl(pattern = ",", x = VARIABLES))){
 
 ## ?? Remove "monomorphic" variables
 ## They could cause an error with color gradients and binning
+
+## CANAPE (categorical analysis of neo- and paleoendemism; Mishler et al., 2014)
+if("CANAPE" %in% VARIABLES){
+  cat("Preparing data for CANAPE analysis\n")
+  do_CANAPE <- TRUE
+
+  required_vars <- c(
+    "P_PHYLO_RPD1", "P_PHYLO_RPD2", 
+    "P_PD_P", "P_PE_WE_P", "P_PD_P_per_taxon",
+    "P_PHYLO_RPE1", "P_PHYLO_RPE2",
+    "P_PHYLO_RPE_NULL1", "P_PHYLO_RPE_NULL2")
+
+  ## Check if we have all the required variables in the data
+  if(any(! required_vars %in% colnames(res_p) )){
+    cat("..WARNING: some variables required for the CANAPE analysis are missing from the data!\n")
+    cat(paste(required_vars[ ! required_vars %in% colnames(res_p) ], collapse = ", "), "\n")
+    cat("..You may add `calc_phylo_rpe1,calc_phylo_rpe2` to the `indices` parameter of the pipeline\n")
+    cat("..Skipping the CANAPE analysis\n")
+    do_CANAPE <- FALSE
+  } else {
+    
+    cat("..Running the CANAPE analysis\n")
+
+    ## Significance-testing and thresholds are based on the code by Nunzio Knerr and Shawn Laffan
+    # https://github.com/NunzioKnerr/biodiverse_pipeline/blob/0e3eb237870a3a72a0be9939062123eee488e960/R_release/load_biodiverse_results_and_report_on_CANAPE_by_taxa.R#L38
+    ## Two-tailed test for RPD
+    sig1 <- function(x){
+      if (x >= 0.99) {
+        return("VeryHighlySig")
+      } else if (x >= 0.975){
+        return ("HighlySig")
+      } else if (x <= 0.01){
+        return ("VerySigLow")
+      } else if (x <= 0.025){
+        return ("SigLow")
+      } else {
+        return("NotSig")
+      }
+    }
+
+    ## Two-pass test for RPE
+    sig2 <- function(x, y, z, with_super = TRUE){
+      # x = P_PE_WE_P; y = P_PHYLO_RPE_NULL2; z = P_PHYLO_RPE2
+
+      if (is.na(x)) { x = 0   }
+      if (is.na(y)) { y = 0   }
+      if (is.na(z)) { z = 0.5 }
+
+      if(with_super == TRUE){
+        if (x < 0.95 & y < 0.95) {
+          return("NotSignificant")
+        } else if (z <= 0.025){
+          return ("Neo_endemism")
+        } else if (z >= 0.975){
+          return ("Paleo_endemism")
+        } else if (x >= 0.99 & y >= 0.99){
+          return ("Super_endemism")
+        } else {
+          return("Mixed_endemism")
+        }
+      }
+
+      if(with_super == FALSE){
+        if (x <= 0.95 & y <= 0.95) {
+           return ("NotSignificant")
+         } else if (z < 0.025) {
+           return ("Neo_endemism")
+         } else if (z > 0.975) {
+           return ("Paleo_endemism")
+         } else {
+           return ("Mixed_endemism")
+         }
+      }
+    } # end of sig2
+
+    ## Vectorize the functions
+    sig1 <- Vectorize(sig1)
+    sig2 <- Vectorize(sig2)
+
+    ## Step 1
+    # cat("...Step 1 - Parsing significance tests\n")
+    # canape_data <- data.table(
+    #   H3 = res_p[[ "H3" ]],
+    #   P_PHYLO_RPD1_SIG = sig1( res_p[[ "P_PHYLO_RPD1" ]] ),
+    #   P_PHYLO_RPD2_SIG = sig1( res_p[[ "P_PHYLO_RPD2" ]] ),
+    #   P_PD_P_SIG = sig1( res_p[[ "P_PD_P" ]] ),
+    #   P_PE_WE_P_SIG = sig1( res_p[[ "P_PE_WE_P" ]] ),
+    #   P_PD_P_per_taxon_SIG = sig1( res_p[[ "P_PD_P_per_taxon" ]] ),
+    #   P_PHYLO_RPE2_ONE_STEP_SIG = sig1( res_p[[ "P_PHYLO_RPE2" ]] )
+    #   )
+
+    ## Step 2
+    # cat("...Step 2 - Inferring endemism type\n")
+
+    ## Null model of PD evenly distributed across terminals, but with the same range per terminal and where ancestral nodes are of zero length
+    ## P_PHYLO_RPE1_SIG
+    # canape_data$CANAPE <- sig2(
+    #   res_p[[ "P_PE_WE_P" ]],
+    #   res_p[[ "P_PHYLO_RPE_NULL1" ]],
+    #   res_p[[ "P_PHYLO_RPE1" ]])
+
+    ## Null model where PE is calculated using a tree where all branches are of equal length
+    ## P_PHYLO_RPE2_SIG
+    # canape_data$CANAPE <- sig2(
+    #   res_p[[ "P_PE_WE_P" ]],
+    #   res_p[[ "P_PHYLO_RPE_NULL2" ]],
+    #   res_p[[ "P_PHYLO_RPE2" ]])
+
+    cat("...Inferring endemism type\n")
+  
+    canape_data <- data.table(
+      H3 = res_p[[ "H3" ]],
+      CANAPE = sig2(
+          res_p[[ "P_PE_WE_P" ]],
+          res_p[[ "P_PHYLO_RPE_NULL2" ]],
+          res_p[[ "P_PHYLO_RPE2" ]])
+      )
+
+    canape_data$CANAPE <- factor(canape_data$CANAPE,
+      levels = c("Neo_endemism", "Palaeo_endemism", "NotSignificant", "Mixed_endemism", "Super_endemism"))
+
+    ## Add CANAPE to the main table
+    res <- merge(x = res, y = canape_data, by = "H3", all.x = TRUE)
+
+  } # end of CANAPE
+
+} else {
+  cat("Skipping the CANAPE analysis\n")
+  do_CANAPE <- FALSE
+}
 
 
 ## Check if the selected index is in the tables
