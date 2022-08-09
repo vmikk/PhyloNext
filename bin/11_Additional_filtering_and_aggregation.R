@@ -620,7 +620,7 @@ if(!is.null(removed_CC_CAPITAL)){
 }
 
 
-## Instituteion centroids
+## Institution centroids
 if(!is.null(removed_CC_INSTIT)){
   
   ## H3 binning of removed occurrences
