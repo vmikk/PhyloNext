@@ -423,11 +423,15 @@ gen_color_palette <- function(x, type = "quantile", col = "RdYlBu", nbins = 5, r
   ## Equal-interval binning (based on `cut` function)
   if(type %in% "equal"){
     pal <- colorBin(palette = col, domain = x, bins = nbins, reverse = rev, na.color = "#808080")
+    attr(pal, which = "newbins") <- nbins
   }
 
   ## Simple linear mapping from continuous numeric data to an interpolated palette
   if(type %in% "continuous"){
     pal <- colorNumeric(palette = col, domain = x, reverse = rev, na.color = "#808080")
+    attr(pal, which = "newbins") <- 999
+  }
+
   ## SES-score mapping (symmetric around zero)
   if(type %in% "ses"){
 
