@@ -269,6 +269,25 @@ gen_color_palette <- function(x, type = "quantile", col = "RdYlBu", nbins = 5, r
   ## Simple linear mapping from continuous numeric data to an interpolated palette
   if(type %in% "continuous"){
     pal <- colorNumeric(palette = col, domain = x, reverse = rev, na.color = "#808080")
+  ## SES-score mapping (symmetric around zero)
+  if(type %in% "ses"){
+
+    ses_colors <- c(
+      HighlyNegative = "#27408B",
+      Negative       = "#4876FF",
+      NotSignificant = "#FAFAD2",
+      Positive       = "#FF0000",
+      HighlyPositive = "#8B0000"
+      )
+
+    ses_bins <-c(-1000, -2.58, -1.96, 1.96, 2.58, 1000)
+
+    pal <- colorBin(palette = ses_colors, bins = ses_bins,
+      na.color = "#808080", domain = c(-1000, 1000))
+    
+    attr(pal, which = "newbins") <- 5
+    # plot(-4:4, col = pal(-4:4), cex = 2, pch = 16) # test
+  }
   }
 
   return(pal)
@@ -278,12 +297,35 @@ gen_color_palette <- function(x, type = "quantile", col = "RdYlBu", nbins = 5, r
 #       gen_color_palette(1:10, type = "continuous")
 
 ## Make color palette for all variables
-pals <- alply(.data = VARIABLES, .margins = 1,
-  .fun = function(v, ...){ gen_color_palette(x = H3_poly[[ v ]], ...) }, 
-  type = PALETTE, col = COLOR, nbins = BINS, rev = TRUE)
+pals <- list()
 
-names(pals) <- VARIABLES
+VARIABLES_ses <- grep(pattern = "^SES_", x = VARIABLES, value = TRUE)
+VARIABLES_raw <- grep(pattern = "^SES_", x = VARIABLES, value = TRUE, invert = TRUE)
 
+## Colors for "raw" variables
+if(length(VARIABLES_raw) > 0){
+
+  pals_raw <- alply(.data = VARIABLES_raw, .margins = 1,
+    .fun = function(v, ...){ gen_color_palette(x = H3_poly[[ v ]], ...) }, 
+    type = PALETTE, col = COLOR, nbins = BINS, rev = TRUE)
+
+  names(pals_raw) <- VARIABLES_raw
+  pals <- c(pals, pals_raw)
+  rm(pals_raw)
+}
+
+
+## Colors of SES-scores
+if(length(VARIABLES_ses) > 0){
+
+  pals_ses <- alply(.data = VARIABLES_ses, .margins = 1,
+    .fun = function(v, ...){ gen_color_palette(x = H3_poly[[ v ]], ...) }, 
+    type = "ses")
+
+  names(pals_ses) <- VARIABLES_ses
+  pals <- c(pals, pals_ses)
+  rm(pals_ses)
+}
 
 
 cat("..Adding polygons\n")
