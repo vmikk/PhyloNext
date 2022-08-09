@@ -437,6 +437,25 @@ gen_color_palette <- function(x, type = "quantile", col = "RdYlBu", nbins = 5, r
     attr(pal, which = "newbins") <- 5
     # plot(-4:4, col = pal(-4:4), cex = 2, pch = 16) # test
   }
+
+  ## CANAPE-style mapping (neo / paleo / mixed / super)
+  if(type %in% "canape"){
+
+    canape_colors <- c(
+      Neo_endemism   = "#FF0000",
+      Paleo_endemism = "#4876FF",
+      NotSignificant = "#FAFAD2",
+      Mixed_endemism = "#CB7FFF",
+      Super_endemism = "#9D00FF"
+      )
+
+    pal <- colorFactor(
+      palette = canape_colors,
+      levels = names(canape_colors),
+      na.color = "#808080")
+
+    attr(pal, which = "newbins") <- 5
+    # plot(1:length(canape_colors), col = pal(names(canape_colors)), cex = 2, pch = 16) # test
   }
 
   return(pal)
