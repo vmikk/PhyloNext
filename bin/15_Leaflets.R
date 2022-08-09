@@ -576,6 +576,35 @@ for(v in VARIABLES){
 rm(v)
 
 
+## Add CANAPE to the plot
+if("CANAPE" %in% VARIABLES){
+
+  canape_pal <- gen_color_palette(
+    x = H3_poly[[ "CANAPE" ]],
+    type = "canape")
+
+  m <- m %>% 
+    addPolygons(data = H3_poly,
+      fillColor = ~ canape_pal( H3_poly[[ "CANAPE" ]] ),
+      group = "CANAPE",
+      opacity = 0.8,
+      fillOpacity = 0.8,
+      weight = 0.3, color = "white", dashArray = "1",
+      highlightOptions = highlightOptions(
+        weight = 2, color = "#777777", dashArray = "1",
+        opacity = 0.8, bringToFront = TRUE),
+      label = labels,
+      labelOptions = labelOptions(
+        style = list("font-weight" = "normal", padding = "3px 8px"),
+        textsize = "10px", direction = "auto")
+    ) %>%
+    addLegend("bottomright", pal = canape_pal, values = H3_poly[[ "CANAPE" ]],
+      title = "CANAPE", group = "CANAPE",  opacity = 1)
+
+} # end of CANAPE
+
+
+
 
 ## Add variable selector
 cat("..Adding variable selector\n")
