@@ -32,7 +32,7 @@ suppressPackageStartupMessages(require(optparse))
 ## Parse arguments
 option_list <- list(
   make_option(c("-r", "--observed"), action="store", default=NA, type='character', help="Input file (CSV) with Biodiverse results - observed indices"),
-  make_option(c("-z", "--zscores"),  action="store", default=NA, type='character', help="Input file (CSV) with Biodiverse results - Z-scores"),
+  make_option(c("-s", "--sesscores"),  action="store", default=NA, type='character', help="Input file (CSV) with Biodiverse results - SES-scores"),
   make_option(c("-v", "--variables"), action="store", default="RICHNESS_ALL,PD,zPD,PD_P,zPD_P", type='character', help="Diversity variables to plot (comma-separated entries)"),
   make_option(c("-p", "--palette"), action="store", default="quantile", type='character', help="Color palette type"),
   make_option(c("-c", "--color"), action="store", default="RdYlBu", type='character', help="Color gradient scheme"),
@@ -47,16 +47,17 @@ opt <- parse_args(OptionParser(option_list=option_list))
 if(is.na(opt$observed)){
   stop("Input file with observed PD indices is not specified.\n")
 }
-if(is.na(opt$zscores)){
-  stop("Input file with Z-scores is not specified.\n")
+if(is.na(opt$sesscores)){
+  stop("Input file with SES-scores is not specified.\n")
+}
 }
 if(is.na(opt$output)){
   stop("Output file is not specified.\n")
 }
 
 ## Assign variables
-INPUTO <- opt$observed
-INPUTZ <- opt$zscores
+INPUTR <- opt$observed          # observed results (raw index values)
+INPUTS <- opt$sesscores         # standardized index values (SES)
 VARIABLES <- opt$variables
 PALETTE <- opt$palette
 COLOR <- opt$color
@@ -64,8 +65,8 @@ BINS <- as.numeric( opt$bins )
 OUTPUT <- opt$output
 
 ## Log assigned variables
-cat(paste("Input file (observed indices): ", INPUTO, "\n", sep=""))
-cat(paste("Input file (Z-scores): ", INPUTZ, "\n", sep=""))
+cat(paste("Input file (observed indices): ", INPUTR, "\n", sep=""))
+cat(paste("Input file (SES-scores): ", INPUTS, "\n", sep=""))
 cat(paste("Indices to plot: ", VARIABLES, "\n", sep=""))
 cat(paste("Color palette type: ", PALETTE, "\n", sep=""))
 cat(paste("Color gradient scheme: ", COLOR, "\n", sep=""))
@@ -118,9 +119,9 @@ cat("\n")
 ############################################## Prepare data
 
 ## Parameters for debugging
-# INPUTO <- "RND_SPATIAL_RESULTS.csv"
-# INPUTZ <- "RND_rand--z_scores--SPATIAL_RESULTS.csv"
 # VARIABLES <- "RICHNESS_ALL,PD,zPD,PD_P,zPD_P"
+# INPUTR <- "RND_SPATIAL_RESULTS.csv"
+# INPUTS <- "RND_rand--z_scores--SPATIAL_RESULTS.csv"
 # PALETTE <- "quantile"
 # COLOR <- "RdYlBu"
 # BINS <- 5 
@@ -130,25 +131,25 @@ cat("Loading Biodiverse results\n")
 
 ## Raw indices
 cat("..Observed indices\n")
-res_r <- fread(INPUTO)
+res_r <- fread(INPUTR)
 
-## Z-scores
-cat("..Z-scores\n")
-res_z <- fread(INPUTZ)
+## SES-scores
+cat("..SES-scores\n")
+res_s <- fread(INPUTS)
 
 ## The first columns should be a gridcell ID
 colnames(res_r)[1] <- "H3"
-colnames(res_z)[1] <- "H3"
+colnames(res_s)[1] <- "H3"
 
 ## Remove redundant column
 res_r[, Axis_0 := NULL ]
-res_z[, Axis_0 := NULL ]
+res_s[, Axis_0 := NULL ]
 
-## Rename Z-scores (add `z` prefix)
-colnames(res_z)[-1] <- paste0("z", colnames(res_z)[-1])
+## Rename SES-scores (add `SES_` prefix)
+colnames(res_s)[-1] <- paste0("SES_", colnames(res_s)[-1])
 
 ## Merge the data into a single table
-res <- merge(x = res_r, y = res_z, by = "H3", all.x = TRUE)
+res <- merge(x = res_r, y = res_s, by = "H3", all.x = TRUE)
 
 
 ## If there are multiple variables selected - split them
