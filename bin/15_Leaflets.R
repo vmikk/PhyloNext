@@ -4,15 +4,20 @@
 
 ## Usage example:
 # ./15_Leaflets.R \
-#   --observed "02.Biodiverse_input/occ.bds.csv" \
-#   --zscores "02.Biodiverse_results/RND_rand--z_scores--SPATIAL_RESULTS.csv" \
-#   --variables "RICHNESS_ALL,PD,zPD,PD_P,zPD_P" \
+#   --observed "RND_SPATIAL_RESULTS.csv" \
+#   --sesscores "RND_rand--z_scores--SPATIAL_RESULTS.csv" \
+#   --sigscores "RND_rand--SPATIAL_RESULTS.csv" \
+#   --variables "RICHNESS_ALL,PD,SES_PD,PD_P,ENDW_WE,SES_ENDW_WE,PE_WE,SES_PE_WE,CANAPE" \
 #   --palette "quantile" \
 #   --color "RdYlBu" \
 #   --bins 5 \
 #   --output "03.Plots/Choropleth.html"
 
-## for Z-score-based variables, add `z` prefix (e.g., zPD)
+## For a list of indices available in Biodiverse, see:
+# https://github.com/shawnlaffan/biodiverse/wiki/IndicesDevVersion
+
+## For Standardized-Effect-Size-based variables, add `SES_` prefix (e.g., `SES_PD`)
+
 ## For CANAPE (categorical analysis of neo- and paleoendemism; Mishler et al., 2014), add `CANAPE` to the variables list
 # CANAPE is able to distinguish different types of centres of endemism, and can thus give insights 
 # into different evolutionary and ecological processes that may be responsible for these patterns. 
@@ -23,6 +28,7 @@
 
 
 ## TO DO:
+# - fix SES legend (1000)
 # - handle NA values (e.g., if Richness == 1)
 
 
