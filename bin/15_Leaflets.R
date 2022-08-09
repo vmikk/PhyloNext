@@ -469,6 +469,7 @@ pals <- list()
 
 VARIABLES_ses <- grep(pattern = "^SES_", x = VARIABLES, value = TRUE)
 VARIABLES_raw <- grep(pattern = "^SES_", x = VARIABLES, value = TRUE, invert = TRUE)
+VARIABLES_raw <- VARIABLES_raw[ ! VARIABLES_raw %in% "CANAPE" ]
 
 ## Colors for "raw" variables
 if(length(VARIABLES_raw) > 0){
@@ -546,12 +547,15 @@ add_polygons_with_legend <- function(m, v, pal){
 # add_polygons_with_legend(m, "PD", pal = pals[[ "PD" ]])
 
 
-for(v in VARIABLES){
+## Loop throug all variables except "CANAPE" (it has a categorical color scheme)
+for(v in VARIABLES[ ! VARIABLES %in% "CANAPE" ]){
 
   cat("... ", v, "\n")
 
-  if(PALETTE %in% "quantile"  &  attr(pals[[v]], "newbins") != BINS){ 
+  if(v %in% VARIABLES_raw & PALETTE %in% "quantile"){
+    if(attr(pals[[v]], "newbins") != BINS){
     cat(".... number of bins was adjusted to ", attr(pals[[v]], "newbins"), "\n")
+    }
   }
 
   tmp <- try( add_polygons_with_legend(m = m, v = v, pal = pals[[v]] ) )
