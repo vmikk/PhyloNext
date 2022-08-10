@@ -48,6 +48,7 @@ option_list <- list(
   make_option("--class", action="store", default=NA, type='character', help="Comma-separated list of classes to select"),
   make_option("--order", action="store", default=NA, type='character', help="Comma-separated list of orders to select"),
   make_option("--family", action="store", default=NA, type='character', help="Comma-separated list of families to select"),
+  make_option("--genus", action="store", default=NA, type='character', help="Comma-separated list of genera to select"),
   
   ## Spatial filters
   make_option("--country", action="store", default=NA, type='character', help="Comma-separated list of country codes (e.g., AU,CA)"),
@@ -91,6 +92,7 @@ PHYLUM <- to_na( opt$phylum )
 CLASS  <- to_na( opt$class )
 ORDER  <- to_na( opt$order )
 FAMILY <- to_na( opt$family )
+GENUS  <- to_na( opt$genus )
 
 COUNTRY <- to_na( opt$country )
 LATMIN <- as.numeric( to_na(opt$latmin) )
@@ -110,15 +112,16 @@ OUTPUT <- opt$output
 cat(paste("Input occurrences: ", INPUT, "\n", sep=""))
 
 cat(paste("Selected phyla: ",    PHYLUM, "\n", sep = ""))
-cat(paste("Selected classes: ",  CLASS, "\n", sep = ""))
-cat(paste("Selected orders: ",   ORDER, "\n", sep = ""))
+cat(paste("Selected classes: ",  CLASS,  "\n", sep = ""))
+cat(paste("Selected orders: ",   ORDER,  "\n", sep = ""))
 cat(paste("Selected families: ", FAMILY, "\n", sep = ""))
+cat(paste("Selected genera: ",   GENUS,  "\n", sep = ""))
 
 cat(paste("Country codes: ",     COUNTRY, "\n", sep = ""))
-cat(paste("Minimum latitude: ",  LATMIN, "\n", sep = ""))
-cat(paste("Maximum latitude: ",  LATMAX, "\n", sep = ""))
-cat(paste("Minimum longitude: ", LONMIN, "\n", sep = ""))
-cat(paste("Maximum longitude: ", LONMAX, "\n", sep = ""))
+cat(paste("Minimum latitude: ",  LATMIN,  "\n", sep = ""))
+cat(paste("Maximum latitude: ",  LATMAX,  "\n", sep = ""))
+cat(paste("Minimum longitude: ", LONMIN,  "\n", sep = ""))
+cat(paste("Maximum longitude: ", LONMAX,  "\n", sep = ""))
 
 cat(paste("Minimum year of occurrence: ", MINYEAR, "\n", sep=""))
 cat(paste("List of extict species: ", EXTINCT, "\n", sep=""))
@@ -211,6 +214,12 @@ if(!is.na(FAMILY)){
   cat("..Filtering by Family\n")
   FAMILY <- strsplit(x = FAMILY, split = ",")[[1]]
   dsf <- dsf %>% filter(family %in% FAMILY)
+}
+
+if(!is.na(GENUS)){
+  cat("..Filtering by Genus\n")
+  GENUS <- strsplit(x = GENUS, split = ",")[[1]]
+  dsf <- dsf %>% filter(genus %in% GENUS)
 }
 
 
