@@ -266,8 +266,8 @@ process occ_filter {
       path noextinct
 
     output:
-      path "Partition=low", emit: part_low, type: "dir", optional: true
-      path "Partition=high", emit: part_high, type: "dir", optional: true
+      path "Partition_low", emit: part_low, type: "dir", optional: true
+      path "Partition_high", emit: part_high, type: "dir", optional: true
       path "spp.txt", emit: spp
 
     script:
@@ -296,9 +296,13 @@ process occ_filter {
     ## Prepare species list for DBSCAN
     awk '\$3 ~ /high/ {print \$1 }' SpeciesCounts.txt > spp.txt
 
+    ## Remove `equal` sign (causes a problem with azcopy)
+    mv 'Partition=low'  Partition_low
+    mv 'Partition=high' Partition_high
+
     ## Check the size of output directories, if empty - remove them
-    if [ -d 'Partition=low'  ]; then rmdir --ignore-fail-on-non-empty 'Partition=low'  ; fi
-    if [ -d 'Partition=high' ]; then rmdir --ignore-fail-on-non-empty 'Partition=high' ; fi
+    if [ -d 'Partition_low'  ]; then rmdir --ignore-fail-on-non-empty 'Partition_low'  ; fi
+    if [ -d 'Partition_high' ]; then rmdir --ignore-fail-on-non-empty 'Partition_high' ; fi
 
     """
 }
