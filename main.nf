@@ -283,7 +283,7 @@ process occ_filter {
       --class ${params.class} \
       --order ${params.order} \
       --family ${params.family} \
-      --genus ${params.family} \
+      --genus ${params.genus} \
       --country ${params.country} \
       --latmin ${params.latmin} \
       --latmax ${params.latmax} \
@@ -350,7 +350,7 @@ process record_count {
       --class ${params.class} \
       --order ${params.order} \
       --family ${params.family} \
-      --genus ${params.family} \
+      --genus ${params.genus} \
       --country ${params.country} \
       --latmin ${params.latmin} \
       --latmax ${params.latmax} \
