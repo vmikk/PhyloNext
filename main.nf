@@ -140,6 +140,7 @@ world              = params.world              ? file(params.world)             
 // Define output paths for different steps
 out_flt1 = params.outdir + "/00.filtered1.parquet"
 out_flt2 = params.outdir + "/01.filtered2"
+out_recs = params.outdir + "/01.NumRecords"
 out_biod = params.outdir + "/02.Biodiverse_input"
 out_plot = params.outdir + "/03.Plots"
 
@@ -249,7 +250,7 @@ log.info """
         """
         .stripIndent()
 
-log.info "========================================================"
+log.info "===================================================================="
 log.info "\n"
 
 
