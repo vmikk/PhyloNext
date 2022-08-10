@@ -310,6 +310,67 @@ process occ_filter {
 }
 
 
+// Counting the total number of records per H3 cell ("sampling effort" for the redundancy estimator)
+process record_count {
+
+    label "container_r"
+    queue "custom_pool"
+
+    publishDir "${out_recs}", mode: 'copy'
+    // cpus 10
+
+    input:
+      path(input)
+      path(noextinct)
+      path(terrestrial)
+      path(rmcountrycentroids)
+      path(rmcountrycapitals)
+      path(rminstitutions)
+      path(rmurban)
+
+    output:
+      path "Record_counts_H3.RData", emit: n_recr
+      path "Record_counts_H3.txt.gz", emit: n_rect
+      path "Record_counts_Outliers.txt.gz", emit: n_outl, optional: true
+
+    script:
+
+    filter_extinct      = params.noextinct          ? "--noextinct $noextinct" : ""
+    filter_terrestrial  = params.terrestrial        ? "--terrestrial $terrestrial" : ""
+    filter_country      = params.rmcountrycentroids ? "--rmcountrycentroids $rmcountrycentroids" : ""
+    filter_capitals     = params.rmcountrycapitals  ? "--rmcountrycapitals $rmcountrycapitals" : ""
+    filter_institutions = params.rminstitutions     ? "--rminstitutions $rminstitutions" : ""
+    filter_urban        = params.rmurban            ? "--rmurban $rmurban" : ""
+
+    """
+    10_Record_counts.R \
+      --input ${input} \
+      --phylum ${params.phylum} \
+      --class ${params.class} \
+      --order ${params.order} \
+      --family ${params.family} \
+      --genus ${params.family} \
+      --country ${params.country} \
+      --latmin ${params.latmin} \
+      --latmax ${params.latmax} \
+      --lonmin ${params.lonmin} \
+      --lonmax ${params.lonmax} \
+      --minyear ${params.minyear} \
+      ${filter_extinct} \
+      ${filter_terrestrial} \
+      ${filter_country} \
+      ${filter_capitals} \
+      ${filter_institutions} \
+      ${filter_urban} \
+      --roundcoords ${params.roundcoords2} \
+      --resolution ${params.h3resolution}
+      --threads ${task.cpus} \
+      --output "Record_counts"
+
+    """
+}
+
+
 // Outlier filtering, stage II - without DBSCAN, all low abundant species
 process outl_low {
 
