@@ -56,6 +56,7 @@ params.phylum = "NA"
 params.class = "NA"
 params.order = "NA"
 params.family = "NA"
+params.genus = "NA"
 params.country = "NA"
 params.latmin = "NA"
 params.latmax = "NA"
@@ -281,6 +282,7 @@ process occ_filter {
       --class ${params.class} \
       --order ${params.order} \
       --family ${params.family} \
+      --genus ${params.family} \
       --country ${params.country} \
       --latmin ${params.latmin} \
       --latmax ${params.latmax} \
