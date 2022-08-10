@@ -788,6 +788,19 @@ workflow {
         input_ch,
         noextinct)
 
+    // occ_filter.out.part_low.view()
+    // occ_filter.out.part_high.view()
+
+    // Counting the total number of records
+    record_count(
+        input_ch,
+        noextinct,
+        terrestrial,
+        rmcountrycentroids,
+        rmcountrycapitals,
+        rminstitutions,
+        rmurban)
+
     // Run stage-II filtering for species with low abundance (no DBSCAN)
     outl_low(
         occ_filter.out.part_low,
