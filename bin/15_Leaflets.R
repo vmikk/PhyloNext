@@ -513,6 +513,13 @@ gen_color_palette <- function(x, type = "quantile", col = "RdYlBu", nbins = 5, r
     # plot(1:length(canape_colors), col = pal(names(canape_colors)), cex = 2, pch = 16) # test
   }
 
+  ## Redundancy-style mapping (yellow-brown, [0,1])
+  if(type %in% "redundancy"){
+    pal <- colorNumeric(palette = "YlOrBr", domain = seq(0, 1, 0.01), reverse = FALSE, na.color = "#808080")
+    attr(pal, which = "newbins") <- 999
+    # plot(seq(0,1,0.05), col = pal(seq(0,1,0.05)), cex = 2, pch = 16) # test
+  }
+
   return(pal)
 }
 # e.g., gen_color_palette(1:10, type = "quantile", nbins = 5)
