@@ -373,7 +373,13 @@ cat("Preparing gridcell polygons\n")
 H3_poly <- h3_to_geo_boundary_sf(res$H3)
 
 cat("..Adding diversity estimates to polygons\n")
-H3_poly <- cbind(H3_poly, res[, ..VARIABLES])
+
+if("NumRecords" %in% colnames(res)){
+  vars <- c(VARIABLES, "NumRecords")
+  H3_poly <- cbind(H3_poly, res[, ..vars])
+} else {
+  H3_poly <- cbind(H3_poly, res[, ..VARIABLES])
+}
 
 # plot(H3_poly)
 
@@ -419,6 +425,11 @@ cat("..Generating polygon labels\n")
 labels <- alply(.data = VARIABLES, .margins = 1, .fun = function(v){
   single_label(num = H3_poly[[ v ]], name = v)
   })
+
+## Add number of GBIF-records to the labels
+labels <- c(labels, 
+  list( single_label(num = H3_poly[[ "NumRecords" ]], name = "Number of records"))
+  )
 
 ## Concatenate labels from all variables
 labels <- do.call(paste0, labels)
