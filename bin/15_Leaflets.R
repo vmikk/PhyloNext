@@ -53,6 +53,7 @@ option_list <- list(
   make_option(c("-p", "--palette"), action="store", default="quantile", type='character', help="Color palette type"),
   make_option(c("-c", "--color"), action="store", default="RdYlBu", type='character', help="Color gradient scheme for the diversity indices (except for SES, CANAPE, and redundancy metrics)"),
   make_option(c("-b", "--bins"), action="store", default=5L, type='integer', help="Number of color bins for quantile palette"),
+  make_option(c("-j", "--redundancy"), action="store", default=0, type='integer', help="Redundancy threshold for hiding the grid cells with low number of records (disabled by default)"),
   # make_option(c("-t", "--threads"), action="store", default=1L, type='integer', help="Number of CPU threads for arrow, default 4"),
   make_option(c("-o", "--output"), action="store", default="Choropleth.html", type='character', help="Output file name")
 )
@@ -76,6 +77,13 @@ if(is.na(opt$output)){
   stop("Output file is not specified.\n")
 }
 
+
+## Function to convert text "NA"s to NA
+to_na <- function(x){ 
+  if(x %in% "NA"){ x <- NA }
+  return(x)
+}
+
 ## Assign variables
 INPUTR <- opt$observed          # observed results (raw index values)
 INPUTS <- opt$sesscores         # standardized index values (SES)
@@ -85,7 +93,15 @@ VARIABLES <- opt$variables
 PALETTE <- opt$palette
 COLOR <- opt$color
 BINS <- as.numeric( opt$bins )
+REDUNDANCYTRSH <- as.numeric(to_na( opt$redundancy ))
 OUTPUT <- opt$output
+
+## Check the redundancy range
+if(!is.na(REDUNDANCYTRSH)){
+  if(! (0 <= REDUNDANCYTRSH & REDUNDANCYTRSH <= 1) ){
+    stop("Redundacy threshold should be in the [0,1] range.\n")
+  }
+}
 
 ## Log assigned variables
 cat(paste("Input file (observed indices): ", INPUTR, "\n", sep=""))
@@ -96,6 +112,7 @@ cat(paste("Indices to plot: ", VARIABLES, "\n", sep=""))
 cat(paste("Color palette type: ", PALETTE, "\n", sep=""))
 cat(paste("Color gradient scheme: ", COLOR, "\n", sep=""))
 cat(paste("Number of color bins: ", BINS, "\n", sep=""))
+cat(paste("Redundancy threshold: ", REDUNDANCYTRSH, "\n", sep=""))
 cat(paste("Output file: ", OUTPUT, "\n", sep=""))
 
 # CPUTHREADS <- as.numeric(opt$threads)
@@ -149,6 +166,7 @@ cat("\n")
 # INPUTP <- "RND_rand--SPATIAL_RESULTS.csv"
 # NRECORDS <- "Record_counts_H3.RData"
 # VARIABLES <- "RICHNESS_ALL,PD,SES_PD,PD_P,ENDW_WE,SES_ENDW_WE,PE_WE,SES_PE_WE,CANAPE,Redundancy"
+# REDUNDANCYTRSH <- 0.7
 # PALETTE <- "quantile"
 # COLOR <- "RdYlBu"
 # BINS <- 5 
@@ -363,8 +381,26 @@ if(any(!VARIABLES %in% colz)){
   VARIABLES <- VARIABLES[ ! VARIABLES %in% missing ]
 }
 
+## Check the data
 if(length(VARIABLES) == 0){
   stop("None of the selected indices were found in the results! Nothing to plot.\n")
+}
+
+## Remove gridcell with the redundancy index below the specified threshold
+if(REDUNDANCYTRSH > 0 & "Redundancy" %in% colnames(res)){
+  cat("Removing grid cells with low redundancy index\n")
+  cat("..The specified threshold is ", REDUNDANCYTRSH, "\n")
+  cat("..There are ", sum(res$Redundancy <= REDUNDANCYTRSH), " grid cells to be removed\n")
+  cat("..And ", sum(res$Redundancy > REDUNDANCYTRSH), " grid cells will be preserved\n")
+
+  if(any(res$Redundancy <= REDUNDANCYTRSH)){
+    res <- res[ Redundancy > REDUNDANCYTRSH ]
+  }
+}
+
+## Check the data
+if(!nrow(res) > 0){
+  stop("There are no grid cells to display!\n")
 }
 
 
