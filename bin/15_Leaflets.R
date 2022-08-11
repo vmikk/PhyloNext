@@ -7,6 +7,7 @@
 #   --observed "RND_SPATIAL_RESULTS.csv" \
 #   --sesscores "RND_rand--z_scores--SPATIAL_RESULTS.csv" \
 #   --sigscores "RND_rand--SPATIAL_RESULTS.csv" \
+#   --reccounts "Record_counts_H3.RData" \
 #   --variables "RICHNESS_ALL,PD,SES_PD,PD_P,ENDW_WE,SES_ENDW_WE,PE_WE,SES_PE_WE,CANAPE" \
 #   --palette "quantile" \
 #   --color "RdYlBu" \
@@ -47,10 +48,11 @@ option_list <- list(
   make_option(c("-r", "--observed"), action="store", default=NA, type='character', help="Input file (CSV) with Biodiverse results - observed indices"),
   make_option(c("-s", "--sesscores"),  action="store", default=NA, type='character', help="Input file (CSV) with Biodiverse results - SES-scores"),
   make_option(c("-q", "--sigscores"),  action="store", default=NA, type='character', help="Input file (CSV) with Biodiverse results - Randomization p-values"),
+  make_option(c("-n", "--reccounts"),  action="store", default=NA, type='character', help="File with the total number of (filtered) records per H3 cell"),
   make_option(c("-v", "--variables"), action="store", default="RICHNESS_ALL,PD,zPD,PD_P,zPD_P", type='character', help="Diversity variables to plot (comma-separated entries)"),
   make_option(c("-p", "--palette"), action="store", default="quantile", type='character', help="Color palette type"),
-  make_option(c("-c", "--color"), action="store", default="RdYlBu", type='character', help="Color gradient scheme"),
-  make_option(c("-b", "--bins"), action="store", default=5L, type='integer', help="Number of color bins"),
+  make_option(c("-c", "--color"), action="store", default="RdYlBu", type='character', help="Color gradient scheme for the diversity indices (except for SES, CANAPE, and redundancy metrics)"),
+  make_option(c("-b", "--bins"), action="store", default=5L, type='integer', help="Number of color bins for quantile palette"),
   # make_option(c("-t", "--threads"), action="store", default=1L, type='integer', help="Number of CPU threads for arrow, default 4"),
   make_option(c("-o", "--output"), action="store", default="Choropleth.html", type='character', help="Output file name")
 )
@@ -67,6 +69,9 @@ if(is.na(opt$sesscores)){
 if(is.na(opt$sigscores)){
   stop("Input file with radnomization-based p-values is not specified.\n")
 }
+if(is.na(opt$reccounts)){
+  stop("Input file with the total number of GBIF-records per H3 cell is not specified.\n")
+}
 if(is.na(opt$output)){
   stop("Output file is not specified.\n")
 }
@@ -75,6 +80,7 @@ if(is.na(opt$output)){
 INPUTR <- opt$observed          # observed results (raw index values)
 INPUTS <- opt$sesscores         # standardized index values (SES)
 INPUTP <- opt$sigscores         # randomisations for each index in SPATIAL_RESULTS
+NRECORDS <- opt$reccounts       # total number of GBIF records per H3-cell
 VARIABLES <- opt$variables
 PALETTE <- opt$palette
 COLOR <- opt$color
@@ -85,6 +91,7 @@ OUTPUT <- opt$output
 cat(paste("Input file (observed indices): ", INPUTR, "\n", sep=""))
 cat(paste("Input file (SES-scores): ", INPUTS, "\n", sep=""))
 cat(paste("Input file (p-values): ", INPUTP, "\n", sep=""))
+cat(paste("Input file (number of records): ", NRECORDS, "\n", sep=""))
 cat(paste("Indices to plot: ", VARIABLES, "\n", sep=""))
 cat(paste("Color palette type: ", PALETTE, "\n", sep=""))
 cat(paste("Color gradient scheme: ", COLOR, "\n", sep=""))
@@ -140,6 +147,7 @@ cat("\n")
 # INPUTR <- "RND_SPATIAL_RESULTS.csv"
 # INPUTS <- "RND_rand--z_scores--SPATIAL_RESULTS.csv"
 # INPUTP <- "RND_rand--SPATIAL_RESULTS.csv"
+# NRECORDS <- "Record_counts_H3.RData"
 # VARIABLES <- "RICHNESS_ALL,PD,SES_PD,PD_P,ENDW_WE,SES_ENDW_WE,PE_WE,SES_PE_WE,CANAPE"
 # PALETTE <- "quantile"
 # COLOR <- "RdYlBu"
@@ -313,6 +321,33 @@ if("CANAPE" %in% VARIABLES){
 } else {
   cat("Skipping the CANAPE analysis\n")
   do_CANAPE <- FALSE
+}
+
+
+### Estimate sampling redundancy for each cell (how well the are is sampled) 
+###  = 1 - (Richness / Number of specimens)
+### (see Mishler et al., 2020; DOI: 10.1111/jse.12590) 
+cat("Estimating sampling redundancy\n")
+if(!"RICHNESS_ALL" %in% colnames(res)){
+  cat("..WARNING: species richness is missing from the estimated indices!\n")
+  cat("..Skipping redundancy estimation\n")
+} else {
+
+  ## Loading number of records
+  cat("..Loading a file with the total number of GBIF-records per H3-cell\n")
+  NRECORDS <- readRDS(NRECORDS)
+
+  ## Add N to the main table
+  cat("..Adding N records to the main table\n")
+  res <- merge(x = res, y = NRECORDS[, .(H3, NumRecords)],
+               by = "H3", all.x = TRUE)
+  
+  ## Calc the redundancy
+  cat("..Estimating the index\n")
+  res[, Redundancy := ( 1 - (RICHNESS_ALL / NumRecords) )]
+
+  ## Add the index to the VARIABLES
+  VARIABLES <- c(VARIABLES, "Redundancy")
 }
 
 
