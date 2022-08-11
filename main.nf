@@ -364,7 +364,7 @@ process record_count {
       ${filter_institutions} \
       ${filter_urban} \
       --roundcoords ${params.roundcoords2} \
-      --resolution ${params.h3resolution}
+      --resolution ${params.h3resolution} \
       --threads ${task.cpus} \
       --output "Record_counts"
 
