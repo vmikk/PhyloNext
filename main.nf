@@ -65,6 +65,7 @@ params.lonmax = "NA"
 params.minyear = 1945
 params.noextinct = null          // params.data_path + "/Fossil_IDs.RData"
 params.roundcoords = true
+params.roundcoords2 = 2          // as numeric, for `record_count`
 params.dbscannoccurrences = 30
 
 // Filtering, stage II - "11_Additional_filtering_and_aggregation.R"
