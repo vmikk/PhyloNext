@@ -148,7 +148,7 @@ cat("\n")
 # INPUTS <- "RND_rand--z_scores--SPATIAL_RESULTS.csv"
 # INPUTP <- "RND_rand--SPATIAL_RESULTS.csv"
 # NRECORDS <- "Record_counts_H3.RData"
-# VARIABLES <- "RICHNESS_ALL,PD,SES_PD,PD_P,ENDW_WE,SES_ENDW_WE,PE_WE,SES_PE_WE,CANAPE"
+# VARIABLES <- "RICHNESS_ALL,PD,SES_PD,PD_P,ENDW_WE,SES_ENDW_WE,PE_WE,SES_PE_WE,CANAPE,Redundancy"
 # PALETTE <- "quantile"
 # COLOR <- "RdYlBu"
 # BINS <- 5 
@@ -531,7 +531,7 @@ pals <- list()
 
 VARIABLES_ses <- grep(pattern = "^SES_", x = VARIABLES, value = TRUE)
 VARIABLES_raw <- grep(pattern = "^SES_", x = VARIABLES, value = TRUE, invert = TRUE)
-VARIABLES_raw <- VARIABLES_raw[ ! VARIABLES_raw %in% "CANAPE" ]
+VARIABLES_raw <- VARIABLES_raw[ ! VARIABLES_raw %in% c("CANAPE", "Redundancy") ]
 
 ## Colors for "raw" variables
 if(length(VARIABLES_raw) > 0){
@@ -609,8 +609,9 @@ add_polygons_with_legend <- function(m, v, pal){
 # add_polygons_with_legend(m, "PD", pal = pals[[ "PD" ]])
 
 
-## Loop throug all variables except "CANAPE" (it has a categorical color scheme)
-for(v in VARIABLES[ ! VARIABLES %in% "CANAPE" ]){
+## Loop throug all variables
+## Except "CANAPE" (it has a categorical color scheme) and "Redundancy"
+for(v in VARIABLES[ ! VARIABLES %in% c("CANAPE", "Redundancy") ]){
 
   cat("... ", v, "\n")
 
@@ -670,6 +671,32 @@ if("CANAPE" %in% VARIABLES){
 } # end of CANAPE
 
 
+## Add Redundancy index to the plot
+if("Redundancy" %in% VARIABLES){
+
+  redundancy_pal <- gen_color_palette(
+    x = H3_poly[[ "Redundancy" ]],
+    type = "redundancy")
+
+  m <- m %>% 
+    addPolygons(data = H3_poly,
+      fillColor = ~ redundancy_pal( H3_poly[[ "Redundancy" ]] ),
+      group = "Redundancy",
+      opacity = 0.8,
+      fillOpacity = 0.8,
+      weight = 0.3, color = "white", dashArray = "1",
+      highlightOptions = highlightOptions(
+        weight = 2, color = "#777777", dashArray = "1",
+        opacity = 0.8, bringToFront = TRUE),
+      label = labels,
+      labelOptions = labelOptions(
+        style = list("font-weight" = "normal", padding = "3px 8px"),
+        textsize = "10px", direction = "auto")
+    ) %>%
+    addLegend("bottomright", pal = redundancy_pal, values = H3_poly[[ "Redundancy" ]],
+      title = "Sampling redundancy", group = "Redundancy",  opacity = 1)
+
+}
 
 
 ## Add variable selector
