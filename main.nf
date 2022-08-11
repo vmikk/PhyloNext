@@ -118,7 +118,7 @@ params.plotunits = "in"
 params.world = params.data_path + "/WorldMap_NaturalEarth_Medium.RData"
 
 // Visualization - Leaflet
-params.leaflet_var = "RICHNESS_ALL,PD,zPD,PD_P,zPD_P"
+params.leaflet_var = "RICHNESS_ALL,PD,SES_PD,PD_P,ENDW_WE,SES_ENDW_WE,PE_WE,SES_PE_WE,CANAPE,Redundancy"
 params.leaflet_palette = "quantile"
 params.leaflet_color = "RdYlBu"
 params.leaflet_bins = 5
