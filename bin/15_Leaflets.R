@@ -163,13 +163,13 @@ cat("\n")
 ## Parameters for debugging
 # INPUTR <- "RND_SPATIAL_RESULTS.csv"
 # INPUTS <- "RND_rand--z_scores--SPATIAL_RESULTS.csv"
-# INPUTP <- "RND_rand--SPATIAL_RESULTS.csv"
+# INPUTP <- "RND_rand--SPATIAL_RESULTS.csv"    # "RND_rand--SPATIAL_RESULTS.csv"
 # NRECORDS <- "Record_counts_H3.RData"
 # VARIABLES <- "RICHNESS_ALL,PD,SES_PD,PD_P,ENDW_WE,SES_ENDW_WE,PE_WE,SES_PE_WE,CANAPE,Redundancy"
 # REDUNDANCYTRSH <- 0.7
 # PALETTE <- "quantile"
 # COLOR <- "RdYlBu"
-# BINS <- 5 
+# BINS <- 5
 
 ## Load input data
 cat("Loading Biodiverse results\n")
@@ -329,7 +329,7 @@ if("CANAPE" %in% VARIABLES){
       )
 
     canape_data$CANAPE <- factor(canape_data$CANAPE,
-      levels = c("Neo_endemism", "Palaeo_endemism", "NotSignificant", "Mixed_endemism", "Super_endemism"))
+      levels = c("Neo_endemism", "Paleo_endemism", "NotSignificant", "Mixed_endemism", "Super_endemism"))
 
     ## Add CANAPE to the main table
     res <- merge(x = res, y = canape_data, by = "H3", all.x = TRUE)
