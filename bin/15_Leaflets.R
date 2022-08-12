@@ -349,6 +349,10 @@ cat("Estimating sampling redundancy\n")
 if(!"RICHNESS_ALL" %in% colnames(res)){
   cat("..WARNING: species richness is missing from the estimated indices!\n")
   cat("..Skipping redundancy estimation\n")
+
+  ## Remove Redundancy variable from the list (if it's there)
+  VARIABLES <- VARIABLES[ ! VARIABLES %in% "Redundancy" ]
+
 } else {
 
   ## Loading number of records
@@ -365,7 +369,7 @@ if(!"RICHNESS_ALL" %in% colnames(res)){
   res[, Redundancy := ( 1 - (RICHNESS_ALL / NumRecords) )]
 
   ## Add the index to the VARIABLES
-  VARIABLES <- c(VARIABLES, "Redundancy")
+  # VARIABLES <- c(VARIABLES, "Redundancy")
 }
 
 
