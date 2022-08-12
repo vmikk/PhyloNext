@@ -887,7 +887,9 @@ workflow {
     // Plot PD indices (interactive map - Leaflet-based choropleth)
     plot_leaflet(
         div_to_csv.out.RND5,
-        div_to_csv.out.RND4)
+        div_to_csv.out.RND4,
+        div_to_csv.out.RND3,
+        record_count.out.n_recr)
 
 }
 
