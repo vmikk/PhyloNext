@@ -407,6 +407,10 @@ if(!nrow(res) > 0){
   stop("There are no grid cells to display!\n")
 }
 
+## Export the data
+cat("Exporting the data table\n")
+fwrite(x = res, file = "Biodiverse_results_merged.txt", sep = "\t")
+
 
 ## Prepare spatial polygons
 cat("Preparing gridcell polygons\n")
