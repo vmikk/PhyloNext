@@ -756,6 +756,8 @@ process plot_leaflet {
     input:
       path BDOBS     // observed indices
       path RND4      // randomized indices
+      path RND3      // randomization-based p-values
+      path NRECORDS  // number of raw records per grid cell
 
     output:
       path "Choropleth.html"
@@ -766,7 +768,9 @@ process plot_leaflet {
     """
     15_Leaflets.R \
       --observed ${BDOBS} \
-      --zscores ${RND4} \
+      --sesscores ${RND4} \
+      --sigscores ${RND3} \
+      --reccounts ${NRECORDS} \
       --variables ${params.leaflet_var} \
       --palette ${params.leaflet_palette} \
       --color ${params.leaflet_color} \
