@@ -88,7 +88,7 @@ params.taxgroup = "All_life"
 params.phylabels = "OTT"
 
 // Biodiverse
-params.indices = "calc_richness,calc_simpson_shannon,calc_endemism_whole,calc_pd,calc_pe,calc_phylo_rpd1,calc_phylo_rpd2,calc_phylo_rpe1,calc_phylo_rpe2,calc_phylo_mpd_mntd2"
+params.indices = "calc_richness,calc_simpson_shannon,calc_endemism_whole,calc_pd,calc_pe,calc_phylo_rpd1,calc_phylo_rpd2,calc_phylo_rpe1,calc_phylo_rpe2"
 params.randname = "rand_structured"
 params.iterations = 100
 params.biodiversethreads = 1
