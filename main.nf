@@ -75,7 +75,7 @@ params.dbscan = false
 params.dbscanepsilon = 1500
 params.dbscanminpts = 3
 params.terrestrial = params.data_path + "/Land_Buffered_025_dgr.RData"
-params.wgsrpd = params.data_path + "/WGSRPD.RData"
+params.wgsrpd = null                // params.data_path + "/WGSRPD.RData"
 params.regions = "NA"
 params.rmcountrycentroids = null    // pipeline_data/CC_CountryCentroids_buf_1000m.RData
 params.rmcountrycapitals = null     // pipeline_data/CC_Capitals_buf_10000m.RData
@@ -405,7 +405,7 @@ process outl_low {
     filter_capitals     = params.rmcountrycapitals  ? "--rmcountrycapitals $rmcountrycapitals" : ""
     filter_institutions = params.rminstitutions     ? "--rminstitutions $rminstitutions" : ""
     filter_urban        = params.rmurban            ? "--rmurban $rmurban" : ""
-    filter_wgsrpd       = params.wgsrpd             ? "--wgsrpd $wgsrpd" : ""
+    filter_wgsrpd       = params.wgsrpd             ? "--wgsrpd $wgsrpd --regions ${params.regions}" : ""
 
     """
     11_Additional_filtering_and_aggregation.R \
@@ -418,7 +418,6 @@ process outl_low {
       ${filter_institutions} \
       ${filter_urban} \
       ${filter_wgsrpd} \
-      --regions ${params.regions} \
       --threads ${task.cpus} \
       --output "."
 
@@ -460,7 +459,7 @@ process outl_high {
     filter_capitals     = params.rmcountrycapitals  ? "--rmcountrycapitals $rmcountrycapitals" : ""
     filter_institutions = params.rminstitutions     ? "--rminstitutions $rminstitutions" : ""
     filter_urban        = params.rmurban            ? "--rmurban $rmurban" : ""
-    filter_wgsrpd       = params.wgsrpd             ? "--wgsrpd $wgsrpd" : ""
+    filter_wgsrpd       = params.wgsrpd             ? "--wgsrpd $wgsrpd --regions ${params.regions}" : ""
 
     """
     11_Additional_filtering_and_aggregation.R \
@@ -476,7 +475,6 @@ process outl_high {
       ${filter_institutions} \
       ${filter_urban} \
       ${filter_wgsrpd} \
-      --regions ${params.regions} \
       --threads ${task.cpus} \
       --output "."
 
