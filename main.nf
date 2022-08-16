@@ -67,6 +67,7 @@ params.noextinct = null          // params.data_path + "/Fossil_IDs.RData"
 params.roundcoords = true
 params.roundcoords2 = 2          // as numeric, for `record_count`
 params.dbscannoccurrences = 30
+params.excludehuman = true       // exclude genus "Homo"
 
 // Filtering, stage II - "11_Additional_filtering_and_aggregation.R"
 params.h3resolution = 4
@@ -292,6 +293,7 @@ process occ_filter {
       --lonmax ${params.lonmax} \
       --minyear ${params.minyear} \
       ${filter_extinct} \
+      --excludehuman ${params.excludehuman} \
       --roundcoords ${params.roundcoords} \
       --threads ${task.cpus} \
       --noccurrences ${params.dbscannoccurrences} \
@@ -359,6 +361,7 @@ process record_count {
       --lonmax ${params.lonmax} \
       --minyear ${params.minyear} \
       ${filter_extinct} \
+      --excludehuman ${params.excludehuman} \
       ${filter_terrestrial} \
       ${filter_country} \
       ${filter_capitals} \
