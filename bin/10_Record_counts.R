@@ -64,6 +64,7 @@ option_list <- list(
   ## Additional filters
   make_option("--minyear", action="store", default=1945, type='integer', help="Minimum year of occurrence (default, 1945)"),
   make_option("--noextinct", action="store", default=NA, type='character', help="Remove extinct species (provide a file with extinct specieskeys)"),
+  make_option("--excludehuman", action="store", default=TRUE, type='logical', help="Exclude human records (genus Homo)"),
 
   ## Spatial filters (shapefile-based)
   make_option(c("-l", "--terrestrial"), action="store", default=NA, type='character', help="Remove non-terrestrial occurrences, provide land polygon in sf-format"),
@@ -115,6 +116,7 @@ LONMAX <- as.numeric( to_na(opt$lonmax) )
 
 MINYEAR <- as.numeric(opt$minyear)
 EXTINCT <- to_na( opt$noextinct)
+EXCLUDEHUMAN <- as.logical( opt$excludehuman )
 
 TERRESTRIAL <- to_na( opt$terrestrial )
 CC_COUNTRY <- to_na( opt$rmcountrycentroids )
@@ -146,6 +148,7 @@ cat(paste("Maximum longitude: ", LONMAX,  "\n", sep = ""))
 
 cat(paste("Minimum year of occurrence: ", MINYEAR, "\n", sep=""))
 cat(paste("List of extict species: ", EXTINCT, "\n", sep=""))
+cat(paste("Exclusion of human records: ", EXCLUDEHUMAN, "\n", sep=""))
 cat(paste("Round coordinates: ", ROUNDCOORDS, "\n", sep=""))
 
 cat(paste("Terrestrial data: ", TERRESTRIAL, "\n", sep=""))
@@ -216,6 +219,7 @@ quiet <- function(x) {
 # LONMAX <- NA
 # MINYEAR <- 2005
 # EXTINCT <- NA
+# EXCLUDEHUMAN <- TRUE
 # TERRESTRIAL <- "/home/mik/GitRepos_Forks/biodiverse-scripts/pipeline_data/Land_Buffered_025_dgr.RData"
 # CC_COUNTRY <- "/home/mik/GitRepos_Forks/biodiverse-scripts/pipeline_data/CC_CountryCentroids_buf_1000m.RData"
 # CC_CAPITAL <- "/home/mik/GitRepos_Forks/biodiverse-scripts/pipeline_data/CC_Capitals_buf_10000m.RData"
@@ -315,6 +319,12 @@ if(!is.na(LONMAX)){
 if(!is.na(EXTINCT[[1]][1])){
   cat("..Filtering out extinct species\n")
   dsf <- dsf %>% filter(!specieskey %in% EXTINCT$specieskey)
+}
+
+## Removal of human records
+if(EXCLUDEHUMAN == TRUE){
+  cat("..Excluding human records (genus Homo)\n")
+  dsf <- dsf %>% filter(!genus %in% "Homo")
 }
 
 ## Round coordiantes, to reduce the dataset size
