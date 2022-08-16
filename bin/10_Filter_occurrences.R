@@ -60,6 +60,7 @@ option_list <- list(
   ## Additional filters
   make_option("--minyear", action="store", default=1945, type='integer', help="Minimum year of occurrence (default, 1945)"),
   make_option("--noextinct", action="store", default=NA, type='character', help="Remove extinct species (provide a file with extinct specieskeys)"),
+  make_option("--excludehuman", action="store", default=TRUE, type='logical', help="Exclude human records (genus Homo)"),
 
   make_option(c("-c", "--roundcoords"), action="store", default=TRUE, type='logical', help="Round spatial coordinates to two decimal places, to reduce the dataset size (default, TRUE)"),
   make_option(c("-t", "--threads"), action="store", default=4L, type='integer', help="Number of CPU threads for arrow, default 4"),
@@ -102,9 +103,10 @@ LONMAX <- as.numeric( to_na(opt$lonmax) )
 
 MINYEAR <- as.numeric(opt$minyear)
 EXTINCT <- to_na( opt$noextinct)
-ROUNDCOORDS <- as.logical( opt$roundcoords )
-CPUTHREADS <- as.numeric(opt$threads)
-OCCURRENCES <- as.numeric(opt$noccurrences)
+EXCLUDEHUMAN <- as.logical( opt$excludehuman )
+ROUNDCOORDS  <- as.logical( opt$roundcoords )
+CPUTHREADS   <- as.numeric(opt$threads)
+OCCURRENCES  <- as.numeric(opt$noccurrences)
 OUTPUT <- opt$output
 
 
@@ -125,6 +127,7 @@ cat(paste("Maximum longitude: ", LONMAX,  "\n", sep = ""))
 
 cat(paste("Minimum year of occurrence: ", MINYEAR, "\n", sep=""))
 cat(paste("List of extict species: ", EXTINCT, "\n", sep=""))
+cat(paste("Exclusion of human records: ", EXCLUDEHUMAN, "\n", sep=""))
 cat(paste("Round coordinates: ", ROUNDCOORDS, "\n", sep=""))
 
 cat(paste("Number of CPU threads to use: ", CPUTHREADS, "\n", sep=""))
@@ -252,6 +255,12 @@ if(!is.na(LONMAX)){
 if(!is.na(EXTINCT[[1]][1])){
   cat("..Filtering out extinct species\n")
   dsf <- dsf %>% filter(!specieskey %in% EXTINCT$specieskey)
+}
+
+## Removal of human records
+if(EXCLUDEHUMAN == TRUE){
+  cat("..Excluding human records (genus Homo)\n")
+  dsf <- dsf %>% filter(!genus %in% "Homo")
 }
 
 
