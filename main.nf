@@ -64,8 +64,7 @@ params.lonmin = "NA"
 params.lonmax = "NA"
 params.minyear = 1945
 params.noextinct = null          // params.data_path + "/Fossil_IDs.RData"
-params.roundcoords = true
-params.roundcoords2 = 2          // as numeric, for `record_count`
+params.roundcoords = 2           // set to negative to disable rounding
 params.dbscannoccurrences = 30
 params.excludehuman = true       // exclude genus "Homo"
 
@@ -367,7 +366,7 @@ process record_count {
       ${filter_capitals} \
       ${filter_institutions} \
       ${filter_urban} \
-      --roundcoords ${params.roundcoords2} \
+      --roundcoords ${params.roundcoords} \
       --resolution ${params.h3resolution} \
       --threads ${task.cpus} \
       --output "Record_counts"
