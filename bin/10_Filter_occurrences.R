@@ -17,11 +17,12 @@
 #    --lonmin 72.2460938 \
 #    --lonmax 168.2249543 \
 #    --minyear 1945 \
+#    --roundcoords 2 \
 #    --threads 10 \
 #    --noccurrences 30 \
 #    --output "Fabaceae_in_AU"
 
-## Note about rounding of coordinates (`--roundcoords true`):
+## Note about rounding of coordinates (`--roundcoords 2`):
 ## A value in decimal degrees to an accuracy of 2 decimal places is accurate to ~1.11 km at the equator
 
 # TO DO:
@@ -62,7 +63,7 @@ option_list <- list(
   make_option("--noextinct", action="store", default=NA, type='character', help="Remove extinct species (provide a file with extinct specieskeys)"),
   make_option("--excludehuman", action="store", default=TRUE, type='logical', help="Exclude human records (genus Homo)"),
 
-  make_option(c("-c", "--roundcoords"), action="store", default=TRUE, type='logical', help="Round spatial coordinates to two decimal places, to reduce the dataset size (default, TRUE)"),
+  make_option(c("--roundcoords"), action="store", default=2L, type='integer', help="Round spatial coordinates to the N decimal places, to reduce the dataset size (default, 2). To disable, set to a negative value."),
   make_option(c("-t", "--threads"), action="store", default=4L, type='integer', help="Number of CPU threads for arrow, default 4"),
   make_option(c("-n", "--noccurrences"), action="store", default=30, type='double', help="Occurrence threshold (used for parquet partitioning)"),
   make_option(c("-o", "--output"), action="store", default=NA, type='character', help="Output prefix")
@@ -104,7 +105,7 @@ LONMAX <- as.numeric( to_na(opt$lonmax) )
 MINYEAR <- as.numeric(opt$minyear)
 EXTINCT <- to_na( opt$noextinct)
 EXCLUDEHUMAN <- as.logical( opt$excludehuman )
-ROUNDCOORDS  <- as.logical( opt$roundcoords )
+ROUNDCOORDS <- as.numeric( opt$roundcoords )
 CPUTHREADS   <- as.numeric(opt$threads)
 OCCURRENCES  <- as.numeric(opt$noccurrences)
 OUTPUT <- opt$output
@@ -266,11 +267,12 @@ if(EXCLUDEHUMAN == TRUE){
 
 ## Round coordiantes, to reduce the dataset size
 cat("..Rounding coordinates\n")
-if(ROUNDCOORDS == TRUE){
+if(ROUNDCOORDS >= 0){
+  cat("..Rounding coordinates\n")
   dsf <- dsf %>%
     mutate(
-      decimallatitude  = round(decimallatitude,  2),
-      decimallongitude = round(decimallongitude, 2))
+      decimallatitude  = round(decimallatitude,  ROUNDCOORDS),
+      decimallongitude = round(decimallongitude, ROUNDCOORDS))
 }
 
 ## Select columns and remove duplicated records
