@@ -173,7 +173,7 @@ def helpMsg() {
         --lonmax              Maximum longitude of species occurrences (decimal degrees); e.g., 55.5
         --minyear             Minimum year of record's occurrences; default, 1945
         --noextinct           File with extinct species specieskeys for their removal
-        --roundcoords         Logical, round spatial coordinates to two decimal places, to reduce the dataset size (default, TRUE)
+        --roundcoords         Numeric, round spatial coordinates to N decimal places, to reduce the dataset size (default, 2; set to negative to disable rounding)
         --h3resolution        Spatial resolution of the H3 geospatial indexing system; e.g., 4
         --dbscan              Logical, remove spatial outliers with density-based clustering; e.g., "false"
         --dbscannoccurrences  Minimum species occurrence to perform DBSCAN; e.g., 30
