@@ -710,6 +710,8 @@ rm(v)
 ## Add CANAPE to the plot
 if("CANAPE" %in% VARIABLES){
 
+  cat("... CANAPE\n")
+
   canape_pal <- gen_color_palette(
     x = H3_poly[[ "CANAPE" ]],
     type = "canape")
@@ -737,6 +739,8 @@ if("CANAPE" %in% VARIABLES){
 
 ## Add Redundancy index to the plot
 if("Redundancy" %in% VARIABLES){
+
+  cat("... Redundancy\n")
 
   redundancy_pal <- gen_color_palette(
     x = H3_poly[[ "Redundancy" ]],
