@@ -56,6 +56,7 @@ option_list <- list(
   make_option(c("-c", "--color"), action="store", default="RdYlBu", type='character', help="Color gradient scheme for the diversity indices (except for SES, CANAPE, and redundancy metrics)"),
   make_option(c("-b", "--bins"), action="store", default=5L, type='integer', help="Number of color bins for quantile palette"),
   make_option(c("-j", "--redundancy"), action="store", default=0, type='integer', help="Redundancy threshold for hiding the grid cells with low number of records (disabled by default)"),
+  make_option(c("--shortid"), action="store", default=TRUE, type='logical', help="Shorten H3 index name of grid cell labels on the map"),
   # make_option(c("-t", "--threads"), action="store", default=1L, type='integer', help="Number of CPU threads for arrow, default 4"),
   make_option(c("-o", "--output"), action="store", default="Choropleth.html", type='character', help="Output file name")
 )
@@ -96,6 +97,7 @@ PALETTE <- opt$palette
 COLOR <- opt$color
 BINS <- as.numeric( opt$bins )
 REDUNDANCYTRSH <- as.numeric(to_na( opt$redundancy ))
+SHORTID <- as.logical( opt$shortid )
 OUTPUT <- opt$output
 
 ## Check the redundancy range
@@ -115,6 +117,7 @@ cat(paste("Color palette type: ", PALETTE, "\n", sep=""))
 cat(paste("Color gradient scheme: ", COLOR, "\n", sep=""))
 cat(paste("Number of color bins: ", BINS, "\n", sep=""))
 cat(paste("Redundancy threshold: ", REDUNDANCYTRSH, "\n", sep=""))
+cat(paste("Display short H3 index names: ", SHORTID, "\n", sep=""))
 cat(paste("Output file: ", OUTPUT, "\n", sep=""))
 
 # CPUTHREADS <- as.numeric(opt$threads)
@@ -172,6 +175,7 @@ cat("\n")
 # PALETTE <- "quantile"
 # COLOR <- "RdYlBu"
 # BINS <- 5
+# SHORTID <- TRUE
 
 ## Load input data
 cat("Loading Biodiverse results\n")
@@ -427,7 +431,13 @@ if("NumRecords" %in% colnames(res)){
   H3_poly <- cbind(H3_poly, res[, ..VARIABLES])
 }
 
+## Assign rownames as H3 grid cell IDs
+if(SHORTID == TRUE){
+  ## Truncate fff-tail of index name (e.g., `830021fffffffff` -> `830021f`)
+  rownames(H3_poly) <- gsub(pattern = "f+$", replacement = "f", x = res$H3)
+} else {
   rownames(H3_poly) <- res$H3
+}
 # plot(H3_poly)
 
 
