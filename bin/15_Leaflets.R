@@ -27,6 +27,8 @@
 # - Mixture of both paleo-endemism and neo-endemism
 # - Super-endemic sites
 
+## H3 grid cell index is represented as a 15-character hexadecimal string (e.g., `830021fffffffff`)
+
 
 ## TO DO:
 # - fix SES legend (1000)
@@ -425,6 +427,7 @@ if("NumRecords" %in% colnames(res)){
   H3_poly <- cbind(H3_poly, res[, ..VARIABLES])
 }
 
+  rownames(H3_poly) <- res$H3
 # plot(H3_poly)
 
 
@@ -474,6 +477,12 @@ labels <- alply(.data = VARIABLES, .margins = 1, .fun = function(v){
 labels <- c(labels, 
   list( single_label(num = H3_poly[[ "NumRecords" ]], name = "Number of records"))
   )
+
+## Add H3 index to the labels
+labels <- c(labels, 
+  list( single_label(num = rownames(H3_poly), name = "H3 index") )
+  )
+
 
 ## Concatenate labels from all variables
 labels <- do.call(paste0, labels)
