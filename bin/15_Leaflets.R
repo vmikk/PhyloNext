@@ -57,6 +57,7 @@ option_list <- list(
   make_option(c("-b", "--bins"), action="store", default=5L, type='integer', help="Number of color bins for quantile palette"),
   make_option(c("-j", "--redundancy"), action="store", default=0, type='integer', help="Redundancy threshold for hiding the grid cells with low number of records (disabled by default)"),
   make_option(c("--shortid"), action="store", default=TRUE, type='logical', help="Shorten H3 index name of grid cell labels on the map"),
+  make_option(c("--antimeridianfix"), action="store", default=TRUE, type='logical', help="Fix H3 polygons that cross the antimeridian"),
   # make_option(c("-t", "--threads"), action="store", default=1L, type='integer', help="Number of CPU threads for arrow, default 4"),
   make_option(c("-o", "--output"), action="store", default="Choropleth.html", type='character', help="Output file name")
 )
@@ -98,6 +99,7 @@ COLOR <- opt$color
 BINS <- as.numeric( opt$bins )
 REDUNDANCYTRSH <- as.numeric(to_na( opt$redundancy ))
 SHORTID <- as.logical( opt$shortid )
+ANTIFIX <- as.logical( opt$antimeridianfix )
 OUTPUT <- opt$output
 
 ## Check the redundancy range
@@ -118,6 +120,7 @@ cat(paste("Color gradient scheme: ", COLOR, "\n", sep=""))
 cat(paste("Number of color bins: ", BINS, "\n", sep=""))
 cat(paste("Redundancy threshold: ", REDUNDANCYTRSH, "\n", sep=""))
 cat(paste("Display short H3 index names: ", SHORTID, "\n", sep=""))
+cat(paste("Antimeridian fix: ", ANTIFIX, "\n", sep=""))
 cat(paste("Output file: ", OUTPUT, "\n", sep=""))
 
 # CPUTHREADS <- as.numeric(opt$threads)
@@ -176,6 +179,7 @@ cat("\n")
 # COLOR <- "RdYlBu"
 # BINS <- 5
 # SHORTID <- TRUE
+# ANTIFIX <- TRUE
 
 ## Load input data
 cat("Loading Biodiverse results\n")
@@ -438,6 +442,13 @@ if(SHORTID == TRUE){
 } else {
   rownames(H3_poly) <- res$H3
 }
+
+## Fix H3 polygons that cross the antimeridian by cutting them in two
+if(ANTIFIX == TRUE){
+  H3_poly <- st_wrap_dateline(H3_poly, options = c("WRAPDATELINE=YES", "DATELINEOFFSET=180"))
+}
+
+
 # plot(H3_poly)
 
 
