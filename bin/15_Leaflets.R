@@ -436,6 +436,7 @@ if("NumRecords" %in% colnames(res)){
 }
 
 ## Assign rownames as H3 grid cell IDs
+cat("..Adding H3 cell names\n")
 if(SHORTID == TRUE){
   ## Truncate fff-tail of index name (e.g., `830021fffffffff` -> `830021f`)
   rownames(H3_poly) <- gsub(pattern = "f+$", replacement = "f", x = res$H3)
@@ -445,6 +446,7 @@ if(SHORTID == TRUE){
 
 ## Fix H3 polygons that cross the antimeridian by cutting them in two
 if(ANTIFIX == TRUE){
+  cat("..Fixing antimeridian issue\n")
   H3_poly <- st_wrap_dateline(H3_poly, options = c("WRAPDATELINE=YES", "DATELINEOFFSET=180"))
 }
 
