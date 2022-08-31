@@ -114,7 +114,7 @@ LATMAX <- as.numeric( to_na(opt$latmax) )
 LONMIN <- as.numeric( to_na(opt$lonmin) )
 LONMAX <- as.numeric( to_na(opt$lonmax) )
 
-MINYEAR <- as.numeric(opt$minyear)
+MINYEAR <- as.numeric(to_na( opt$minyear) )
 EXTINCT <- to_na( opt$noextinct)
 EXCLUDEHUMAN <- as.logical( opt$excludehuman )
 
@@ -252,11 +252,15 @@ dsf <- ds %>%
   filter(!is.na(decimallatitude)) %>% 
   filter(!decimallatitude == 0 | !decimallongitude == 0) %>%
   filter(decimallatitude != decimallongitude) %>%
-  filter(year >= MINYEAR) %>% 
   filter(coordinateprecision < 0.1 | is.na(coordinateprecision)) %>% 
   filter(coordinateuncertaintyinmeters < 10000 | is.na(coordinateuncertaintyinmeters)) %>%
   filter(!coordinateuncertaintyinmeters %in% c(301, 3036, 999, 9999))
 
+## Year
+if(!is.na(MINYEAR)){
+  cat("..Filtering by collection date\n")
+  dsf <- dsf %>% filter(year >= MINYEAR)
+}
 
 ## Taxonomy filters
 if(!is.na(PHYLUM)){
