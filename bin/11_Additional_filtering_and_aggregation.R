@@ -171,7 +171,6 @@ quiet <- function(x) {
 
 ############################################## Main pipeline
 
-
 ## Open dataset
 cat("Loading Parquet data\n")
 ds <- arrow::open_dataset(INPUT)
@@ -194,6 +193,15 @@ cat("Total number of records: ", NRECORDS, "\n")
 
 if(is.na(SPECIESKEY)){ cat("No specieskey is specified\n") }
 cat("There are ", length(unique(datt$specieskey)), "unique specieskeys in the data.\n")
+
+
+## Function to handle case with no observations
+## (in the case if everithing was removed during the filtering)
+check_nodata <- function(x){
+  if(! nrow(x) > 0){ 
+    cat("WARNING: no speciecies occurrences after the filtering\n")
+  }
+}
 
 
 ## Remove non-terrestrial records 
@@ -231,6 +239,7 @@ if(!is.na(TERRESTRIAL)){
     removed_nonterrestrial <- NULL   # no non-terrestrial samples found
   }
 
+  check_nodata(datt)
   rm(pts, TERRESTRIAL)
   quiet( gc() )
 } else {
@@ -284,6 +293,7 @@ if(!is.na(WGSRPD) & !is.na(WGSRPDREGIONS)){
     removed_WGSRPD <- NULL   # no non-WGSRPD samples found
   }
 
+  check_nodata(datt)
   rm(pts, WGSRPD)
   quiet( gc() )
 } else {
@@ -327,6 +337,7 @@ if(!is.na(CC_COUNTRY)){
     removed_CC_COUNTRY <- NULL   # no found
   }
 
+  check_nodata(datt)
   rm(pts, CC_COUNTRY)
   quiet( gc() )
 } else {
@@ -368,6 +379,7 @@ if(!is.na(CC_CAPITAL)){
     removed_CC_CAPITAL <- NULL   # no found
   }
 
+  check_nodata(datt)
   rm(pts, CC_CAPITAL)
   quiet( gc() )
 } else {
@@ -409,6 +421,7 @@ if(!is.na(CC_INSTIT)){
     removed_CC_INSTIT <- NULL   # no found
   }
 
+  check_nodata(datt)
   rm(pts, CC_INSTIT)
   quiet( gc() )
 } else {
@@ -449,6 +462,7 @@ if(!is.na(CC_URBAN)){
     removed_CC_URBAN <- NULL   # no found
   }
 
+  check_nodata(datt)
   rm(pts, CC_URBAN)
   quiet( gc() )
 } else {
@@ -540,6 +554,7 @@ if(DBSCAN == TRUE){
     removed_dbscan <- NULL    # DBSCAN-based filtering was not performed
 }
 
+check_nodata(datt)
 
 ######## Spatial aggregation
 cat("Spatial aggregation using H3 system\n")
