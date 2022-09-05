@@ -205,7 +205,7 @@ check_nodata <- function(x){
 
 
 ## Remove non-terrestrial records 
-if(!is.na(TERRESTRIAL)){
+if(!is.na(TERRESTRIAL) & nrow(datt) > 0){
   cat("Removing non-terrestrial records\n")
   
   ## Load land mask
@@ -250,7 +250,7 @@ if(!is.na(TERRESTRIAL)){
 
 
 ## Subset to WGSRPD regions
-if(!is.na(WGSRPD) & !is.na(WGSRPDREGIONS)){
+if(!is.na(WGSRPD) & !is.na(WGSRPDREGIONS) & nrow(datt) > 0){
   cat("Subsetting by World Geographical Regions\n")
 
   ## Load WGSRPD polygons
@@ -306,7 +306,7 @@ if(!is.na(WGSRPD) & !is.na(WGSRPDREGIONS)){
 ## Remove country centroids and province centroids (similar to CoordinateCleaner::cc_cen)
 ## https://github.com/ropensci/CoordinateCleaner/blob/master/R/cc_cen.R
 ## Default buffer = 1 km
-if(!is.na(CC_COUNTRY)){
+if(!is.na(CC_COUNTRY) & nrow(datt) > 0){
   cat("Removing occurrences inside country and province centroids\n")
 
   ## Load polygons
@@ -348,7 +348,7 @@ if(!is.na(CC_COUNTRY)){
 ## Filter country capitals (similar to CoordinateCleaner::cc_cap)
 ## https://github.com/ropensci/CoordinateCleaner/blob/master/R/cc_cap.R
 ## Default buffer = 10 km
-if(!is.na(CC_CAPITAL)){
+if(!is.na(CC_CAPITAL) & nrow(datt) > 0){
   cat("Removing occurrences within capitals\n")
 
   ## Load polygons
@@ -390,7 +390,7 @@ if(!is.na(CC_CAPITAL)){
 ## Remove records in the vicinity of biodiversity institutions (similar to CoordinateCleaner::cc_inst)
 ## https://github.com/ropensci/CoordinateCleaner/blob/master/R/cc_inst.R
 ## Default buffer = 100 m
-if(!is.na(CC_INSTIT)){
+if(!is.na(CC_INSTIT) & nrow(datt) > 0){
   cat("Removing occurrences in the vicinity of biodiversity institutions\n")
 
   ## Load polygons
@@ -431,7 +431,7 @@ if(!is.na(CC_INSTIT)){
 
 ## Remove records inside urban areas (similar to CoordinateCleaner::cc_urb)
 ## https://github.com/ropensci/CoordinateCleaner/blob/master/R/cc_urb.R
-if(!is.na(CC_URBAN)){
+if(!is.na(CC_URBAN) & nrow(datt) > 0){
   cat("Removing occurrences inside urban areas\n")
 
   ## Load polygons
@@ -472,7 +472,7 @@ if(!is.na(CC_URBAN)){
 
 
 ## Density-based outlier removal
-if(DBSCAN == TRUE){
+if(DBSCAN == TRUE & nrow(datt) > 0){
   cat("Density-based outlier removal\n")
 
   ## Reproject lat and long such that the Euclidean distance would approximate of geographic distance
