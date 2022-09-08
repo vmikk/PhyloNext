@@ -3,6 +3,8 @@
 
 ## Additional filtering of GBIF occurrences and spatial binning
 
+cat("Species-level filtering of occurrence data and spatial binning\n")
+
 ## TO DO:
 # - handle a case with single observation
 # - handle a case with no observations

@@ -2,6 +2,8 @@
 
 ## Prepare input data for Biodiverse
 
+cat("Preparation of the occurrence table and phylogenetic tree for Biodiverse\n")
+
 ## TO DO:
 # - add option to retrive tree via Open Tree API
 # - export GBIF-OTT ID matches

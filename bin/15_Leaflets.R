@@ -2,6 +2,8 @@
 
 ## Visualization of Biodiverse results using intaractive maps (Leaflet-based)
 
+cat("Leaflet-based visualization of Biodiverse results\n")
+
 ## Usage example:
 # ./15_Leaflets.R \
 #   --observed "RND_SPATIAL_RESULTS.csv" \

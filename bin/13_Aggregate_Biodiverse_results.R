@@ -3,6 +3,7 @@
 ## Aggregate Biodiverse randomization results (from different threads)
 ## and estimate Z-scores
 
+cat("Aggregation of Biodiverse results\n")
 
 ## Usage example:
 # ./13_Aggregate_Biodiverse_results.R \

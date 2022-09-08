@@ -2,6 +2,8 @@
 
 ## Count number of records per gridcell in the GBIF occurrence data
 
+cat("Counting the number of records per grid cell\n")
+
 ## Usage:
 # ./10_Record_counts.R \
 #    --input "/mnt/GBIF/Parquet/2022-01-01/occurrence.parquet" \

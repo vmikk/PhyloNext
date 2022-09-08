@@ -1,6 +1,8 @@
 #!/usr/bin/env Rscript
 
-## Visualization of Biodiverse results
+## Visualization of Biodiverse results (will be deprecated in the future release)
+
+cat("Basic visualization of Biodiverse results\n")
 
 ## Usage example:
 # ./14_Visualization.R \
