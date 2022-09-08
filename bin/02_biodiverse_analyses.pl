@@ -53,6 +53,8 @@ if ($opt->help) {
     exit;
 }
 
+say 'Running diversity analysis with Biodiverse';
+
 my $input_bds_file = $opt->input_bds_file;
 my $input_bts_file = $opt->input_bts_file;
 my $calcs          = $opt->calcs;

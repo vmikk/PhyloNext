@@ -24,6 +24,7 @@ use Biodiverse::BaseData;
 #  load up the user defined libs
 use Biodiverse::Config;
 
+say 'Converting Biodiverse results into csv format';
 
 
 #############################################

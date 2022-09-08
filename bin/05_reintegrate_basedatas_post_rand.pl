@@ -23,6 +23,8 @@ my ($opt, $usage) = describe_options(
 );
 
 
+say 'Reintegrating randomization chunks';
+
 my $glob = $opt->glob;
 my $opfx = $opt->output_prefix;
 my $no_verify = $opt->no_verify;

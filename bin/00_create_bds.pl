@@ -40,6 +40,8 @@ if ($opt->help) {
     exit;
 }
 
+say 'Preparing occurrence data for Biodiverse';
+
 my $csv_file              = $opt->csv_file;
 my $out_file              = $opt->out_file;
 my $label_column_number   = $opt->label_column_number;
