@@ -29,7 +29,7 @@ cat("Filtering GBIF species occurrence data\n")
 # TO DO:
 # - add country name validation
 # - check if the input folder exists (except of 's3')
-
+# - custom list of specieskeys
 
 ############################################## Parse input parameters
 

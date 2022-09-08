@@ -1,6 +1,5 @@
 #!/usr/bin/env Rscript
 
-
 ## Additional filtering of GBIF occurrences and spatial binning
 
 cat("Species-level filtering of occurrence data and spatial binning\n")

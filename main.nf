@@ -13,10 +13,19 @@
 */
 
 // TO DO:
+// - 15_Leaflets.R - add coordinates of H3 cells and re-order columns
+// - add 'R.utils' to the container - 'install.packages('R.utils') !!
+// - add script names and descriptions to log files
+// - add corrected phylogenetic endemism to the default indices? (CPE = PE / PD)
+// - check `12_Prepare_Biodiverse_input.R` logs with Latin tip names (Species names not found in the phylogenetic tree ...)
+// - add genus to the 10_Filtering
+// - export outlier summary stats
+// - implement pre-computed outliers (in 10_Filtering and 10_Records)
+// - implement coverage estimator (+ show it on map)
+// - mask map-values based on a coverage threshold
 // - add country filter (gbif issues)
 // - local OTOL tax dump
 // - upd startup message (add coordinatecleaner params)
-// - add script names and descriptions to log files
 // - add filtering summary (per species)
 // - autoname outdir (with current date?)
 // - add a text file with parameter summary to the results
