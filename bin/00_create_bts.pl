@@ -43,7 +43,7 @@ if ($opt->help) {
     exit;
 }
 
-say 'Preparing phylogenetic tree for Biodiverse';
+print "Preparing phylogenetic tree for Biodiverse\n";
 
 my $nexus_file    = $opt->input_tree_file;
 my $tree_out_file = $opt->out_file;

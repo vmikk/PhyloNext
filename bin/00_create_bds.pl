@@ -40,7 +40,7 @@ if ($opt->help) {
     exit;
 }
 
-say 'Preparing occurrence data for Biodiverse';
+print "Preparing occurrence data for Biodiverse\n";
 
 my $csv_file              = $opt->csv_file;
 my $out_file              = $opt->out_file;

@@ -23,7 +23,7 @@ my ($opt, $usage) = describe_options(
 );
 
 
-say 'Reintegrating randomization chunks';
+print "Reintegrating randomization chunks\n";
 
 my $glob = $opt->glob;
 my $opfx = $opt->output_prefix;

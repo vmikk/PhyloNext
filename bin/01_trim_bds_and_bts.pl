@@ -44,7 +44,7 @@ if ($opt->help) {
     exit;
 }
 
-say 'Preparing phylogenetic tree for Biodiverse';
+print "Preparing phylogenetic tree for Biodiverse\n";
 
 my $input_bds_file    = $opt->input_bds_file;
 my $input_bts_file = $opt->input_bts_file;

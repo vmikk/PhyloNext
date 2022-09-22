@@ -79,7 +79,7 @@ if ($print_usage) {
 
 exit (0) if $ENV{BDV_PP_BUILDING};
 
-say 'Running randomizations with Biodiverse';
+print "Running randomizations with Biodiverse\n";
 
 die "\nError: Basedata file not specified\n$usage\n"
   if !defined $in_file;
