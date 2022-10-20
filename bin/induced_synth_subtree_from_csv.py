@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
 """
+Script to get an induced subtree from synthetic phylogenetic tree for a set of OpenTree IDs
+Author:  Emily Jane McTavish
+Version: b1ead89 (September 20, 2022)
+Link:    https://github.com/McTavishLab/GBIF-Biodiverse-OpenTree/
+
 to run:
 python induced_synth_subtree_from_csv.py --query ../tests/query.csv --output_dir amph_tree
 

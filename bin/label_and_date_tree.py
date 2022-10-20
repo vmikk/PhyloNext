@@ -1,5 +1,10 @@
-
 #!/usr/bin/env python3
+"""
+Script to get node age estimates from input trees in the OpenTree, and then smoothing the other node ages using Bladj
+Author:  Emily Jane McTavish
+Version: 78253df (September 14, 2022)
+Link:    https://github.com/McTavishLab/GBIF-Biodiverse-OpenTree/
+"""
 
 import argparse
 import os
