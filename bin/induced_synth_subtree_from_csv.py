@@ -23,7 +23,7 @@ from opentree import OT, annotations
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument("-q","---query", help="File containing ott_ids. First column should have the header 'ott_id' and contain OpenTree taxon ids")
+parser.add_argument("-q","--query", help="File containing ott_ids. First column should have the header 'ott_id' and contain OpenTree taxon ids")
 parser.add_argument("-o","--output_dir", default="synth_output", help="output folder. default is synth_dir")
 parser.add_argument("-l","--label_format", default="name_and_id",help="label format. One of 'name', 'id', 'name_and_id'. Default is 'name_and_id'")
 
