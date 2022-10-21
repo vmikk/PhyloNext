@@ -43,6 +43,7 @@ parser.add_argument(
 
 args = parser.parse_args()
 
+print("Running script 'induced_synth_subtree_from_csv.py'\n", file=sys.stderr)
 
 assert os.path.exists(args.query)
 
@@ -50,6 +51,7 @@ if not os.path.exists(args.output_dir):
     os.mkdir(args.output_dir)
 
 queryfile = open(args.query)
+print("Input query:", args.query, "\n", file=sys.stderr)
 header = queryfile.readline()
 assert header.split(",")[0] == "ott_id"
 
@@ -71,6 +73,7 @@ queryfile.close()
 node_ids = list(taxa.keys())
 ott_ids = [node.strip("ott") for node in node_ids]
 
+print("Preparing synth tree\n", file=sys.stderr)
 ret = labelled_induced_synth(
     ott_ids=ott_ids,
     label_format=args.label_format,
@@ -78,6 +81,7 @@ ret = labelled_induced_synth(
     standardize=True,
 )
 
+print("Exporting labelled tree\n", file=sys.stderr)
 ret["labelled_tree"].write(path=args.output_dir + "/labelled_tree.tre", schema="newick")
 
 log = open("{}/synth.log".format(args.output_dir), "w")
@@ -102,9 +106,12 @@ payload = {"node_ids": node_ids}
 resp = session.post(url=url, data=json.dumps(payload))
 resp_dict = json.loads(resp.content.decode())
 
+print("Obtaining dated tree\n", file=sys.stderr)
 dated_tree = dendropy.Tree.get(
     data=resp_dict["dated_trees_newick_list"][0], schema="newick"
 )
+
+print("Exporting dated tree\n", file=sys.stderr)
 dated_tree.write(path=args.output_dir + "/ottid_dated_tree.tre", schema="newick")
 
 
@@ -113,7 +120,7 @@ date_citations = OT.get_citations(ret["supporting_studies"])
 
 date_cites_file.write(date_citations)
 
-
+print("Node annotations\n", file=sys.stderr)
 node_annotations = annotations.generate_synth_node_annotation(dated_tree)
 
 translation_dict = {}
@@ -140,3 +147,5 @@ annotations.write_itol_support(
     node_annotations,
     filename=args.output_dir + "/support_annot.tre",
 )
+
+print("All done.\n", file=sys.stderr)
