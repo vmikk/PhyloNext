@@ -15,6 +15,7 @@ Will generate a tree, a logfile and a citations file, all in the output director
 
 import argparse
 import os
+import sys
 import json
 import requests
 import dendropy
@@ -126,7 +127,7 @@ node_annotations = annotations.generate_synth_node_annotation(dated_tree)
 translation_dict = {}
 for node in node_annotations:
     if node in taxa:
-        translation_dict[node] = taxa[node]["unique_name"]
+        translation_dict[node] = taxa[node]["species"]
 
 annotations.write_itol_relabel(
     translation_dict, filename=args.output_dir + "/ottlabel.txt"
