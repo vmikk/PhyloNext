@@ -5,7 +5,8 @@
 cat("Preparation of the occurrence table and phylogenetic tree for Biodiverse\n")
 
 ## TO DO:
-# - add option to retrive tree via Open Tree API
+# - test `--phylabels Latin` with complex names (e.g., "Dryopteris_filix-mas")
+#   underscore should be used for delimiting genus and species only (so no "Dryopteris_filix_mas`)
 # - export GBIF-OTT ID matches
 # - export species IDs that are not in tree
 # - check tree nodes (in case if tree is not strictly species-level)
@@ -82,7 +83,7 @@ TAXGROUP <- gsub(pattern = "_", replacement = " ", x = TAXGROUP)
 ## Log assigned variables
 cat(paste("Input directory with filtered occurrences: ", INPUT, "\n", sep=""))
 cat(paste("Input file with paths to the filtered occurrences: ", INPUTFILE, "\n", sep=""))
-cat(paste("Pre-computed phylogenetic tree: ", PHYTREE, "\n", sep=""))
+cat(paste("Phylogenetic tree: ", PHYTREE, "\n", sep=""))
 cat(paste("Type of tip labels on the phylogenetic tree: ", LABELS, "\n", sep=""))
 cat(paste("Taxonomy group in OpenTree: ", TAXGROUP, "\n", sep=""))
 cat(paste("Number of CPU threads to use: ", CPUTHREADS, "\n", sep=""))
@@ -149,11 +150,6 @@ if(!is.na(PHYTREE)){
     cat("Loading pre-computed phylogenetic tree\n")
     TREE <- ape::read.tree(PHYTREE)
   
-  } else if(PHYTREE %in% "API") {
-    
-    cat("Fetching phylogenetic tree from Open Tree API\n")
-    # ////////////////////////////////////////  -- TO DO
-
   } else {
 
     stop("Unknown tree option is specified. Please check `--phytree` argument.\n")
