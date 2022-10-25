@@ -220,12 +220,13 @@ quiet <- function(x) {
 
 
 ## Parameters for debugging
-# INPUT <- "/mnt/Dat2/GBIF/Parquet/2022-07-01/"
+# INPUT <- "/mnt/Dat2/GBIF/Parquet/2022-08-01/"
 # PHYLUM <- NA
 # CLASS <- NA
 # ORDER <- NA
 # FAMILY <- "Fabaceae"
 # GENUS <- "Acacia"
+# SPECIESKEYS <- NA
 # COUNTRY <- "AU"
 # LATMIN <- NA
 # LATMAX <- NA
