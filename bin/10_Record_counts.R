@@ -55,6 +55,7 @@ option_list <- list(
   make_option("--order", action="store", default=NA, type='character', help="Comma-separated list of orders to select"),
   make_option("--family", action="store", default=NA, type='character', help="Comma-separated list of families to select"),
   make_option("--genus", action="store", default=NA, type='character', help="Comma-separated list of genera to select"),
+  make_option("--specieskeys", action="store", default=NA, type='character', help="File with user-supplied GBIF specieskeys"),
   
   ## Spatial filters
   make_option("--country", action="store", default=NA, type='character', help="Comma-separated list of country codes (e.g., AU,CA)"),
@@ -109,6 +110,7 @@ CLASS  <- to_na( opt$class )
 ORDER  <- to_na( opt$order )
 FAMILY <- to_na( opt$family )
 GENUS <- to_na( opt$genus )
+SPECIESKEYS  <- to_na( opt$specieskeys )
 
 COUNTRY <- to_na( opt$country )
 LATMIN <- as.numeric( to_na(opt$latmin) )
@@ -141,6 +143,7 @@ cat(paste("Selected classes: ",  CLASS,  "\n", sep = ""))
 cat(paste("Selected orders: ",   ORDER,  "\n", sep = ""))
 cat(paste("Selected families: ", FAMILY, "\n", sep = ""))
 cat(paste("Selected genera: ",   GENUS,  "\n", sep = ""))
+cat(paste("File with GBIF specieskeys: ", SPECIESKEYS,  "\n", sep = ""))
 
 cat(paste("Country codes: ",     COUNTRY, "\n", sep = ""))
 cat(paste("Minimum latitude: ",  LATMIN,  "\n", sep = ""))
@@ -197,6 +200,15 @@ if(!is.na(EXTINCT)){
   colnames(EXTINCT) <- "specieskey"
   cat("Extinct species list loaded. Number of records: ", nrow(EXTINCT), "\n")
 }
+
+## Load user-supplied specieskeys
+if(!is.na(SPECIESKEYS)){
+  SPECIESKEYS <- fread(file = SPECIESKEYS, sep = "\t")
+  colnames(SPECIESKEYS) <- "specieskey"
+  SPECIESKEYS <- unique(na.omit(SPECIESKEYS))
+  cat("Specieskey list loaded. Number of records: ", nrow(SPECIESKEYS), "\n")
+}
+
 
 ## Function to suppress function output
 ## (will be used for silencing of garbage collector)
@@ -293,6 +305,12 @@ if(!is.na(GENUS)){
   cat("..Filtering by Genus\n")
   GENUS <- strsplit(x = GENUS, split = ",")[[1]]
   dsf <- dsf %>% filter(genus %in% GENUS)
+}
+
+## Custom specieskeys
+if(!is.na(SPECIESKEYS[[1]][1])){
+  cat("..Filtering by specieskeys\n")
+  dsf <- dsf %>% filter(specieskey %in% SPECIESKEYS$specieskey)
 }
 
 
