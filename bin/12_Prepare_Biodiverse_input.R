@@ -167,6 +167,7 @@ if(exists("TREE")){
 
   ## Get the first N tip labels
   N <- 20
+  if(N > length(TREE$tip.label)){ N <- length(TREE$tip.label) }  # if there are less species
   cat("Checking the first", N, "tree tip labels\n")
   tiplabs <- TREE$tip.label[1:N]
   tiplabs <- na.omit(tiplabs)      # in the case if tree is smaller
