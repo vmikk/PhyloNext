@@ -16,7 +16,7 @@ RUN pip install DendroPy \
     && pip install git+https://github.com/OpenTreeOfLife/python-opentree.git@itol_annot#egg=opentree \
     && chmod +x /GBIF-Biodiverse-OpenTree/scripts/*.py
 
-ENV PATH=/GBIF-Biodiverse-OpenTree/scripts/:$PATH
+# ENV PATH=/GBIF-Biodiverse-OpenTree/scripts/:$PATH
 
 # CMD [ "python", "GBIF-Biodiverse-OpenTree/scripts/induced_synth_subtree_from_csv.py" ]
 
