@@ -96,7 +96,13 @@ params.rmurban = null               // pipeline_data/CC_Urban.RData
 // Filtered data aggregation - "12_Prepare_Biodiverse_input.R"
 params.phytree = null
 params.taxgroup = "All_life"
-params.phylabels = "OTT"
+params.phylabels = "Latin"
+if(params.phytree == null & params.phylabels == "OTT"){
+  println("No user-supplied phylogenetic tree was provided.")
+  println("Tree will be automatically fetched from the Open Tree of Life.")
+  println("!! Please set `--phylabels` parameter to `Latin`")
+  exit(1)
+}
 
 // Biodiverse
 params.indices = "calc_richness,calc_simpson_shannon,calc_endemism_whole,calc_pd,calc_pe,calc_phylo_rpd1,calc_phylo_rpd2,calc_phylo_rpe1,calc_phylo_rpe2"
