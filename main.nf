@@ -61,11 +61,12 @@ params.data_path = "${projectDir}/pipeline_data"
 // Filtering, stage I - "10_Filter_occurrences.R"
 params.input = false
 params.outdir = "${launchDir}/results"
+
 params.phylum = "NA"
-params.class = "NA"
-params.order = "NA"
+params.class  = "NA"
+params.order  = "NA"
 params.family = "NA"
-params.genus = "NA"
+params.genus  = "NA"
 params.country = "NA"
 params.latmin = "NA"
 params.latmax = "NA"
@@ -164,7 +165,7 @@ def helpMsg() {
     
     Pipeline Usage:
     To run the pipeline, enter the following in the command line:
-        nextflow run vmikk/phylonext -r ${version} --input ... --outdir ...
+        nextflow run vmikk/phylonext -r main --input ... --outdir ...
     
     Options:
     REQUIRED:
@@ -278,9 +279,9 @@ process occ_filter {
       path noextinct
 
     output:
-      path "Partition_low", emit: part_low, type: "dir", optional: true
-      path "Partition_high", emit: part_high, type: "dir", optional: true
-      path "spp.txt", emit: spp
+      path "Partition_low",     emit: part_low,  type: "dir", optional: true
+      path "Partition_high",    emit: part_high, type: "dir", optional: true
+      path "spp.txt",           emit: spp
 
     script:
 
@@ -288,22 +289,22 @@ process occ_filter {
 
     """
     10_Filter_occurrences.R \
-      --input ${input} \
-      --phylum ${params.phylum} \
-      --class ${params.class} \
-      --order ${params.order} \
-      --family ${params.family} \
-      --genus ${params.genus} \
+      --input   ${input} \
+      --phylum  ${params.phylum} \
+      --class   ${params.class} \
+      --order   ${params.order} \
+      --family  ${params.family} \
+      --genus   ${params.genus} \
       --country ${params.country} \
-      --latmin ${params.latmin} \
-      --latmax ${params.latmax} \
-      --lonmin ${params.lonmin} \
-      --lonmax ${params.lonmax} \
+      --latmin  ${params.latmin} \
+      --latmax  ${params.latmax} \
+      --lonmin  ${params.lonmin} \
+      --lonmax  ${params.lonmax} \
       --minyear ${params.minyear} \
       ${filter_extinct} \
       --excludehuman ${params.excludehuman} \
-      --roundcoords ${params.roundcoords} \
-      --threads ${task.cpus} \
+      --roundcoords  ${params.roundcoords} \
+      --threads      ${task.cpus} \
       --noccurrences ${params.dbscannoccurrences} \
       --output "."
 
@@ -356,17 +357,17 @@ process record_count {
 
     """
     10_Record_counts.R \
-      --input ${input} \
-      --phylum ${params.phylum} \
-      --class ${params.class} \
-      --order ${params.order} \
-      --family ${params.family} \
-      --genus ${params.genus} \
+      --input   ${input} \
+      --phylum  ${params.phylum} \
+      --class   ${params.class} \
+      --order   ${params.order} \
+      --family  ${params.family} \
+      --genus   ${params.genus} \
       --country ${params.country} \
-      --latmin ${params.latmin} \
-      --latmax ${params.latmax} \
-      --lonmin ${params.lonmin} \
-      --lonmax ${params.lonmax} \
+      --latmin  ${params.latmin} \
+      --latmax  ${params.latmax} \
+      --lonmin  ${params.lonmin} \
+      --lonmax  ${params.lonmax} \
       --minyear ${params.minyear} \
       ${filter_extinct} \
       --excludehuman ${params.excludehuman} \
@@ -376,8 +377,8 @@ process record_count {
       ${filter_institutions} \
       ${filter_urban} \
       --roundcoords ${params.roundcoords} \
-      --resolution ${params.h3resolution} \
-      --threads ${task.cpus} \
+      --resolution  ${params.h3resolution} \
+      --threads     ${task.cpus} \
       --output "Record_counts"
 
     """
@@ -471,11 +472,11 @@ process outl_high {
 
     """
     11_Additional_filtering_and_aggregation.R \
-      --input "${part_high}" \
+      --input     "${part_high}" \
       --specieskey ${sp} \
-      --dbscan ${params.dbscan} \
-      --epsilon ${params.dbscanepsilon} \
-      --minpts ${params.dbscanminpts} \
+      --dbscan     ${params.dbscan} \
+      --epsilon    ${params.dbscanepsilon} \
+      --minpts     ${params.dbscanminpts} \
       --resolution ${params.h3resolution} \
       ${filter_terrestrial} \
       ${filter_country} \
@@ -540,9 +541,9 @@ process merge_occ {
       --input "." \
       ${custom_phytree} \
       --phylabels ${params.phylabels} \
-      --taxgroup ${params.taxgroup} \
-      --threads ${task.cpus} \
-      --output  "."
+      --taxgroup  ${params.taxgroup} \
+      --threads   ${task.cpus} \
+      --output    "."
 
     # --inputfile ${spp} \
 
@@ -567,10 +568,10 @@ process prep_biodiv {
       path tree
 
     output:
-      path "occ.bds", emit: BDS
-      path "tree.bts", emit: BTS
+      path "occ.bds",          emit: BDS
+      path "tree.bts",         emit: BTS
       path "occ_analysed.bds", emit: BDA
-      path "occ.bds.csv", emit: BDOBS
+      path "occ.bds.csv",      emit: BDOBS
 
     script:
     """
@@ -622,7 +623,7 @@ process phylodiv {
     """
     03_run_randomisation.pl \
       --basedata ${BDA} \
-      --bd_name ${BDA} \
+      --bd_name  ${BDA} \
       --out_file "Biodiv_randomized.bds" \
       --rand_name 'rand' \
       --iterations ${params.iterations} \
@@ -699,11 +700,11 @@ process div_to_csv {
       path Biodiv
 
     output:
-      path "RND_groups.csv", emit: RND1
-      path "RND_rand--p_rank--SPATIAL_RESULTS.csv", emit: RND2
-      path "RND_rand--SPATIAL_RESULTS.csv", emit: RND3
+      path "RND_groups.csv",                          emit: RND1
+      path "RND_rand--p_rank--SPATIAL_RESULTS.csv",   emit: RND2
+      path "RND_rand--SPATIAL_RESULTS.csv",           emit: RND3
       path "RND_rand--z_scores--SPATIAL_RESULTS.csv", emit: RND4
-      path "RND_SPATIAL_RESULTS.csv", emit: RND5
+      path "RND_SPATIAL_RESULTS.csv",                 emit: RND5
 
     script:
     """
@@ -738,16 +739,16 @@ process plot_pd {
 
     """
     14_Visualization.R \
-      --observed ${BDOBS} \
-      --zscores ${RND4} \
-      --threads ${task.cpus} \
+      --observed  ${BDOBS} \
+      --zscores   ${RND4} \
+      --threads   ${task.cpus} \
       --variables ${params.plotvar} \
       ${add_world_map} \
       --format "${params.plotformat}" \
-      --plotz "${params.plottype}" \
-      --width "${params.plotwidth}" \
+      --plotz  "${params.plottype}" \
+      --width  "${params.plotwidth}" \
       --height "${params.plotheight}" \
-      --units "${params.plotunits}" \
+      --units  "${params.plotunits}" \
       --output "."
 
     """
@@ -777,14 +778,14 @@ process plot_leaflet {
 
     """
     15_Leaflets.R \
-      --observed ${BDOBS} \
+      --observed  ${BDOBS} \
       --sesscores ${RND4} \
       --sigscores ${RND3} \
       --reccounts ${NRECORDS} \
       --variables ${params.leaflet_var} \
-      --palette ${params.leaflet_palette} \
-      --color ${params.leaflet_color} \
-      --bins ${params.leaflet_bins} \
+      --palette   ${params.leaflet_palette} \
+      --color     ${params.leaflet_color} \
+      --bins      ${params.leaflet_bins} \
       --output "Choropleth.html"
 
     """
