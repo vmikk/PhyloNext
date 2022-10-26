@@ -67,6 +67,8 @@ params.class  = "NA"
 params.order  = "NA"
 params.family = "NA"
 params.genus  = "NA"
+params.specieskeys = null
+
 params.country = "NA"
 params.latmin = "NA"
 params.latmax = "NA"
@@ -138,6 +140,7 @@ params.leaflet_bins = 5
 params.helpMsg = false
 
 // Optional input files
+specieskeys        = params.specieskeys          ? file(params.specieskeys)      : file("${params.outdir}/no_file0") 
 noextinct          = params.noextinct          ? file(params.noextinct)          : file("${params.outdir}/no_file1") 
 terrestrial        = params.terrestrial        ? file(params.terrestrial)        : file("${params.outdir}/no_file2") 
 rmcountrycentroids = params.rmcountrycentroids ? file(params.rmcountrycentroids) : file("${params.outdir}/no_file3") 
@@ -177,6 +180,8 @@ def helpMsg() {
         --order               Order to analyze (multiple comma-separated values allowed); e.g., "Carnivora"
         --family              Family to analyze (multiple comma-separated values allowed); e.g., "Felidae,Canidae"
         --genus               Genus to analyze (multiple comma-separated values allowed); e.g., "Felis,Canis,Lynx"
+        --specieskeys         Custom list of GBIF specieskeys (file with a single column, with header)
+
         --phytree             Custom phylogenetic tree
         --taxgroup            Specific taxonomy group in Open Tree of Life (default, "All_life")
         --phylabels           Type of tip labels on a phylogenetic tree ("OTT" or "Latin")
@@ -315,7 +320,8 @@ process occ_filter {
 
     script:
 
-    filter_extinct = params.noextinct ? "--noextinct $noextinct" : ""
+    filter_specieskeys = params.specieskeys ? "--specieskeys $specieskeys" : ""
+    filter_extinct     = params.noextinct   ? "--noextinct $noextinct"     : ""
 
     """
     10_Filter_occurrences.R \
@@ -331,6 +337,7 @@ process occ_filter {
       --lonmin  ${params.lonmin} \
       --lonmax  ${params.lonmax} \
       --minyear ${params.minyear} \
+      ${filter_specieskeys} \
       ${filter_extinct} \
       --excludehuman ${params.excludehuman} \
       --roundcoords  ${params.roundcoords} \
@@ -378,10 +385,11 @@ process record_count {
 
     script:
 
-    filter_extinct      = params.noextinct          ? "--noextinct $noextinct" : ""
+    filter_specieskeys  = params.specieskeys        ? "--specieskeys $specieskeys" : ""
+    filter_extinct      = params.noextinct          ? "--noextinct $noextinct"     : ""
     filter_terrestrial  = params.terrestrial        ? "--terrestrial $terrestrial" : ""
     filter_country      = params.rmcountrycentroids ? "--rmcountrycentroids $rmcountrycentroids" : ""
-    filter_capitals     = params.rmcountrycapitals  ? "--rmcountrycapitals $rmcountrycapitals" : ""
+    filter_capitals     = params.rmcountrycapitals  ? "--rmcountrycapitals $rmcountrycapitals"   : ""
     filter_institutions = params.rminstitutions     ? "--rminstitutions $rminstitutions" : ""
     filter_urban        = params.rmurban            ? "--rmurban $rmurban" : ""
 
@@ -399,6 +407,7 @@ process record_count {
       --lonmin  ${params.lonmin} \
       --lonmax  ${params.lonmax} \
       --minyear ${params.minyear} \
+      ${filter_specieskeys} \
       ${filter_extinct} \
       --excludehuman ${params.excludehuman} \
       ${filter_terrestrial} \
