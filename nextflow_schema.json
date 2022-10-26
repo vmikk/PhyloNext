@@ -1,0 +1,514 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "https://raw.githubusercontent.com/vmikk/PhyloNext/master/nextflow_schema.json",
+    "title": "PhyloNext pipeline parameters",
+    "description": "A pipeline for phylogenetic diversity analysis of GBIF-mediated data",
+    "type": "object",
+    "definitions": {
+        "input_output_options": {
+            "title": "Input/output options",
+            "type": "object",
+            "fa_icon": "fas fa-terminal",
+            "description": "Define where the pipeline should find input data and save output data.",
+            "required": [
+                "input"
+            ],
+            "properties": {
+                "input": {
+                    "type": "string",
+                    "format": "directory-path",
+                    "mimetype": "text/csv",
+                    "schema": "assets/schema_input.json",
+                    "description": "Path to the directory with parquet files (GBIF occurrcence dump)",
+                    "help_text": "You will need to create a design file with information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row. See [usage docs](https://nf-co.re/biodiverse/usage#samplesheet-input).",
+                    "fa_icon": "fas fa-file-csv"
+                },
+                "outdir": {
+                    "type": "string",
+                    "description": "The output directory where the results will be saved",
+                    "default": "./results",
+                    "fa_icon": "fas fa-folder-open"
+                },
+                "phytree": {
+                    "type": "string",
+                    "fa_icon": "fas fa-tree",
+                    "description": "Custom phylogenetic tree",
+                    "format": "file-path",
+                    "mimetype": "text/x-nh",
+                    "pattern": ".nwk$|.{n,N}ewick$|.tre$|.tree$"
+                }
+            }
+        },
+        "taxonomic_scope": {
+            "title": "Taxonomic scope",
+            "type": "object",
+            "description": "Define which taxa should be analyzed",
+            "default": "",
+            "fa_icon": "fas fa-cat",
+            "properties": {
+                "phylum": {
+                    "type": "string",
+                    "fa_icon": "fas fa-cat",
+                    "description": "Phylum to analyze (multiple comma-separated values allowed); e.g., \"Chordata\""
+                },
+                "class": {
+                    "type": "string",
+                    "fa_icon": "fas fa-cat",
+                    "description": "Class to analyze (multiple comma-separated values allowed); e.g., \"Mammalia\""
+                },
+                "order": {
+                    "type": "string",
+                    "fa_icon": "fas fa-cat",
+                    "description": "Order to analyze (multiple comma-separated values allowed); e.g., \"Carnivora\""
+                },
+                "family": {
+                    "type": "string",
+                    "fa_icon": "fas fa-cat",
+                    "description": "Family to analyze (multiple comma-separated values allowed); e.g., \"Felidae,Canidae\""
+                },
+                "genus": {
+                    "type": "string",
+                    "fa_icon": "fas fa-cat",
+                    "description": "Genus to analyze (multiple comma-separated values allowed); e.g., \"Felis,Canis,Lynx\""
+                },
+                "specieskeys": {
+                    "type": "string",
+                    "fa_icon": "fas fa-tasks",
+                    "description": "Custom list of GBIF specieskeys (file with a single column)",
+                    "format": "file-path",
+                    "mimetype": "text/plain"
+                },
+                "noextinct": {
+                    "type": "string",
+                    "fa_icon": "fas fa-bacteria",
+                    "format": "file-path",
+                    "mimetype": "text/plain",
+                    "description": "File with extinct species specieskeys for their removal (file with a single column, with header)"
+                },
+                "excludehuman": {
+                    "type": "boolean",
+                    "fa_icon": "fas fa-user-alt-slash",
+                    "description": "Logical, exclude genus \"Homo\" from occurrence data (default, true)",
+                    "default": true
+                }
+            }
+        },
+        "spatial_scope": {
+            "title": "Spatial scope",
+            "type": "object",
+            "description": "Spatial filters",
+            "default": "",
+            "fa_icon": "fas fa-globe",
+            "properties": {
+                "latmin": {
+                    "type": "number",
+                    "fa_icon": "fas fa-globe",
+                    "description": "Minimum latitude of species occurrences (decimal degrees); e.g., 5.1"
+                },
+                "latmax": {
+                    "type": "number",
+                    "fa_icon": "fas fa-globe",
+                    "description": "Maximum latitude of species occurrences (decimal degrees); e.g., 15.5"
+                },
+                "lonmin": {
+                    "type": "number",
+                    "fa_icon": "fas fa-globe",
+                    "description": "Minimum longitude of species occurrences (decimal degrees); e.g., 47.0"
+                },
+                "lonmax": {
+                    "type": "number",
+                    "fa_icon": "fas fa-globe",
+                    "description": "Maximum longitude of species occurrences (decimal degrees); e.g., 55.5"
+                },
+                "country": {
+                    "type": "string",
+                    "fa_icon": "fas fa-flag"
+                },
+                "wgsrpd": {
+                    "type": "string",
+                    "default": "None",
+                    "fa_icon": "fas fa-globe-americas"
+                },
+                "regions": {
+                    "type": "string",
+                    "default": "None",
+                    "fa_icon": "fas fa-globe-americas"
+                }
+            }
+        },
+        "new_group_1": {
+            "title": "New Group 1",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "properties": {
+                "dbscan": {
+                    "type": "string",
+                    "default": "false",
+                    "fa_icon": "fas fa-cookie"
+                },
+                "dbscannoccurrences": {
+                    "type": "string",
+                    "default": null,
+                    "fa_icon": "fas fa-cookie"
+                },
+                "dbscanepsilon": {
+                    "type": "string",
+                    "default": null,
+                    "fa_icon": "fas fa-cookie"
+                },
+                "dbscanminpts": {
+                    "type": "string",
+                    "default": null,
+                    "fa_icon": "fas fa-cookie"
+                }
+            },
+            "fa_icon": "fas fa-cookie"
+        },
+        "occurrence_filtering_and_binning": {
+            "title": "Occurrence filtering and binning",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "fa_icon": "fas fa-filter",
+            "properties": {
+                "minyear": {
+                    "type": "integer",
+                    "fa_icon": "fas fa-clock",
+                    "description": "Minimum year of record's occurrences; default, 1945"
+                },
+                "h3resolution": {
+                    "type": "integer",
+                    "default": 4,
+                    "fa_icon": "fas fa-cubes",
+                    "description": "Spatial resolution of the H3 geospatial indexing system; e.g., 4"
+                },
+                "roundcoords": {
+                    "type": "integer",
+                    "fa_icon": "fas fa-search",
+                    "description": "Numeric, round spatial coordinates to N decimal places, to reduce the dataset size (default, 2; set to negative to disable rounding)",
+                    "default": 2
+                }
+            }
+        },
+        "coordinatecleaner_like_filtering": {
+            "title": "CoordinateCleaner-like filtering",
+            "type": "object",
+            "description": "Removal of common spatial errors",
+            "default": "",
+            "fa_icon": "fas fa-object-group",
+            "properties": {
+                "terrestrial": {
+                    "type": "string",
+                    "default": "params.data_path + \"/Land_Buffered_025_dgr.RData\"",
+                    "fa_icon": "fas fa-road"
+                },
+                "rmcountrycentroids": {
+                    "type": "string",
+                    "default": "None",
+                    "fa_icon": "far fa-building"
+                },
+                "rmcountrycapitals": {
+                    "type": "string",
+                    "default": "None",
+                    "fa_icon": "fas fa-city"
+                },
+                "rminstitutions": {
+                    "type": "string",
+                    "default": "None",
+                    "fa_icon": "fas fa-laptop-house"
+                },
+                "rmurban": {
+                    "type": "string",
+                    "default": "None",
+                    "fa_icon": "fas fa-city"
+                }
+            }
+        },
+        "biodeverse": {
+            "title": "Biodeverse",
+            "type": "object",
+            "description": "Diversity indices",
+            "default": "",
+            "properties": {
+                "indices": {
+                    "type": "string",
+                    "default": "calc_richness,calc_simpson_shannon,calc_endemism_whole,calc_pd,calc_pe,calc_phylo_rpd1,calc_phylo_rpd2,calc_phylo_rpe1,calc_phylo_rpe2",
+                    "description": "Comma-seprated list of diversity and endemism indices; e.g., \"calc_richness,calc_pd,calc_pe\"",
+                    "fa_icon": "fas fa-cogs"
+                },
+                "iterations": {
+                    "type": "integer",
+                    "default": 1000,
+                    "description": "Number of randomisation iterations; e.g., 1000",
+                    "fa_icon": "fas fa-cogs"
+                },
+                "biodiversethreads": {
+                    "type": "integer",
+                    "default": 10,
+                    "description": "Number of Biodiverse threads; e.g., 10",
+                    "fa_icon": "fas fa-cogs"
+                },
+                "randname": {
+                    "type": "string",
+                    "default": "rand_structured",
+                    "fa_icon": "fas fa-cogs"
+                }
+            },
+            "fa_icon": "fas fa-cogs"
+        },
+        "visualization_interactive": {
+            "title": "Visualization - interactive",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "properties": {
+                "leaflet_var": {
+                    "type": "string",
+                    "default": "RICHNESS_ALL,PD,SES_PD,PD_P,ENDW_WE,SES_ENDW_WE,PE_WE,SES_PE_WE,CANAPE,Redundancy",
+                    "fa_icon": "fas fa-atlas"
+                },
+                "leaflet_color": {
+                    "type": "string",
+                    "default": "RdYlBu",
+                    "fa_icon": "fas fa-atlas"
+                },
+                "leaflet_palette": {
+                    "type": "string",
+                    "default": "quantile",
+                    "fa_icon": "fas fa-atlas"
+                },
+                "leaflet_bins": {
+                    "type": "string",
+                    "default": "5",
+                    "fa_icon": "fas fa-atlas"
+                }
+            },
+            "fa_icon": "fas fa-passport"
+        },
+        "visualization_static": {
+            "title": "Visualization - static",
+            "type": "object",
+            "description": "Static maps",
+            "default": "",
+            "fa_icon": "fas fa-chart-line",
+            "properties": {
+                "plotvar": {
+                    "type": "string",
+                    "default": "RICHNESS_ALL,PD,PD_P",
+                    "fa_icon": "fas fa-chart-line",
+                    "description": "Variables to plot (multiple comma-separated values allowed); e.g., \"RICHNESS_ALL,PD,PD_P\""
+                },
+                "plottype": {
+                    "type": "string",
+                    "default": "raw",
+                    "fa_icon": "fas fa-chart-line",
+                    "description": "Plot type"
+                },
+                "plotformat": {
+                    "type": "string",
+                    "default": "pdf",
+                    "fa_icon": "fas fa-chart-line",
+                    "description": "Plot format (jpg,pdf,png)"
+                },
+                "plotwidth": {
+                    "type": "number",
+                    "default": 18,
+                    "fa_icon": "fas fa-chart-line",
+                    "description": "Plot width (default, 18 inches)"
+                },
+                "plotheight": {
+                    "type": "number",
+                    "default": 18,
+                    "fa_icon": "fas fa-chart-line",
+                    "description": "Plot height (default, 18 inches)"
+                },
+                "plotunits": {
+                    "type": "string",
+                    "default": "None",
+                    "fa_icon": "fas fa-chart-line"
+                },
+                "world": {
+                    "type": "string",
+                    "default": "params.data_path + \"/WorldMap_NaturalEarth_Medium.RData\"",
+                    "fa_icon": "fas fa-chart-line",
+                    "description": "World basemap"
+                }
+            }
+        },
+        "phylogenetic_tree_related_parameters": {
+            "title": "Phylogenetic tree-related parameters",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "fa_icon": "fas fa-brain",
+            "properties": {
+                "taxgroup": {
+                    "type": "string",
+                    "default": "All_life",
+                    "fa_icon": "fas fa-sitemap"
+                },
+                "phylabels": {
+                    "type": "string",
+                    "default": "OTT",
+                    "fa_icon": "fas fa-tags"
+                }
+            }
+        },
+        "generic_options": {
+            "title": "Generic options",
+            "type": "object",
+            "fa_icon": "fas fa-file-import",
+            "description": "Less common options for the pipeline, typically set in a config file.",
+            "help_text": "These options are common to all nf-core pipelines and allow you to customise some of the core preferences for how the pipeline runs.\n\nTypically these options would be set in a Nextflow config file loaded for all pipeline runs, such as `~/.nextflow/config`.",
+            "properties": {
+                "help": {
+                    "type": "boolean",
+                    "description": "Display help text.",
+                    "fa_icon": "fas fa-question-circle"
+                },
+                "helpMsg": {
+                    "type": "string",
+                    "default": "None",
+                    "fa_icon": "far fa-question-circle"
+                },
+                "scripts_path": {
+                    "type": "string",
+                    "default": "None",
+                    "hidden": true,
+                    "fa_icon": "fas fa-database"
+                },
+                "data_path": {
+                    "type": "string",
+                    "default": "None",
+                    "hidden": true,
+                    "fa_icon": "fas fa-database"
+                },
+                "email": {
+                    "type": "string",
+                    "description": "Email address for completion summary.",
+                    "fa_icon": "fas fa-envelope",
+                    "help_text": "Set this parameter to your e-mail address to get a summary e-mail with details of the run sent to you when the workflow exits. If set in your user config file (`~/.nextflow/config`) then you don't need to specify this on the command line for every run.",
+                    "pattern": "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$"
+                },
+                "email_on_fail": {
+                    "type": "string",
+                    "description": "Email address for completion summary, only when pipeline fails.",
+                    "fa_icon": "fas fa-exclamation-triangle",
+                    "pattern": "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$",
+                    "help_text": "An email address to send a summary email to when the pipeline is completed - ONLY sent if the pipeline does not exit successfully.",
+                    "hidden": true
+                },
+                "plaintext_email": {
+                    "type": "boolean",
+                    "description": "Send plain-text email instead of HTML.",
+                    "fa_icon": "fas fa-remove-format",
+                    "hidden": true
+                },
+                "monochrome_logs": {
+                    "type": "boolean",
+                    "description": "Do not use coloured log outputs.",
+                    "fa_icon": "fas fa-palette",
+                    "hidden": true
+                },
+                "tracedir": {
+                    "type": "string",
+                    "description": "Directory to keep pipeline Nextflow logs and reports.",
+                    "default": "${params.outdir}/pipeline_info",
+                    "fa_icon": "fas fa-cogs",
+                    "hidden": true
+                },
+                "validate_params": {
+                    "type": "boolean",
+                    "description": "Boolean whether to validate parameters against the schema at runtime",
+                    "default": true,
+                    "fa_icon": "fas fa-check-square",
+                    "hidden": true
+                },
+                "show_hidden_params": {
+                    "type": "boolean",
+                    "fa_icon": "far fa-eye-slash",
+                    "description": "Show all params when using `--help`",
+                    "hidden": true,
+                    "help_text": "By default, parameters set as _hidden_ in the schema are not shown on the command line when a user runs with `--help`. Specifying this option will tell the pipeline to show all parameters."
+                },
+                "enable_conda": {
+                    "type": "boolean",
+                    "description": "Run this workflow with Conda. You can also use '-profile conda' instead of providing this parameter.",
+                    "hidden": true,
+                    "fa_icon": "fas fa-bacon"
+                }
+            }
+        },
+        "max_job_request_options": {
+            "title": "Max job request options",
+            "type": "object",
+            "fa_icon": "fas fa-user-md",
+            "description": "Set the top limit for requested resources for any single job.",
+            "help_text": "If you are running on a smaller system, a pipeline step requesting more resources than are available may cause the Nextflow to stop the run with an error. These options allow you to cap the maximum resources requested by any single job so that the pipeline will run on your system.\n\nNote that you can not _increase_ the resources requested by any job using these options. For that you will need your own configuration file. See [the nf-core website](https://nf-co.re/usage/configuration) for details.",
+            "properties": {
+                "max_cpus": {
+                    "type": "integer",
+                    "description": "Maximum number of CPUs that can be requested for any single job.",
+                    "default": 16,
+                    "fa_icon": "fas fa-microchip",
+                    "help_text": "Use to set an upper-limit for the CPU requirement for each process. Should be an integer e.g. `--max_cpus 1`"
+                },
+                "max_memory": {
+                    "type": "string",
+                    "description": "Maximum amount of memory that can be requested for any single job.",
+                    "default": "128.GB",
+                    "fa_icon": "fas fa-memory",
+                    "pattern": "^\\d+(\\.\\d+)?\\.?\\s*(K|M|G|T)?B$",
+                    "help_text": "Use to set an upper-limit for the memory requirement for each process. Should be a string in the format integer-unit e.g. `--max_memory '8.GB'`"
+                },
+                "max_time": {
+                    "type": "string",
+                    "description": "Maximum amount of time that can be requested for any single job.",
+                    "default": "240.h",
+                    "fa_icon": "far fa-clock",
+                    "pattern": "^(\\d+\\.?\\s*(s|m|h|day)\\s*)+$",
+                    "help_text": "Use to set an upper-limit for the time requirement for each process. Should be a string in the format integer-unit e.g. `--max_time '2.h'`"
+                }
+            }
+        }
+    },
+    "allOf": [
+        {
+            "$ref": "#/definitions/input_output_options"
+        },
+        {
+            "$ref": "#/definitions/taxonomic_scope"
+        },
+        {
+            "$ref": "#/definitions/spatial_scope"
+        },
+        {
+            "$ref": "#/definitions/new_group_1"
+        },
+        {
+            "$ref": "#/definitions/occurrence_filtering_and_binning"
+        },
+        {
+            "$ref": "#/definitions/coordinatecleaner_like_filtering"
+        },
+        {
+            "$ref": "#/definitions/biodeverse"
+        },
+        {
+            "$ref": "#/definitions/visualization_interactive"
+        },
+        {
+            "$ref": "#/definitions/visualization_static"
+        },
+        {
+            "$ref": "#/definitions/phylogenetic_tree_related_parameters"
+        },
+        {
+            "$ref": "#/definitions/generic_options"
+        },
+        {
+            "$ref": "#/definitions/max_job_request_options"
+        }
+    ]
+}
