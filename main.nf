@@ -553,6 +553,31 @@ process outl_high {
 // }
 
 
+// Prepare a list of OpenTree IDs (to obtain a phylogenetic tree)
+process prep_ott_ids {
+
+    label "container_r"
+    queue "custom_pool"
+
+    publishDir "$params.outdir/02.OTT_tree", mode: 'copy'
+    // cpus 1
+
+    input:
+      path spp_all
+
+    output:
+      path "Species_OTT.csv", emit: spp_ott
+
+    script:
+    """
+    11_GBIF_SpeciesKet_to_OTTID.R \
+      --input    ${spp_all} \
+      --taxgroup ${params.taxgroup} \
+      --threads  ${task.cpus} \
+      --output   "Species_OTT.csv"
+    """
+}
+
 // Merge filtered species occurrences and prep data for Biodiverse
 process merge_occ {
 
