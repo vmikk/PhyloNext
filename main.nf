@@ -637,13 +637,10 @@ process merge_occ {
       path "Trimmed_tree.nex", emit: tree
 
     script:
-
-    custom_phytree = params.phytree ? "--phytree $phytree" : ""
-
     """
     12_Prepare_Biodiverse_input.R \
       --input "." \
-      ${custom_phytree} \
+      --phytree ${phytree} \
       --phylabels ${params.phylabels} \
       --taxgroup  ${params.taxgroup} \
       --threads   ${task.cpus} \
