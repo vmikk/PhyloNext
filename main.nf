@@ -323,6 +323,7 @@ process occ_filter {
       path "Partition_low",     emit: part_low,  type: "dir", optional: true
       path "Partition_high",    emit: part_high, type: "dir", optional: true
       path "spp.txt",           emit: spp
+      path "SpeciesCounts.txt", emit: spp_all
 
     script:
 
