@@ -584,6 +584,40 @@ process prep_ott_ids {
     """
 }
 
+
+// Get an induced subtree from synthetic phylogenetic tree for a set of OpenTree IDs
+process get_ott_tree {
+
+    label "container_ott"
+    queue "custom_pool"
+
+    publishDir "$params.outdir/02.OTT_tree", mode: 'copy'
+    // cpus 1
+
+    input:
+      path spp_ott
+
+    output:
+      path "ott_label_dated_tree.tre", emit: tree
+      path "ottid_dated_tree.tre",     emit: treedated
+      path "labelled_tree.tre",        emit: treelabeled
+      path "ottlabel.txt",             emit: labels
+      path "conflict_annot.tre",       emit: conflicts, optional: true
+      path "support_annot.tre",        emit: support,   optional: true
+      path "citations.txt"
+      path "date_citations.txt"
+      path "synth.log"
+
+    script:
+    """
+    induced_synth_subtree_from_csv.py \
+      --query ${spp_ott} \
+      --output_dir "\$(pwd)" \
+      --label_format "name"
+    """
+}
+
+
 // Merge filtered species occurrences and prep data for Biodiverse
 process merge_occ {
 
