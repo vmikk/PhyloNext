@@ -20,7 +20,7 @@
                     "mimetype": "text/csv",
                     "schema": "assets/schema_input.json",
                     "description": "Path to the directory with parquet files (GBIF occurrcence dump)",
-                    "help_text": "You will need to create a design file with information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row. See [usage docs](https://nf-co.re/biodiverse/usage#samplesheet-input).",
+                    "help_text": "Input data should be in the Parquet format. Could be stored locally or in the cloud (S3 or Azure Blob strorage).",
                     "fa_icon": "fas fa-file-csv"
                 },
                 "outdir": {
@@ -32,10 +32,11 @@
                 "phytree": {
                     "type": "string",
                     "fa_icon": "fas fa-tree",
-                    "description": "Custom phylogenetic tree",
+                    "description": "Custom phylogenetic tree in Newick format",
                     "format": "file-path",
                     "mimetype": "text/x-nh",
-                    "pattern": ".nwk$|.{n,N}ewick$|.tre$|.tree$"
+                    "pattern": ".nwk$|.{n,N}ewick$|.tre$|.tree$",
+                    "help_text": "Tips should be labeled either with Latin binomials (e.g., \"Homo_sapiens\"), or with Open Tree IDs (e.g, \"ott359899\"). Please adjust the `--phylabels` parameter correspondingly."
                 }
             }
         },
@@ -76,14 +77,16 @@
                     "fa_icon": "fas fa-tasks",
                     "description": "Custom list of GBIF specieskeys (file with a single column)",
                     "format": "file-path",
-                    "mimetype": "text/plain"
+                    "mimetype": "text/plain",
+                    "pattern": ".txt^"
                 },
                 "noextinct": {
                     "type": "string",
                     "fa_icon": "fas fa-bacteria",
                     "format": "file-path",
                     "mimetype": "text/plain",
-                    "description": "File with extinct species specieskeys for their removal (file with a single column, with header)"
+                    "description": "File with extinct species specieskeys for their removal (file with a single column, with header)",
+                    "pattern": ".txt^"
                 },
                 "excludehuman": {
                     "type": "boolean",
@@ -122,45 +125,51 @@
                 },
                 "country": {
                     "type": "string",
-                    "fa_icon": "fas fa-flag"
+                    "fa_icon": "fas fa-flag",
+                    "description": "Country code, ISO 3166 (multiple comma-separated values allowed); e.g., \"DE,PL,CZ\""
                 },
                 "wgsrpd": {
                     "type": "string",
-                    "default": "None",
-                    "fa_icon": "fas fa-globe-americas"
+                    "fa_icon": "fas fa-globe-americas",
+                    "default": "null",
+                    "format": "file-path",
+                    "description": "Polygons of World Geographical Regions; e.g., \"pipeline_data/WGSRPD.RData\""
                 },
                 "regions": {
                     "type": "string",
-                    "default": "None",
-                    "fa_icon": "fas fa-globe-americas"
+                    "fa_icon": "fas fa-globe-americas",
+                    "description": "Names of World Geographical Regions; e.g., \"L1_EUROPE,L1_ASIA_TEMPERATE\""
                 }
             }
         },
-        "new_group_1": {
-            "title": "New Group 1",
+        "spatial_outliers_removal": {
+            "title": "Spatial outliers removal",
             "type": "object",
             "description": "",
             "default": "",
             "properties": {
                 "dbscan": {
-                    "type": "string",
-                    "default": "false",
-                    "fa_icon": "fas fa-cookie"
+                    "type": "boolean",
+                    "fa_icon": "fas fa-cookie",
+                    "description": "Logical, remove spatial outliers with density-based clustering; e.g., \"false\""
                 },
                 "dbscannoccurrences": {
-                    "type": "string",
-                    "default": null,
-                    "fa_icon": "fas fa-cookie"
+                    "type": "integer",
+                    "fa_icon": "fas fa-cookie",
+                    "description": "Minimum species occurrence to perform DBSCAN; e.g., 30",
+                    "default": 30
                 },
                 "dbscanepsilon": {
-                    "type": "string",
-                    "default": null,
-                    "fa_icon": "fas fa-cookie"
+                    "type": "integer",
+                    "fa_icon": "fas fa-cookie",
+                    "description": "DBSCAN parameter epsilon, km; e.g., \"700\"",
+                    "default": 1500
                 },
                 "dbscanminpts": {
-                    "type": "string",
-                    "default": null,
-                    "fa_icon": "fas fa-cookie"
+                    "type": "integer",
+                    "fa_icon": "fas fa-cookie",
+                    "description": "DBSCAN min number of points; e.g., \"3\"",
+                    "default": 3
                 }
             },
             "fa_icon": "fas fa-cookie"
@@ -175,13 +184,16 @@
                 "minyear": {
                     "type": "integer",
                     "fa_icon": "fas fa-clock",
-                    "description": "Minimum year of record's occurrences; default, 1945"
+                    "description": "Minimum year of record's occurrences; default, 1945",
+                    "default": 1945
                 },
                 "h3resolution": {
                     "type": "integer",
                     "default": 4,
                     "fa_icon": "fas fa-cubes",
-                    "description": "Spatial resolution of the H3 geospatial indexing system; e.g., 4"
+                    "description": "Spatial resolution of the H3 geospatial indexing system; e.g., 4",
+                    "minimum": 1,
+                    "maximum": 9
                 },
                 "roundcoords": {
                     "type": "integer",
@@ -201,27 +213,37 @@
                 "terrestrial": {
                     "type": "string",
                     "default": "params.data_path + \"/Land_Buffered_025_dgr.RData\"",
-                    "fa_icon": "fas fa-road"
+                    "fa_icon": "fas fa-road",
+                    "description": "Land polygon for removal of non-terrestrial occurrences; e.g., \"pipeline_data/Land_Buffered_025_dgr.RData\"",
+                    "format": "file-path"
                 },
                 "rmcountrycentroids": {
                     "type": "string",
-                    "default": "None",
-                    "fa_icon": "far fa-building"
+                    "fa_icon": "far fa-building",
+                    "description": "Polygons with country and province centroids; e.g., \"pipeline_data/CC_CountryCentroids_buf_1000m.RData\"",
+                    "format": "file-path",
+                    "default": "null"
                 },
                 "rmcountrycapitals": {
                     "type": "string",
-                    "default": "None",
-                    "fa_icon": "fas fa-city"
+                    "fa_icon": "fas fa-city",
+                    "description": "Polygons with country capitals; e.g., \"pipeline_data/CC_Capitals_buf_10000m.RData\"",
+                    "format": "file-path",
+                    "default": "null"
                 },
                 "rminstitutions": {
                     "type": "string",
-                    "default": "None",
-                    "fa_icon": "fas fa-laptop-house"
+                    "fa_icon": "fas fa-laptop-house",
+                    "description": "Polygons with biological institutuions and museums; e.g., \"pipeline_data/CC_Institutions_buf_100m.RData\"",
+                    "format": "file-path",
+                    "default": "null"
                 },
                 "rmurban": {
                     "type": "string",
-                    "default": "None",
-                    "fa_icon": "fas fa-city"
+                    "fa_icon": "fas fa-city",
+                    "description": "Polygons with urban areas; e.g., \"pipeline_data/CC_Urban.RData\"",
+                    "format": "file-path",
+                    "default": "null"
                 }
             }
         },
@@ -252,7 +274,11 @@
                 "randname": {
                     "type": "string",
                     "default": "rand_structured",
-                    "fa_icon": "fas fa-cogs"
+                    "fa_icon": "fas fa-cogs",
+                    "description": "Randomisation scheme type; e.g., \"rand_structured\"",
+                    "enum": [
+                        "rand_structured"
+                    ]
                 }
             },
             "fa_icon": "fas fa-cogs"
@@ -266,22 +292,67 @@
                 "leaflet_var": {
                     "type": "string",
                     "default": "RICHNESS_ALL,PD,SES_PD,PD_P,ENDW_WE,SES_ENDW_WE,PE_WE,SES_PE_WE,CANAPE,Redundancy",
-                    "fa_icon": "fas fa-atlas"
+                    "fa_icon": "fas fa-atlas",
+                    "description": "Variables to plot; e.g., \"RICHNESS_ALL,PD,SES_PD,PD_P,ENDW_WE,SES_ENDW_WE,PE_WE,SES_PE_WE,CANAPE,Redundancy\""
                 },
                 "leaflet_color": {
                     "type": "string",
                     "default": "RdYlBu",
-                    "fa_icon": "fas fa-atlas"
+                    "fa_icon": "fas fa-atlas",
+                    "description": "Color scheme for continuous variables (default, \"RdYlBu\")",
+                    "enum": [
+                        "RdYlBu",
+                        "Blues",
+                        "BrBG",
+                        "BuGn",
+                        "BuPu",
+                        "GnBu",
+                        "Greens",
+                        "Greys",
+                        "Oranges",
+                        "OrRd",
+                        "PiYG",
+                        "PRGn",
+                        "PuBu",
+                        "PuBuGn",
+                        "PuOr",
+                        "PuRd",
+                        "Purples",
+                        "RdBu",
+                        "RdGy",
+                        "RdPu",
+                        "RdYlGn",
+                        "Reds",
+                        "Spectral",
+                        "YlGn",
+                        "YlGnBu",
+                        "YlOrBr",
+                        "YlOrRd",
+                        "Accent",
+                        "viridis",
+                        "inferno",
+                        "plasma",
+                        "magma"
+                    ],
+                    "help_text": "The name of a preset palette from the `RColorBrewer` package."
                 },
                 "leaflet_palette": {
                     "type": "string",
                     "default": "quantile",
-                    "fa_icon": "fas fa-atlas"
+                    "fa_icon": "fas fa-atlas",
+                    "description": "Color palette for continuous variables (default, \"quantile\")",
+                    "enum": [
+                        "quantile",
+                        "equal",
+                        "continuous"
+                    ],
+                    "help_text": "Defines mapping of data values to colors . See [Leaflet docs](https://rstudio.github.io/leaflet/colors.html):<br>\n`colorNumeric` is a simple linear mapping from continuous numeric data to an interpolated palette.<br>\n`colorBin` also maps continuous numeric data, but performs binning based on value (see the cut function). <br>\n`colorQuantile` similarly bins numeric data, but via the quantile function."
                 },
                 "leaflet_bins": {
-                    "type": "string",
-                    "default": "5",
-                    "fa_icon": "fas fa-atlas"
+                    "type": "integer",
+                    "default": 5,
+                    "fa_icon": "fas fa-atlas",
+                    "description": "Number of color bins for continuous variables (default, 5)"
                 }
             },
             "fa_icon": "fas fa-passport"
@@ -309,7 +380,12 @@
                     "type": "string",
                     "default": "pdf",
                     "fa_icon": "fas fa-chart-line",
-                    "description": "Plot format (jpg,pdf,png)"
+                    "description": "Plot format (jpg,pdf,png)",
+                    "enum": [
+                        "pdf",
+                        "png",
+                        "jpg"
+                    ]
                 },
                 "plotwidth": {
                     "type": "number",
@@ -325,8 +401,14 @@
                 },
                 "plotunits": {
                     "type": "string",
-                    "default": "None",
-                    "fa_icon": "fas fa-chart-line"
+                    "default": "in",
+                    "fa_icon": "fas fa-chart-line",
+                    "description": "Plot size units (in,cm)",
+                    "enum": [
+                        "in",
+                        "cm",
+                        "px"
+                    ]
                 },
                 "world": {
                     "type": "string",
@@ -346,12 +428,68 @@
                 "taxgroup": {
                     "type": "string",
                     "default": "All_life",
-                    "fa_icon": "fas fa-sitemap"
+                    "fa_icon": "fas fa-sitemap",
+                    "description": "Specific taxonomy group in Open Tree of Life (default, \"All_life\")",
+                    "enum": [
+                        "All_life",
+                        "Animals",
+                        "Birds",
+                        "Tetrapods",
+                        "Mammals",
+                        "Amphibians",
+                        "Vertebrates",
+                        "Arthropods",
+                        "Molluscs",
+                        "Nematodes",
+                        "Platyhelminthes",
+                        "Annelids",
+                        "Cnidarians",
+                        "Arachnids",
+                        "Insects",
+                        "Fungi",
+                        "Basidiomycetes",
+                        "Ascomycetes",
+                        "Bacteria",
+                        "SAR_group",
+                        "Archaea",
+                        "Excavata",
+                        "Amoebozoa",
+                        "Centrohelida",
+                        "Haptophyta",
+                        "Apusozoa",
+                        "Diatoms",
+                        "Ciliates",
+                        "Forams",
+                        "Land_plants",
+                        "Hornworts",
+                        "Mosses",
+                        "Liverworts",
+                        "Vascular_plants",
+                        "Club_mosses",
+                        "Ferns",
+                        "Seed_plants",
+                        "Flowering_plants",
+                        "Monocots",
+                        "Eudicots",
+                        "Rosids",
+                        "Asterids",
+                        "Asterales",
+                        "Asteraceae",
+                        "Aster",
+                        "Symphyotrichum",
+                        "Campanulaceae",
+                        "Lobelia"
+                    ]
                 },
                 "phylabels": {
                     "type": "string",
-                    "default": "OTT",
-                    "fa_icon": "fas fa-tags"
+                    "default": "Latin",
+                    "fa_icon": "fas fa-tags",
+                    "description": "Type of tip labels on a phylogenetic tree (\"OTT\" or \"Latin\")",
+                    "enum": [
+                        "Latin",
+                        "OTT"
+                    ]
                 }
             }
         },
@@ -368,21 +506,22 @@
                     "fa_icon": "fas fa-question-circle"
                 },
                 "helpMsg": {
-                    "type": "string",
-                    "default": "None",
+                    "type": "boolean",
                     "fa_icon": "far fa-question-circle"
                 },
                 "scripts_path": {
                     "type": "string",
-                    "default": "None",
+                    "default": "${projectDir}/bin",
                     "hidden": true,
-                    "fa_icon": "fas fa-database"
+                    "fa_icon": "fas fa-database",
+                    "format": "directory-path"
                 },
                 "data_path": {
                     "type": "string",
-                    "default": "None",
+                    "default": "${projectDir}/pipeline_data",
                     "hidden": true,
-                    "fa_icon": "fas fa-database"
+                    "fa_icon": "fas fa-database",
+                    "format": "directory-path"
                 },
                 "email": {
                     "type": "string",
@@ -435,8 +574,8 @@
                 "enable_conda": {
                     "type": "boolean",
                     "description": "Run this workflow with Conda. You can also use '-profile conda' instead of providing this parameter.",
-                    "hidden": true,
-                    "fa_icon": "fas fa-bacon"
+                    "fa_icon": "fas fa-bacon",
+                    "hidden": true
                 }
             }
         },
@@ -452,7 +591,8 @@
                     "description": "Maximum number of CPUs that can be requested for any single job.",
                     "default": 16,
                     "fa_icon": "fas fa-microchip",
-                    "help_text": "Use to set an upper-limit for the CPU requirement for each process. Should be an integer e.g. `--max_cpus 1`"
+                    "help_text": "Use to set an upper-limit for the CPU requirement for each process. Should be an integer e.g. `--max_cpus 1`",
+                    "hidden": true
                 },
                 "max_memory": {
                     "type": "string",
@@ -460,7 +600,8 @@
                     "default": "128.GB",
                     "fa_icon": "fas fa-memory",
                     "pattern": "^\\d+(\\.\\d+)?\\.?\\s*(K|M|G|T)?B$",
-                    "help_text": "Use to set an upper-limit for the memory requirement for each process. Should be a string in the format integer-unit e.g. `--max_memory '8.GB'`"
+                    "help_text": "Use to set an upper-limit for the memory requirement for each process. Should be a string in the format integer-unit e.g. `--max_memory '8.GB'`",
+                    "hidden": true
                 },
                 "max_time": {
                     "type": "string",
@@ -468,7 +609,8 @@
                     "default": "240.h",
                     "fa_icon": "far fa-clock",
                     "pattern": "^(\\d+\\.?\\s*(s|m|h|day)\\s*)+$",
-                    "help_text": "Use to set an upper-limit for the time requirement for each process. Should be a string in the format integer-unit e.g. `--max_time '2.h'`"
+                    "help_text": "Use to set an upper-limit for the time requirement for each process. Should be a string in the format integer-unit e.g. `--max_time '2.h'`",
+                    "hidden": true
                 }
             }
         }
@@ -484,7 +626,7 @@
             "$ref": "#/definitions/spatial_scope"
         },
         {
-            "$ref": "#/definitions/new_group_1"
+            "$ref": "#/definitions/spatial_outliers_removal"
         },
         {
             "$ref": "#/definitions/occurrence_filtering_and_binning"
