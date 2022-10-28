@@ -226,6 +226,7 @@ def helpMsg() {
         --leaflet_color       Color scheme for continuous variables (default, "RdYlBu")
         --leaflet_palette     Color palette for continuous variables (default, "quantile")
         --leaflet_bins        Number of color bins for continuous variables (default, 5)
+        --leaflet_redundancy  Redundancy threshold for hiding the grid cells with low number of records (default, 0 = display all grid cells)
 
     Static visualization:
         --plotvar             Variables to plot (multiple comma-separated values allowed); e.g., "RICHNESS_ALL,PD,PD_P"
@@ -880,14 +881,15 @@ process plot_leaflet {
 
     """
     15_Leaflets.R \
-      --observed  ${BDOBS} \
-      --sesscores ${RND4} \
-      --sigscores ${RND3} \
-      --reccounts ${NRECORDS} \
-      --variables ${params.leaflet_var} \
-      --palette   ${params.leaflet_palette} \
-      --color     ${params.leaflet_color} \
-      --bins      ${params.leaflet_bins} \
+      --observed   ${BDOBS} \
+      --sesscores  ${RND4} \
+      --sigscores  ${RND3} \
+      --reccounts  ${NRECORDS} \
+      --variables  ${params.leaflet_var} \
+      --palette    ${params.leaflet_palette} \
+      --color      ${params.leaflet_color} \
+      --bins       ${params.leaflet_bins} \
+      --redundancy ${params.leaflet_redundancy} \
       --output "Choropleth.html"
 
     """
