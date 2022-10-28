@@ -53,11 +53,7 @@ nextflow.enable.dsl = 2
 // Pipeline version
 version = '0.0.2'
 
-// Biodiverse
-params.indices = "calc_richness,calc_simpson_shannon,calc_endemism_whole,calc_pd,calc_pe,calc_phylo_rpd1,calc_phylo_rpd2,calc_phylo_rpe1,calc_phylo_rpe2"
-params.randname = "rand_structured"
-params.iterations = 1000
-params.biodiversethreads = 10
+// Parameters are defined in the `conf/params.config` file
 
 // // Biodiverse args
 // biodiverse_args = "function=" + params.randname + " max_iters=" + params.iterations
@@ -84,7 +80,7 @@ if(params.phytree == null & params.phylabels == "OTT"){
 }
 
 // Optional input files
-specieskeys        = params.specieskeys          ? file(params.specieskeys)      : file("${params.outdir}/no_file0") 
+specieskeys        = params.specieskeys        ? file(params.specieskeys)      : file("${params.outdir}/no_file0") 
 noextinct          = params.noextinct          ? file(params.noextinct)          : file("${params.outdir}/no_file1") 
 terrestrial        = params.terrestrial        ? file(params.terrestrial)        : file("${params.outdir}/no_file2") 
 rmcountrycentroids = params.rmcountrycentroids ? file(params.rmcountrycentroids) : file("${params.outdir}/no_file3") 
