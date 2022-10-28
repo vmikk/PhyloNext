@@ -52,7 +52,7 @@
                     "fa_icon": "fas fa-cat",
                     "description": "Phylum to analyze (multiple comma-separated values allowed); e.g., \"Chordata\""
                 },
-                "class": {
+                "classis": {
                     "type": "string",
                     "fa_icon": "fas fa-cat",
                     "description": "Class to analyze (multiple comma-separated values allowed); e.g., \"Mammalia\""
