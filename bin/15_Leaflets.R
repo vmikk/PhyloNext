@@ -57,7 +57,7 @@ option_list <- list(
   make_option(c("-p", "--palette"), action="store", default="quantile", type='character', help="Color palette type"),
   make_option(c("-c", "--color"), action="store", default="RdYlBu", type='character', help="Color gradient scheme for the diversity indices (except for SES, CANAPE, and redundancy metrics)"),
   make_option(c("-b", "--bins"), action="store", default=5L, type='integer', help="Number of color bins for quantile palette"),
-  make_option(c("-j", "--redundancy"), action="store", default=0, type='integer', help="Redundancy threshold for hiding the grid cells with low number of records (disabled by default)"),
+  make_option(c("-j", "--redundancy"), action="store", default=0, type='double', help="Redundancy threshold for hiding the grid cells with low number of records (disabled by default)"),
   make_option(c("--shortid"), action="store", default=TRUE, type='logical', help="Shorten H3 index name of grid cell labels on the map"),
   make_option(c("--antimeridianfix"), action="store", default=TRUE, type='logical', help="Fix H3 polygons that cross the antimeridian"),
   # make_option(c("-t", "--threads"), action="store", default=1L, type='integer', help="Number of CPU threads for arrow, default 4"),
