@@ -353,6 +353,15 @@
                     "default": 5,
                     "fa_icon": "fas fa-atlas",
                     "description": "Number of color bins for continuous variables (default, 5)"
+                },
+                "leaflet_redundancy": {
+                    "type": "integer",
+                    "default": 0,
+                    "fa_icon": "fas fa-atlas",
+                    "description": "Redundancy threshold for hiding the grid cells with low number of records (default, 0 = display all grid cells)",
+                    "minimum": 0,
+                    "maximum": 1,
+                    "help_text": "Sampling redundancy = [1 \u2013 (richness / number of specimens)] in a grid cell."
                 }
             },
             "fa_icon": "fas fa-passport"
