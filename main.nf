@@ -179,7 +179,7 @@ if (params.helpMsg){
 }
 
 // Check if input path was provided
-if (params.input == false) {
+if (params.input == null) {
     println( "Please provide the directory with input data with `--input`")
     exit(1)
 }
