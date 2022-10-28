@@ -53,57 +53,6 @@ nextflow.enable.dsl = 2
 // Pipeline version
 version = '0.0.2'
 
-//// Initialize parameters, set default values
-
-params.scripts_path = "${projectDir}/bin"
-params.data_path = "${projectDir}/pipeline_data"
-
-// Filtering, stage I - "10_Filter_occurrences.R"
-params.input = false
-params.outdir = "${launchDir}/results"
-
-params.phylum = "NA"
-params.class  = "NA"
-params.order  = "NA"
-params.family = "NA"
-params.genus  = "NA"
-params.specieskeys = null
-
-params.country = "NA"
-params.latmin = "NA"
-params.latmax = "NA"
-params.lonmin = "NA"
-params.lonmax = "NA"
-params.minyear = 1945
-params.noextinct = null          // params.data_path + "/Fossil_IDs.RData"
-params.roundcoords = 2           // set to negative to disable rounding
-params.dbscannoccurrences = 30
-params.excludehuman = true       // exclude genus "Homo"
-
-// Filtering, stage II - "11_Additional_filtering_and_aggregation.R"
-params.h3resolution = 4
-params.dbscan = false
-params.dbscanepsilon = 1500
-params.dbscanminpts = 3
-params.terrestrial = params.data_path + "/Land_Buffered_025_dgr.RData"
-params.wgsrpd = null                // params.data_path + "/WGSRPD.RData"
-params.regions = "NA"
-params.rmcountrycentroids = null    // pipeline_data/CC_CountryCentroids_buf_1000m.RData
-params.rmcountrycapitals = null     // pipeline_data/CC_Capitals_buf_10000m.RData
-params.rminstitutions = null        // pipeline_data/CC_Institutions_buf_100m.RData
-params.rmurban = null               // pipeline_data/CC_Urban.RData
-
-// Filtered data aggregation - "12_Prepare_Biodiverse_input.R"
-params.phytree = null
-params.taxgroup = "All_life"
-params.phylabels = "Latin"
-if(params.phytree == null & params.phylabels == "OTT"){
-  println("No user-supplied phylogenetic tree was provided.")
-  println("Tree will be automatically fetched from the Open Tree of Life.")
-  println("!! Please set `--phylabels` parameter to `Latin`")
-  exit(1)
-}
-
 // Biodiverse
 params.indices = "calc_richness,calc_simpson_shannon,calc_endemism_whole,calc_pd,calc_pe,calc_phylo_rpd1,calc_phylo_rpd2,calc_phylo_rpe1,calc_phylo_rpe2"
 params.randname = "rand_structured"
@@ -126,24 +75,6 @@ else {
 biodiverse_args = "function=" + params.randname + " max_iters=" + iterations_per_thread
 
 
-
-// Visualization - static
-params.plotvar = "RICHNESS_ALL,PD,PD_P"
-params.plotformat = "pdf"
-params.plottype = "raw"
-params.plotwidth = 18
-params.plotheight = 18
-params.plotunits = "in"
-params.world = params.data_path + "/WorldMap_NaturalEarth_Medium.RData"
-
-// Visualization - Leaflet
-params.leaflet_var = "RICHNESS_ALL,PD,SES_PD,PD_P,ENDW_WE,SES_ENDW_WE,PE_WE,SES_PE_WE,CANAPE,Redundancy"
-params.leaflet_palette = "quantile"
-params.leaflet_color = "RdYlBu"
-params.leaflet_bins = 5
-
-// Help message flag
-params.helpMsg = false
 
 // Optional input files
 specieskeys        = params.specieskeys          ? file(params.specieskeys)      : file("${params.outdir}/no_file0") 
