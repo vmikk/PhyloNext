@@ -113,7 +113,7 @@ def helpMsg() {
         --outdir              The output directory where the results will be saved
     OPTIONAL:
         --phylum              Phylum to analyze (multiple comma-separated values allowed); e.g., "Chordata"
-        --class               Class to analyze (multiple comma-separated values allowed); e.g., "Mammalia"
+        --classis             Class to analyze (multiple comma-separated values allowed); e.g., "Mammalia"
         --order               Order to analyze (multiple comma-separated values allowed); e.g., "Carnivora"
         --family              Family to analyze (multiple comma-separated values allowed); e.g., "Felidae,Canidae"
         --genus               Genus to analyze (multiple comma-separated values allowed); e.g., "Felis,Canis,Lynx"
@@ -266,7 +266,7 @@ process occ_filter {
     10_Filter_occurrences.R \
       --input   ${input} \
       --phylum  ${params.phylum} \
-      --class   ${params.class} \
+      --class   ${params.classis} \
       --order   ${params.order} \
       --family  ${params.family} \
       --genus   ${params.genus} \
@@ -336,7 +336,7 @@ process record_count {
     10_Record_counts.R \
       --input   ${input} \
       --phylum  ${params.phylum} \
-      --class   ${params.class} \
+      --class   ${params.classis} \
       --order   ${params.order} \
       --family  ${params.family} \
       --genus   ${params.genus} \
