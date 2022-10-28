@@ -957,6 +957,22 @@ workflow {
     //         println "${it.text}"
     //     }
 
+    // Automatically retrive phylogenetic tree from Open Tree of Life
+    if(params.phytree == null){
+
+      // Get OTT IDs for species
+      prep_ott_ids(occ_filter.out.spp_all)
+
+      // Get the tree
+      get_ott_tree(prep_ott_ids.out.spp_ott)
+      phytree = get_ott_tree.out.tree
+
+    } else {
+    // Use user-supplied hylogenetic tree
+      phytree = file(params.phytree) 
+    }
+
+
     // Use output of for Biodiverse
     flt_ch = outl_high.out.sp.mix(outl_low.out.lowabsp).collect()
     // flt_ch.view()
