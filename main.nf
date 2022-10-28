@@ -75,6 +75,13 @@ else {
 biodiverse_args = "function=" + params.randname + " max_iters=" + iterations_per_thread
 
 
+// OTT-derived tree should have Latin tip names
+if(params.phytree == null & params.phylabels == "OTT"){
+  println("No user-supplied phylogenetic tree was provided.")
+  println("Tree will be automatically fetched from the Open Tree of Life.")
+  println("!! Please set `--phylabels` parameter to `Latin`")
+  exit(1)
+}
 
 // Optional input files
 specieskeys        = params.specieskeys          ? file(params.specieskeys)      : file("${params.outdir}/no_file0") 
