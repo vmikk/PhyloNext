@@ -49,10 +49,10 @@ suppressPackageStartupMessages(require(optparse))
 
 ## Parse arguments
 option_list <- list(
-  make_option(c("-r", "--observed"), action="store", default=NA, type='character', help="Input file (CSV) with Biodiverse results - observed indices"),
-  make_option(c("-s", "--sesscores"),  action="store", default=NA, type='character', help="Input file (CSV) with Biodiverse results - SES-scores"),
-  make_option(c("-q", "--sigscores"),  action="store", default=NA, type='character', help="Input file (CSV) with Biodiverse results - Randomization p-values"),
-  make_option(c("-n", "--reccounts"),  action="store", default=NA, type='character', help="File with the total number of (filtered) records per H3 cell"),
+  make_option(c("-r", "--observed"),  action="store", default=NA, type='character', help="Input file (CSV) with Biodiverse results - observed indices"),
+  make_option(c("-s", "--sesscores"), action="store", default=NA, type='character', help="Input file (CSV) with Biodiverse results - SES-scores"),
+  make_option(c("-q", "--sigscores"), action="store", default=NA, type='character', help="Input file (CSV) with Biodiverse results - Randomization p-values"),
+  make_option(c("-n", "--reccounts"), action="store", default=NA, type='character', help="File with the total number of (filtered) records per H3 cell"),
   make_option(c("-v", "--variables"), action="store", default="RICHNESS_ALL,PD,zPD,PD_P,zPD_P", type='character', help="Diversity variables to plot (comma-separated entries)"),
   make_option(c("-p", "--palette"), action="store", default="quantile", type='character', help="Color palette type"),
   make_option(c("-c", "--color"), action="store", default="RdYlBu", type='character', help="Color gradient scheme for the diversity indices (except for SES, CANAPE, and redundancy metrics)"),
@@ -86,7 +86,7 @@ if(is.na(opt$output)){
 
 ## Function to convert text "NA"s to NA
 to_na <- function(x){ 
-  if(x %in% "NA"){ x <- NA }
+  if(x %in% c("NA", "null", "Null"){ x <- NA }
   return(x)
 }
 

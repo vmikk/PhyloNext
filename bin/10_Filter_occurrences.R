@@ -84,7 +84,7 @@ if(is.na(opt$output)){
 
 ## Function to convert text "NA"s to NA
 to_na <- function(x){ 
-  if(x %in% "NA"){ x <- NA }
+  if(x %in% c("NA", "null", "Null"){ x <- NA }
   return(x)
 }
 
@@ -99,17 +99,17 @@ GENUS  <- to_na( opt$genus )
 SPECIESKEYS  <- to_na( opt$specieskeys )
 
 COUNTRY <- to_na( opt$country )
-LATMIN <- as.numeric( to_na(opt$latmin) )
-LATMAX <- as.numeric( to_na(opt$latmax) )
-LONMIN <- as.numeric( to_na(opt$lonmin) )
-LONMAX <- as.numeric( to_na(opt$lonmax) )
+LATMIN  <- as.numeric( to_na(opt$latmin) )
+LATMAX  <- as.numeric( to_na(opt$latmax) )
+LONMIN  <- as.numeric( to_na(opt$lonmin) )
+LONMAX  <- as.numeric( to_na(opt$lonmax) )
 
-MINYEAR <- as.numeric(to_na( opt$minyear) )
-EXTINCT <- to_na( opt$noextinct)
+MINYEAR      <- as.numeric(to_na( opt$minyear) )
+EXTINCT      <- to_na( opt$noextinct)
 EXCLUDEHUMAN <- as.logical( opt$excludehuman )
-ROUNDCOORDS <- as.numeric( opt$roundcoords )
-CPUTHREADS   <- as.numeric(opt$threads)
-OCCURRENCES  <- as.numeric(opt$noccurrences)
+ROUNDCOORDS  <- as.numeric( opt$roundcoords )
+CPUTHREADS   <- as.numeric( opt$threads )
+OCCURRENCES  <- as.numeric( opt$noccurrences )
 OUTPUT <- opt$output
 
 
@@ -130,7 +130,7 @@ cat(paste("Minimum longitude: ", LONMIN,  "\n", sep = ""))
 cat(paste("Maximum longitude: ", LONMAX,  "\n", sep = ""))
 
 cat(paste("Minimum year of occurrence: ", MINYEAR, "\n", sep=""))
-cat(paste("List of extict species: ", EXTINCT, "\n", sep=""))
+cat(paste("List of extict species: ",     EXTINCT, "\n", sep=""))
 cat(paste("Exclusion of human records: ", EXCLUDEHUMAN, "\n", sep=""))
 cat(paste("Round coordinates: ", ROUNDCOORDS, "\n", sep=""))
 

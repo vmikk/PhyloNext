@@ -75,11 +75,11 @@ suppressPackageStartupMessages(require(optparse))
 
 ## Parse arguments
 option_list <- list(
-  make_option(c("-r", "--observed"), action="store", default=NA, type='character', help="Input file (CSV) with Biodiverse results - observed indices"),
-  make_option(c("-z", "--randomized"),  action="store", default=NA, type='character', help="Input file (TXT) with paths to Biodiverse randomized results `rand--SPATIAL_RESULTS.csv`"),
+  make_option(c("-r", "--observed"),   action="store", default=NA, type='character', help="Input file (CSV) with Biodiverse results - observed indices"),
+  make_option(c("-z", "--randomized"), action="store", default=NA, type='character', help="Input file (TXT) with paths to Biodiverse randomized results `rand--SPATIAL_RESULTS.csv`"),
 
   make_option(c("-t", "--threads"), action="store", default=2L, type='integer', help="Number of CPU threads for arrow, default 4"),
-  make_option(c("-o", "--output"), action="store", default=NA, type='character', help="Output file")
+  make_option(c("-o", "--output"),  action="store", default=NA, type='character', help="Output file")
 )
 opt <- parse_args(OptionParser(option_list=option_list))
 
@@ -97,18 +97,18 @@ if(is.na(opt$output)){
 
 ## Function to convert text "NA"s to NA
 to_na <- function(x){ 
-  if(x %in% "NA"){ x <- NA }
+  if(x %in% c("NA", "null", "Null"){ x <- NA }
   return(x)
 }
 
 ## Assign variables
-OBSERVED <- opt$observed
+OBSERVED   <- opt$observed
 RANDOMIZED <- opt$randomized
 CPUTHREADS <- as.numeric(opt$threads)
-OUTPUT <- opt$output
+OUTPUT     <- opt$output
 
 ## Log assigned variables
-cat(paste("Input, observed values: ", OBSERVED, "\n", sep=""))
+cat(paste("Input, observed values: ",   OBSERVED, "\n", sep=""))
 cat(paste("Input, randomized values: ", RANDOMIZED, "\n", sep=""))
 cat(paste("Number of CPU threads to use: ", CPUTHREADS, "\n", sep=""))
 cat(paste("Output file: ", OUTPUT, "\n", sep=""))
