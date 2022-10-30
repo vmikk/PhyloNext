@@ -62,7 +62,7 @@ if(is.na(opt$output)){
 
 ## Function to convert text "NA"s to NA
 to_na <- function(x){ 
-  if(x %in% c("NA", "null", "Null"){ x <- NA }
+  if(x %in% c("NA", "null", "Null")){ x <- NA }
   return(x)
 }
 
