@@ -43,7 +43,7 @@ The pipeline could be launched in a cloud environment (e.g., the [Microsoft Azur
     ```console
     nextflow run vmikk/phylonext -r main \
       --input "/mnt/GBIF/Parquet/2022-01-01/occurrence.parquet/" \
-      --class "Mammalia" --family  "Felidae,Canidae" \
+      --classis "Mammalia" --family  "Felidae,Canidae" \
       --country "DE,PL,CZ"  \
       --minyear 2000  \
       --dbscan true  \
@@ -109,7 +109,7 @@ REQUIRED:
     --outdir              The output directory where the results will be saved
 OPTIONAL:
     --phylum              Phylum to analyze (multiple comma-separated values allowed); e.g., "Chordata"
-    --class               Class to analyze (multiple comma-separated values allowed); e.g., "Mammalia"
+    --classis             Class to analyze (multiple comma-separated values allowed); e.g., "Mammalia"
     --order               Order to analyze (multiple comma-separated values allowed); e.g., "Carnivora"
     --family              Family to analyze (multiple comma-separated values allowed); e.g., "Felidae,Canidae"
     --country             Country code, ISO 3166 (multiple comma-separated values allowed); e.g., "DE,PL,CZ"
