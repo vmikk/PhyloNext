@@ -57,7 +57,7 @@ The pipeline could be launched in a cloud environment (e.g., the [Microsoft Azur
 
 1. Nextflow installation:
 
-    Nextflow requires Java 8 (or later, up to 17) to be installed.
+    Nextflow requires Java 11 (or later, up to 18) to be installed.
     ```
     sudo apt-get update
     sudo apt-get install default-jdk
