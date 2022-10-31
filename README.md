@@ -112,25 +112,58 @@ OPTIONAL:
     --classis             Class to analyze (multiple comma-separated values allowed); e.g., "Mammalia"
     --order               Order to analyze (multiple comma-separated values allowed); e.g., "Carnivora"
     --family              Family to analyze (multiple comma-separated values allowed); e.g., "Felidae,Canidae"
+    --genus               Genus to analyze (multiple comma-separated values allowed); e.g., "Felis,Canis,Lynx"
+    --specieskeys         Custom list of GBIF specieskeys (file with a single column, with header)
+
+    --phytree             Custom phylogenetic tree
+    --taxgroup            Specific taxonomy group in Open Tree of Life (default, "All_life")
+    --phylabels           Type of tip labels on a phylogenetic tree ("OTT" or "Latin")
+
     --country             Country code, ISO 3166 (multiple comma-separated values allowed); e.g., "DE,PL,CZ"
     --latmin              Minimum latitude of species occurrences (decimal degrees); e.g., 5.1
     --latmax              Maximum latitude of species occurrences (decimal degrees); e.g., 15.5
     --lonmin              Minimum longitude of species occurrences (decimal degrees); e.g., 47.0
     --lonmax              Maximum longitude of species occurrences (decimal degrees); e.g., 55.5
     --minyear             Minimum year of record's occurrences; default, 1945
-    --noextinct           File with extinct species specieskeys for their removal
-    --roundcoords         Logical, round spatial coordinates to two decimal places, to reduce the dataset size (default, TRUE)
+    --wgsrpd              Polygons of World Geographical Regions; e.g., "pipeline_data/WGSRPD.RData"
+    --regions             Names of World Geographical Regions; e.g., "L1_EUROPE,L1_ASIA_TEMPERATE"
+    --noextinct           File with extinct species specieskeys for their removal (file with a single column, with header)
+    --excludehuman        Logical, exclude genus "Homo" from occurrence data (default, true)
+    --roundcoords         Numeric, round spatial coordinates to N decimal places, to reduce the dataset size (default, 2; set to negative to disable rounding)
     --h3resolution        Spatial resolution of the H3 geospatial indexing system; e.g., 4
+
     --dbscan              Logical, remove spatial outliers with density-based clustering; e.g., "false"
     --dbscannoccurrences  Minimum species occurrence to perform DBSCAN; e.g., 30
     --dbscanepsilon       DBSCAN parameter epsilon, km; e.g., "700"
     --dbscanminpts        DBSCAN min number of points; e.g., "3"
+
     --terrestrial         Land polygon for removal of non-terrestrial occurrences; e.g., "pipeline_data/Land_Buffered_025_dgr.RData"
-    --wgsrpd              Polygons of World Geographical Regions; e.g., "pipeline_data/WGSRPD.RData"
-    --regions             Names of World Geographical Regions; e.g., "L1_EUROPE,L1_ASIA_TEMPERATE"
+    --rmcountrycentroids  Polygons with country and province centroids; e.g., "pipeline_data/CC_CountryCentroids_buf_1000m.RData"
+    --rmcountrycapitals   Polygons with country capitals; e.g., "pipeline_data/CC_Capitals_buf_10000m.RData"
+    --rminstitutions      Polygons with biological institutuions and museums; e.g., "pipeline_data/CC_Institutions_buf_100m.RData"
+    --rmurban             Polygons with urban areas; e.g., "pipeline_data/CC_Urban.RData"
+
     --indices             Comma-seprated list of diversity and endemism indices; e.g., "calc_richness,calc_pd,calc_pe"
     --randname            Randomisation scheme type; e.g., "rand_structured"
     --iterations          Number of randomisation iterations; e.g., 1000
+    --biodiversethreads   Number of Biodiverse threads; e.g., 10
+
+Leaflet interactive visualization:
+    --leaflet_var         Variables to plot; e.g., "RICHNESS_ALL,PD,SES_PD,PD_P,ENDW_WE,SES_ENDW_WE,PE_WE,SES_PE_WE,CANAPE,Redundancy"
+    --leaflet_color       Color scheme for continuous variables (default, "RdYlBu")
+    --leaflet_palette     Color palette for continuous variables (default, "quantile")
+    --leaflet_bins        Number of color bins for continuous variables (default, 5)
+    --leaflet_redundancy  Redundancy threshold for hiding the grid cells with low number of records (default, 0 = display all grid cells)
+
+Static visualization:
+    --plotvar             Variables to plot (multiple comma-separated values allowed); e.g., "RICHNESS_ALL,PD,PD_P"
+    --plottype            Plot type
+    --plotformat          Plot format (jpg,pdf,png)
+    --plotwidth           Plot width (default, 18 inches)
+    --plotheight          Plot height (default, 18 inches)
+    --plotunits           Plot size units (in,cm)
+    --world               World basemap
+
 NEXTFLOW-SPECIFIC:
     -qs                   Queue size (max number of processes that can be executed in parallel); e.g., 8
 ```
