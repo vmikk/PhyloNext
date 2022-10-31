@@ -29,7 +29,7 @@ The pipeline could be launched in a cloud environment (e.g., the [Microsoft Azur
 
 ## Quick Start
 
-1. Install [`Nextflow`](https://www.nextflow.io/docs/latest/getstarted.html#installation) (`>=21.10.0`)
+1. Install [`Nextflow`](https://www.nextflow.io/docs/latest/getstarted.html#installation) (`>=22.10.0`)
 
 2. Install [`Docker`](https://docs.docker.com/engine/installation/)
 
