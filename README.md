@@ -36,7 +36,7 @@ The pipeline could be launched in a cloud environment (e.g., the [Microsoft Azur
 3. Download the pipeline and test it on a minimal dataset with a single command:
 
     ```console
-    nextflow run vmikk/phylonext -r main -profile test
+    nextflow run vmikk/phylonext -r main -profile test,docker
     ```
 4. Start running your own analysis!
 
