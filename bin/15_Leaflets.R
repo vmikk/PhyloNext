@@ -31,6 +31,10 @@ cat("Leaflet-based visualization of Biodiverse results\n")
 
 ## H3 grid cell index is represented as a 15-character hexadecimal string (e.g., `830021fffffffff`)
 
+## Output:
+# - Choropleth.html = Leaflet-based interactive map
+# - Biodiverse_results_merged.txt = Diversity metrics (per grid cell) in a tabular format
+# - Diversity_estimates.gpkg = Polygons with diversity metrics in GeoPackage format
 
 ## TO DO:
 # - fix SES legend (1000)
