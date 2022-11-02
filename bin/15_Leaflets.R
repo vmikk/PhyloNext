@@ -446,6 +446,14 @@ if(SHORTID == TRUE){
   rownames(H3_poly) <- res$H3
 }
 
+cat("..Exporting polygons with divsity estimates in GeoPackage format\n")
+## (using sf + GPKG driver of GDAL library)
+st_write(
+  obj = H3_poly,
+  dsn = "Diversity_estimates.gpkg",
+  layer = "diversity_estimates")
+
+
 ## Fix H3 polygons that cross the antimeridian by cutting them in two
 if(ANTIFIX == TRUE){
   cat("..Fixing antimeridian issue\n")
