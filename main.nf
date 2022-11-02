@@ -808,8 +808,9 @@ process plot_leaflet {
 
     output:
       path "Choropleth.html"
-      path "Choropleth_files", optional: true
+      path "Choropleth_files",              optional: true
       path "Biodiverse_results_merged.txt", optional: true
+      path "Diversity_estimates.gpkg"
 
     script:
 
