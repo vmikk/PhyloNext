@@ -224,7 +224,7 @@ if(!is.na(INPUTFILE)){
 
 cat("..Files found: ", length(fls), "\n")
 if(length(fls) == 0){
-  stop("ERROR: no filtered data found in the speciefied path.\n")
+  stop("ERROR: no filtered data found in the specified path.\n")
 }
 
 datt <- alply(.data = fls, .margins = 1,
