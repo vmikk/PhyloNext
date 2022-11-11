@@ -177,7 +177,7 @@ nextflow run vmikk/phylonext -r main -resume -params-file Mammals.yaml
 The YAML file could contain the following:
 ```
 input      : "/mnt/GBIF/Parquet/2022-01-01/occurrence.parquet/"
-class      : "Mammalia"
+classis    : "Mammalia"
 family     : "Felidae,Canidae"
 country    : "DE,PL,CZ"
 minyear    : 2000
