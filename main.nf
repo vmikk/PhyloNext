@@ -146,6 +146,8 @@ def helpMsg() {
         --rminstitutions      Polygons with biological institutuions and museums; e.g., "pipeline_data/CC_Institutions_buf_100m.RData"
         --rmurban             Polygons with urban areas; e.g., "pipeline_data/CC_Urban.RData"
         
+        --deriveddataset      Prepare a list of DOIs for the datasets used (default, true)
+
         --indices             Comma-seprated list of diversity and endemism indices; e.g., "calc_richness,calc_pd,calc_pe"
         --randname            Randomisation scheme type; e.g., "rand_structured"
         --iterations          Number of randomisation iterations; e.g., 1000
