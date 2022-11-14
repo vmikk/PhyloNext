@@ -1017,6 +1017,18 @@ workflow {
         div_to_csv.out.RND3,
         record_count.out.n_recr)
 
+    // Prepare a list of DOIs for the GBIF datasets
+    if(params.deriveddataset == true){
+      derived_datasets(
+        input_ch,
+        noextinct,
+        terrestrial,
+        rmcountrycentroids,
+        rmcountrycapitals,
+        rminstitutions,
+        rmurban)
+    }
+
 }
 
 
