@@ -491,6 +491,68 @@ process outl_high {
 // }
 
 
+// Prepare a list of DOIs for the GBIF datasets
+// Acrivated by `--deriveddataset` param
+process derived_datasets {
+
+    label "container_r"
+    queue "custom_pool"
+
+    publishDir "$params.tracedir", mode: 'copy'
+    // cpus 1
+
+    input:
+      path(input)
+      path(noextinct)
+      path(terrestrial)
+      path(rmcountrycentroids)
+      path(rmcountrycapitals)
+      path(rminstitutions)
+      path(rmurban)
+
+    output:
+      path "Dataset_DOIs.txt", emit: doi
+
+    script:
+
+    filter_specieskeys  = params.specieskeys        ? "--specieskeys $specieskeys" : ""
+    filter_extinct      = params.noextinct          ? "--noextinct $noextinct"     : ""
+    filter_terrestrial  = params.terrestrial        ? "--terrestrial $terrestrial" : ""
+    filter_country      = params.rmcountrycentroids ? "--rmcountrycentroids $rmcountrycentroids" : ""
+    filter_capitals     = params.rmcountrycapitals  ? "--rmcountrycapitals $rmcountrycapitals"   : ""
+    filter_institutions = params.rminstitutions     ? "--rminstitutions $rminstitutions" : ""
+    filter_urban        = params.rmurban            ? "--rmurban $rmurban" : ""
+
+    """
+    16_Derived_dataset.R \
+      --input   ${input} \
+      --phylum  ${params.phylum} \
+      --class   ${params.classis} \
+      --order   ${params.order} \
+      --family  ${params.family} \
+      --genus   ${params.genus} \
+      --country ${params.country} \
+      --latmin  ${params.latmin} \
+      --latmax  ${params.latmax} \
+      --lonmin  ${params.lonmin} \
+      --lonmax  ${params.lonmax} \
+      --minyear ${params.minyear} \
+      ${filter_specieskeys} \
+      ${filter_extinct} \
+      --excludehuman ${params.excludehuman} \
+      ${filter_terrestrial} \
+      ${filter_country} \
+      ${filter_capitals} \
+      ${filter_institutions} \
+      ${filter_urban} \
+      --roundcoords ${params.roundcoords} \
+      --resolution  ${params.h3resolution} \
+      --threads     ${task.cpus} \
+      --output      "Dataset_DOIs.txt"
+    """
+}
+
+
 // Prepare a list of OpenTree IDs (to obtain a phylogenetic tree)
 process prep_ott_ids {
 
