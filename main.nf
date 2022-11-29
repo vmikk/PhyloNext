@@ -1030,7 +1030,9 @@ workflow {
         rmcountrycentroids,
         rmcountrycapitals,
         rminstitutions,
-        rmurban)
+        rmurban,
+        merge_occ.out.occurrences
+        )
     }
 
 }
