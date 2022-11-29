@@ -20,6 +20,7 @@ cat("Preparation of derived dataset\n")
 #    --rmcountrycapitals  "pipeline_data/CC_Capitals_buf_10000m.RData" \
 #    --rminstitutions     "pipeline_data/CC_Institutions_buf_100m.RData" \
 #    --rmurban            "pipeline_data/CC_Urban.RData" \
+#    --speciestree        "02.Biodiverse_input/Trimmed_occurrences.csv" \
 #    --threads 10 \
 #    --output "Dataset_DOIs.txt"
 
@@ -50,6 +51,7 @@ option_list <- list(
   make_option("--family", action="store", default=NA, type='character', help="Comma-separated list of families to select"),
   make_option("--genus", action="store", default=NA, type='character', help="Comma-separated list of genera to select"),
   make_option("--specieskeys", action="store", default=NA, type='character', help="File with user-supplied GBIF specieskeys"),
+  make_option(c("-s", "--speciestree"), action="store", default=NA, type='character', help="File with specieskeys found in the phylogenetic tree (output of `12_Prepare_Biodiverse_input.R`)"),
   
   ## Spatial filters
   make_option("--country", action="store", default=NA, type='character', help="Comma-separated list of country codes (e.g., AU,CA)"),
@@ -73,6 +75,7 @@ option_list <- list(
   ## Spatial aggregation
   make_option(c("-r", "--resolution"), action="store", default=4L, type='integer', help="Spatial resolution of the H3 Geospatial Indexing System"),
   make_option(c("--roundcoords"), action="store", default=2L, type='integer', help="Round spatial coordinates to the N decimal places, to reduce the dataset size (default, 2). To disable, set to a negative value."),
+
 
   make_option(c("-t", "--threads"), action="store", default=4L, type='integer', help="Number of CPU threads for arrow, default 4")
 )
@@ -105,6 +108,7 @@ ORDER  <- to_na( opt$order )
 FAMILY <- to_na( opt$family )
 GENUS  <- to_na( opt$genus )
 SPECIESKEYS  <- to_na( opt$specieskeys )
+SPECIESTREE  <- to_na( opt$speciestree )
 
 COUNTRY <- to_na( opt$country )
 LATMIN  <- as.numeric( to_na(opt$latmin) )
@@ -138,6 +142,7 @@ cat(paste("Selected orders: ",   ORDER,  "\n", sep = ""))
 cat(paste("Selected families: ", FAMILY, "\n", sep = ""))
 cat(paste("Selected genera: ",   GENUS,  "\n", sep = ""))
 cat(paste("File with GBIF specieskeys: ", SPECIESKEYS,  "\n", sep = ""))
+cat(paste("File with species in phylogenetic tree: ", SPECIESTREE, "\n", sep=""))
 
 cat(paste("Country codes: ",     COUNTRY, "\n", sep = ""))
 cat(paste("Minimum latitude: ",  LATMIN,  "\n", sep = ""))
@@ -204,6 +209,12 @@ if(!is.na(SPECIESKEYS)){
   colnames(SPECIESKEYS) <- "specieskey"
   SPECIESKEYS <- unique(na.omit(SPECIESKEYS))
   cat("Specieskey list loaded. Number of records: ", nrow(SPECIESKEYS), "\n")
+}
+
+## Load specieskeys for taxa found in phylogenetic tree
+if(!is.na(SPECIESTREE)){
+  SPECIESTREE <- fread(file = SPECIESTREE, sep = ",")
+  cat("Specieskeys in phylogenetic tree: ", length(unique(SPECIESTREE$specieskey)), "\n")
 }
 
 
@@ -307,9 +318,15 @@ if(!is.na(GENUS)){
 }
 
 ## Custom specieskeys
-if(!is.na(SPECIESKEYS[[1]][1])){
+if(!is.na(SPECIESKEYS[[1]][1]) & is.na(SPECIESTREE[[1]][1])){
   cat("..Filtering by specieskeys\n")
   dsf <- dsf %>% filter(specieskey %in% SPECIESKEYS$specieskey)
+}
+
+## Specieskeys in phylogenetic tree
+if(!is.na(SPECIESTREE[[1]][1])){
+  cat("..Filtering by specieskeys in phylogenetic tree\n")
+  dsf <- dsf %>% filter(specieskey %in% unique(SPECIESTREE$specieskey))
 }
 
 
