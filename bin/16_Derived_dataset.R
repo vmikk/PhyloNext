@@ -251,11 +251,13 @@ quiet <- function(x) {
 # MINYEAR <- 2005
 # EXTINCT <- NA
 # EXCLUDEHUMAN <- TRUE
-# TERRESTRIAL <- "/home/mik/GitRepos_Forks/biodiverse-scripts/pipeline_data/Land_Buffered_025_dgr.RData"
-# CC_COUNTRY <- "/home/mik/GitRepos_Forks/biodiverse-scripts/pipeline_data/CC_CountryCentroids_buf_1000m.RData"
-# CC_CAPITAL <- "/home/mik/GitRepos_Forks/biodiverse-scripts/pipeline_data/CC_Capitals_buf_10000m.RData"
-# CC_INSTIT <- "/home/mik/GitRepos_Forks/biodiverse-scripts/pipeline_data/CC_Institutions_buf_100m.RData"
-# CC_URBAN <- "/home/mik/GitRepos_Forks/biodiverse-scripts/pipeline_data/CC_Urban.RData"
+# BASISINCL <- NA
+# BASISEXCL <- "FOSSIL_SPECIMEN,LIVING_SPECIMEN"
+# TERRESTRIAL <- " ~/.nextflow/assets/vmikk/phylonext/pipeline_data/Land_Buffered_025_dgr.RData"
+# CC_COUNTRY  <- " ~/.nextflow/assets/vmikk/phylonext/pipeline_data/CC_CountryCentroids_buf_1000m.RData"
+# CC_CAPITAL  <- " ~/.nextflow/assets/vmikk/phylonext/pipeline_data/CC_Capitals_buf_10000m.RData"
+# CC_INSTIT   <- " ~/.nextflow/assets/vmikk/phylonext/pipeline_data/CC_Institutions_buf_100m.RData"
+# CC_URBAN    <- " ~/.nextflow/assets/vmikk/phylonext/pipeline_data/CC_Urban.RData"
 # RESOLUTION <- 4L
 # ROUNDCOORDS <- 2L
 # set_cpu_count(10)
