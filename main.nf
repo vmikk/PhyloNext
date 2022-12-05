@@ -128,6 +128,8 @@ def helpMsg() {
         --lonmin              Minimum longitude of species occurrences (decimal degrees); e.g., 47.0
         --lonmax              Maximum longitude of species occurrences (decimal degrees); e.g., 55.5
         --minyear             Minimum year of record's occurrences; default, 1945
+        --basisofrecordinclude Basis of record to include from the data; e.g., "PRESERVED_SPECIMEN"
+        --basisofrecordexclude Basis of record to exclude from the data; e.g., "FOSSIL_SPECIMEN,LIVING_SPECIMEN"
         --wgsrpd              Polygons of World Geographical Regions; e.g., "pipeline_data/WGSRPD.RData"
         --regions             Names of World Geographical Regions; e.g., "L1_EUROPE,L1_ASIA_TEMPERATE"
         --noextinct           File with extinct species specieskeys for their removal (file with a single column, with header)
@@ -362,7 +364,7 @@ process record_count {
       --roundcoords ${params.roundcoords} \
       --resolution  ${params.h3resolution} \
       --threads     ${task.cpus} \
-      --output "Record_counts"
+      --output      "Record_counts"
 
     """
 }
