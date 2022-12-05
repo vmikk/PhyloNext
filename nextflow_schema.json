@@ -19,8 +19,8 @@
                     "format": "directory-path",
                     "mimetype": "text/csv",
                     "schema": "assets/schema_input.json",
-                    "description": "Path to the directory with parquet files (GBIF occurrcence dump)",
-                    "help_text": "Input data should be in the Parquet format. Could be stored locally or in the cloud (S3 or Azure Blob strorage).",
+                    "description": "Path to the directory with parquet files (GBIF occurrence dump)",
+                    "help_text": "Input data should be in the Parquet format. Could be stored locally or in the cloud (S3 or Azure Blob storage).",
                     "fa_icon": "fas fa-file-csv"
                 },
                 "outdir": {
@@ -248,7 +248,7 @@
                 "rminstitutions": {
                     "type": "string",
                     "fa_icon": "fas fa-laptop-house",
-                    "description": "Polygons with biological institutuions and museums; e.g., \"pipeline_data/CC_Institutions_buf_100m.RData\"",
+                    "description": "Polygons with biological institutions and museums; e.g., \"pipeline_data/CC_Institutions_buf_100m.RData\"",
                     "format": "file-path",
                     "default": "null"
                 },
@@ -369,7 +369,7 @@
                     "description": "Number of color bins for continuous variables (default, 5)"
                 },
                 "leaflet_redundancy": {
-                    "type": "integer",
+                    "type": "number",
                     "default": 0,
                     "fa_icon": "fas fa-atlas",
                     "description": "Redundancy threshold for hiding the grid cells with low number of records (default, 0 = display all grid cells)",
