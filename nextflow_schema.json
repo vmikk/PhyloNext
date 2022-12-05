@@ -187,6 +187,20 @@
                     "description": "Minimum year of record's occurrences; default, 1945",
                     "default": 1945
                 },
+                "basisofrecordinclude": {
+                    "type": "string",
+                    "default": "None",
+                    "help_text": "For details, see description of a Darwin Core term [Basis of record](https://docs.gbif.org/course-data-use/en/basis-of-record.html).",
+                    "fa_icon": "fas fa-clipboard",
+                    "description": "Basis of record to include from the data (default, all); e.g., \"PRESERVED_SPECIMEN\""
+                },
+                "basisofrecordexclude": {
+                    "type": "string",
+                    "default": "FOSSIL_SPECIMEN,LIVING_SPECIMEN",
+                    "help_text": "For details, see description of a Darwin Core term [Basis of record](https://docs.gbif.org/course-data-use/en/basis-of-record.html).",
+                    "description": "Basis of record to exclude from the data; e.g., \"FOSSIL_SPECIMEN,LIVING_SPECIMEN\" (default)",
+                    "fa_icon": "fas fa-clipboard"
+                },
                 "h3resolution": {
                     "type": "integer",
                     "default": 4,
