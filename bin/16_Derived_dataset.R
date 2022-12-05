@@ -64,6 +64,8 @@ option_list <- list(
   make_option("--minyear", action="store", default=1945, type='integer', help="Minimum year of occurrence (default, 1945)"),
   make_option("--noextinct", action="store", default=NA, type='character', help="Remove extinct species (provide a file with extinct specieskeys)"),
   make_option("--excludehuman", action="store", default=TRUE, type='logical', help="Exclude human records (genus Homo)"),
+  make_option("--basisofrecordinclude",  action="store", default=NA, type='character', help="Basis of record to include from the data"),
+  make_option("--basisofrecordexclude", action="store", default="FOSSIL_SPECIMEN,LIVING_SPECIMEN", type='character', help="Basis of record to exclude from the data"),
 
   ## Spatial filters (shapefile-based)
   make_option(c("-l", "--terrestrial"), action="store", default=NA, type='character', help="Remove non-terrestrial occurrences, provide land polygon in sf-format"),
@@ -120,6 +122,9 @@ MINYEAR <- as.numeric(to_na( opt$minyear) )
 EXTINCT <- to_na( opt$noextinct)
 EXCLUDEHUMAN <- as.logical( opt$excludehuman )
 
+BASISINCL <- to_na( opt$basisofrecordinclude )
+BASISEXCL <- to_na( opt$basisofrecordexclude )
+
 TERRESTRIAL <- to_na( opt$terrestrial )
 CC_COUNTRY  <- to_na( opt$rmcountrycentroids )
 CC_CAPITAL  <- to_na( opt$rmcountrycapitals )
@@ -150,6 +155,8 @@ cat(paste("Maximum latitude: ",  LATMAX,  "\n", sep = ""))
 cat(paste("Minimum longitude: ", LONMIN,  "\n", sep = ""))
 cat(paste("Maximum longitude: ", LONMAX,  "\n", sep = ""))
 
+cat(paste("Basis of record to include: ", BASISINCL, "\n", sep=""))
+cat(paste("Basis of record to exclude: ", BASISEXCL, "\n", sep=""))
 cat(paste("Minimum year of occurrence: ", MINYEAR, "\n", sep=""))
 cat(paste("List of extict species: ",     EXTINCT, "\n", sep=""))
 cat(paste("Exclusion of human records: ", EXCLUDEHUMAN, "\n", sep=""))
@@ -270,7 +277,6 @@ dsf <- ds %>%
   filter(!is.na(species)) %>%
   filter(taxonrank %in% c("SPECIES", "SUBSPECIES", "VARIETY", "FORM")) %>%
   filter(occurrencestatus == "PRESENT") %>%
-  filter(!basisofrecord %in% c("FOSSIL_SPECIMEN","LIVING_SPECIMEN")) %>%
   filter(!establishmentmeans %in% c("MANAGED", "INTRODUCED", "INVASIVE", "NATURALISED")) %>%
   filter(!is.na(decimallongitude)) %>% 
   filter(!is.na(decimallatitude)) %>% 
@@ -279,6 +285,34 @@ dsf <- ds %>%
   filter(coordinateprecision < 0.1 | is.na(coordinateprecision)) %>% 
   filter(coordinateuncertaintyinmeters < 10000 | is.na(coordinateuncertaintyinmeters)) %>%
   filter(!coordinateuncertaintyinmeters %in% c(301, 3036, 999, 9999))
+
+## Basis of record filters
+if(!is.na(BASISINCL) & !is.na(BASISEXCL)){
+  cat("..Filtering by basis of record (inclusion and exclusion)\n")
+
+  BASISINCL <- strsplit(x = BASISINCL, split = ",")[[1]]
+  BASISEXCL <- strsplit(x = BASISEXCL, split = ",")[[1]]
+
+  ## Check if selected values are not mutually exclusive
+  if(length(intersect(BASISINCL, BASISEXCL)) > 0){
+    stop("Mutually exclusive basis of record selected!\n")
+  }
+
+  dsf <- dsf %>% 
+    filter( (!basisofrecord %in% BASISEXCL) & (basisofrecord %in% BASISINCL) )
+}
+if(!is.na(BASISINCL) & is.na(BASISEXCL)){
+  cat("..Filtering by basis of record (inclusion only)\n")
+
+  BASISINCL <- strsplit(x = BASISINCL, split = ",")[[1]]
+  dsf <- dsf %>% filter( basisofrecord %in% BASISINCL )
+}
+if(is.na(BASISINCL) & ! is.na(BASISEXCL)){
+  cat("..Filtering by basis of record (exclusion only)\n")
+
+  BASISEXCL <- strsplit(x = BASISEXCL, split = ",")[[1]]
+  dsf <- dsf %>% filter( ! basisofrecord %in% BASISEXCL )
+}
 
 ## Year
 if(!is.na(MINYEAR)){
