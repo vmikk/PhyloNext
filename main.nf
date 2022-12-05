@@ -277,6 +277,8 @@ process occ_filter {
       --lonmin  ${params.lonmin} \
       --lonmax  ${params.lonmax} \
       --minyear ${params.minyear} \
+      --basisofrecordinclude ${params.basisofrecordinclude} \
+      --basisofrecordexclude ${params.basisofrecordexclude} \
       ${filter_specieskeys} \
       ${filter_extinct} \
       --excludehuman ${params.excludehuman} \
@@ -347,6 +349,8 @@ process record_count {
       --lonmin  ${params.lonmin} \
       --lonmax  ${params.lonmax} \
       --minyear ${params.minyear} \
+      --basisofrecordinclude ${params.basisofrecordinclude} \
+      --basisofrecordexclude ${params.basisofrecordexclude} \
       ${filter_specieskeys} \
       ${filter_extinct} \
       --excludehuman ${params.excludehuman} \
@@ -637,6 +641,8 @@ process derived_datasets {
       --lonmin  ${params.lonmin} \
       --lonmax  ${params.lonmax} \
       --minyear ${params.minyear} \
+      --basisofrecordinclude ${params.basisofrecordinclude} \
+      --basisofrecordexclude ${params.basisofrecordexclude} \
       ${filter_specieskeys} \
       --speciestree ${speciesinphylotree} \
       ${filter_extinct} \
