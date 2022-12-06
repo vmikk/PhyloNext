@@ -53,9 +53,9 @@ Main pipeline parameters and output are desribed here:
 
 To show a help message, run `nextflow run vmikk/phylonext -r main --helpMsg`.
 ```
-====================================================================
-GBIF phylogenetic diversity pipeline :  Version 0.0.1
-====================================================================
+=====================================================================
+PhyloNext: GBIF phylogenetic diversity pipeline :  Version 1.0
+=====================================================================
 
 Pipeline Usage:
 To run the pipeline, enter the following in the command line:
@@ -83,6 +83,8 @@ OPTIONAL:
     --lonmin              Minimum longitude of species occurrences (decimal degrees); e.g., 47.0
     --lonmax              Maximum longitude of species occurrences (decimal degrees); e.g., 55.5
     --minyear             Minimum year of record's occurrences; default, 1945
+    --basisofrecordinclude Basis of record to include from the data; e.g., "PRESERVED_SPECIMEN"
+    --basisofrecordexclude Basis of record to exclude from the data; e.g., "FOSSIL_SPECIMEN,LIVING_SPECIMEN"
     --wgsrpd              Polygons of World Geographical Regions; e.g., "pipeline_data/WGSRPD.RData"
     --regions             Names of World Geographical Regions; e.g., "L1_EUROPE,L1_ASIA_TEMPERATE"
     --noextinct           File with extinct species specieskeys for their removal (file with a single column, with header)
@@ -100,6 +102,8 @@ OPTIONAL:
     --rmcountrycapitals   Polygons with country capitals; e.g., "pipeline_data/CC_Capitals_buf_10000m.RData"
     --rminstitutions      Polygons with biological institutuions and museums; e.g., "pipeline_data/CC_Institutions_buf_100m.RData"
     --rmurban             Polygons with urban areas; e.g., "pipeline_data/CC_Urban.RData"
+
+    --deriveddataset      Prepare a list of DOIs for the datasets used (default, true)
 
     --indices             Comma-seprated list of diversity and endemism indices; e.g., "calc_richness,calc_pd,calc_pe"
     --randname            Randomisation scheme type; e.g., "rand_structured"
@@ -124,6 +128,9 @@ Static visualization:
 
 NEXTFLOW-SPECIFIC:
     -qs                   Queue size (max number of processes that can be executed in parallel); e.g., 8
+    -w                    Path to the working directory to store intermediate results (default, "./work")
+    -resume               Execute the pipeline using the cached results.<br>Useful to continue executions that was stopped by an error
+    -profile              Configuration profile; e.g., "docker"
 ```
 
 
