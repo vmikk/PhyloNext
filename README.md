@@ -133,55 +133,39 @@ NEXTFLOW-SPECIFIC:
     -profile              Configuration profile; e.g., "docker"
 ```
 
+## Credits
 
+PhyloNext pipeline was developed by Vladimir Mikryukov and Kessy Abarenkov.
 
-#### The other helpful commands
+[Biodiverse program](https://shawnlaffan.github.io/biodiverse/) and Perl scripts accompanying PhyloNext were written by [Shawn Laffan](https://github.com/shawnlaffan) (Laffan et al., 2010).
 
-```
-## Download or update the pipeline
-## By default, the pipeiline is stored in the '~/.nextflow/assets/vmikk/PhyloNext' directory
-nextflow pull vmikk/phylonext
+Scripts for getting an induced subtree from the Open Tree of Life were developed by [Emily Jane McTavish](https://github.com/snacktavish).
 
-## Run the latest development version of the pipeline
-nextflow run vmikk/phylonext -r main ...
+We thank the following people for their extensive assistance in the development of this pipeline: Joe Miller, Shawn Laffan, Tim Robertson, Emily Jane McTavish, John Waller, Thomas Stjernegaard Jeppesen, and Matthew Blissett.
 
-## Run the tagged version (e.g., v0.1) of the pipeline
-nextflow run vmikk/phylonext -r v0.1 ...
+Also we are very grateful to [Manuele Simi](https://github.com/manuelesimi) and [nf-core](https://nf-co.re/) community for helpful advices on the development of this pipeline.
 
-## Print the pipeline and system runtime information
-nextflow info
-nextflow info vmikk/phylonext
-
-## Delete the local copy of the pipeline
-nextflow drop vmikk/phylonext
-```
-
-#### Obtaining a local snapshot of species occurrences from GBIF
-
-If you would like to run the pipeline locally, you may download the GBIF occurrence dump from the [Amazon AWS cloud](https://registry.opendata.aws/gbif/) using the [AWS CLI program](https://aws.amazon.com/cli/) (No AWS account required). E.g., to download `2022-05-01` dump to the `GBIF` directory in your home folder run:
-```
-aws s3 sync \
-  s3://gbif-open-data-eu-central-1/occurrence/2022-05-01/occurrence.parquet/ \
-  ~/GBIF/ \
-  --no-sign-request
-```
-
-Alternative GBIF snapshot is also [hosted by the Microsoft AI for Earth program](https://github.com/microsoft/AIforEarthDataSets/blob/main/data/gbif.md). To download it using the [AzCopy command-line utility](https://docs.microsoft.com/en-us/azure/storage/common/storage-use-azcopy-v10) run:
-```
-azcopy copy \
-  "https://ai4edataeuwest.blob.core.windows.net/gbif/occurrence/2022-05-01/occurrence.parquet/*" \
-  "~/GBIF/" \
-  --recursive=true
-```
-
-
-
-
+For more details, please see the [Acknowledgments section](https://phylonext.github.io/acknowledgements/) in the docs.
 
 ## Funding
 
 The work is supported by a grant “PD (Phylogenetic Diversity) in the Cloud” to GBIF Supplemental funds from the GEO-Microsoft Planetary Computer Programme.
+
+## Contributions and Support
+
+If you would like to contribute to this pipeline, please see the [contributing guidelines](CONTRIBUTING.md).
+
+For further information or help, don't hesitate to file an [issue on GitHub](https://github.com/vmikk/PhyloNext/issues).
+
 ## Future plans
 
 - Add support of [`Shifter`](https://nersc.gitlab.io/development/shifter/how-to-use/) or [`Charliecloud`](https://hpc.github.io/charliecloud/) containers.
+
+## Citations
+
+If you use PhyloNext pipeline for your analysis, please cite it using the following DOI: [10.5281/zenodo.XXXXXX](https://doi.org/10.5281/zenodo.XXXXXX)
+
+Laffan SW, Lubarsky E, Rosauer DF (2010) Biodiverse, a tool for the spatial analysis of biological and related diversity. Ecography, 33: 643-647. [DOI: 10.1111/j.1600-0587.2010.06237.x](https://onlinelibrary.wiley.com/doi/10.1111/j.1600-0587.2010.06237.x)
+
+An extensive list of references for the tools used by the pipeline can be found in the [Citations](https://phylonext.github.io/citations/) section in the documentation.
 
