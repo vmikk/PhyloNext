@@ -26,19 +26,9 @@ The pipeline could be launched in a cloud environment (e.g., the [Microsoft Azur
 5. Estimation of phylogenetic diversity and endemism indices using [Biodiverse program](https://shawnlaffan.github.io/biodiverse/)
 6. Visualization of the obtained results
 
-
 ## Quick Start
 
-1. Install [`Nextflow`](https://www.nextflow.io/docs/latest/getstarted.html#installation) (`>=22.10.0`)
-
-2. Install [`Docker`](https://docs.docker.com/engine/installation/)
-
-3. Download the pipeline and test it on a minimal dataset with a single command:
-
-    ```console
-    nextflow run vmikk/phylonext -r main -profile test,docker
-    ```
-4. Start running your own analysis!
+An example command to run the pipilene:
 
     ```console
     nextflow run vmikk/phylonext -r main \
@@ -47,52 +37,20 @@ The pipeline could be launched in a cloud environment (e.g., the [Microsoft Azur
       --country "DE,PL,CZ"  \
       --minyear 2000  \
       --dbscan true  \
-      --phytree  $(realpath "${HOME}/.nextflow/assets/vmikk/phylonext/test_data/phy_trees/Mammals.nwk") \
+      --phytree $(realpath "${HOME}/.nextflow/assets/vmikk/phylonext/test_data/phy_trees/Mammals.nwk") \
       --iterations 100  \
-      --outdir "$PWD" \
       -resume
     ```
 
-### Installation example on Ubuntu
-
-1. Nextflow installation:
-
-    Nextflow requires Java 11 (or later, up to 18) to be installed.
-    ```
-    sudo apt-get update
-    sudo apt-get install default-jdk
-    ```
-    Install Nextflow:
-    ```
-    wget -qO- https://get.nextflow.io | bash
-    chmod +x ./nextflow
-    mkdir -p ~/bin & mv ./nextflow ~/bin/
-    ```
-
-2. Docker installation (for details see [the official Docker documentation](https://docs.docker.com/engine/install/ubuntu/)):
-    ```
-    sudo apt-get update
-    sudo apt-get install ca-certificates curl gnupg lsb-release
-
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-
-    echo \
-      "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
-      $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-
-    sudo apt-get update
-    sudo apt-get install docker-ce docker-ce-cli containerd.io
-
-    sudo usermod -aG docker $USER
-    newgrp docker
-    ```
-
-### Singularity
-
-As Docker is NOT supported in most HPC systems, it's possible to run the pipeline using [Singularity](https://sylabs.io/singularity/).
-
-
 ## Documentation
+
+The PhyloNext pipeline comes with documentation about the pipeline usage 
+at [https://phylonext.github.io/](https://phylonext.github.io/).  
+
+Main pipeline parameters and output are desribed here:
+- [parameters](https://phylonext.github.io/parameters/)
+- [output](https://phylonext.github.io/outputs.md)
+
 To show a help message, run `nextflow run vmikk/phylonext -r main --helpMsg`.
 ```
 ====================================================================
@@ -168,24 +126,6 @@ NEXTFLOW-SPECIFIC:
     -qs                   Queue size (max number of processes that can be executed in parallel); e.g., 8
 ```
 
-#### Passing in an input parameter file
-
-It is possible to pass the pipeline parameters via YAML or JSON file, e.g.:
-```
-nextflow run vmikk/phylonext -r main -resume -params-file Mammals.yaml
-```
-The YAML file could contain the following:
-```
-input      : "/mnt/GBIF/Parquet/2022-01-01/occurrence.parquet/"
-classis    : "Mammalia"
-family     : "Felidae,Canidae"
-country    : "DE,PL,CZ"
-minyear    : 2000
-dbscan     : true
-phytree    : "/path/to/the/phylogenetic/tree.nwk"
-iterations : 100
-outdir     : "${launchDir}"
-```
 
 
 #### The other helpful commands
