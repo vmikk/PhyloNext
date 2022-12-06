@@ -30,17 +30,17 @@ The pipeline could be launched in a cloud environment (e.g., the [Microsoft Azur
 
 An example command to run the pipilene:
 
-    ```console
-    nextflow run vmikk/phylonext -r main \
-      --input "/mnt/GBIF/Parquet/2022-01-01/occurrence.parquet/" \
-      --classis "Mammalia" --family  "Felidae,Canidae" \
-      --country "DE,PL,CZ"  \
-      --minyear 2000  \
-      --dbscan true  \
-      --phytree $(realpath "${HOME}/.nextflow/assets/vmikk/phylonext/test_data/phy_trees/Mammals.nwk") \
-      --iterations 100  \
-      -resume
-    ```
+```bash
+nextflow run vmikk/phylonext -r main \
+  --input "/mnt/GBIF/Parquet/2022-01-01/occurrence.parquet/" \
+  --classis "Mammalia" --family  "Felidae,Canidae" \
+  --country "DE,PL,CZ"  \
+  --minyear 2000  \
+  --dbscan true  \
+  --phytree $(realpath "${HOME}/.nextflow/assets/vmikk/phylonext/test_data/phy_trees/Mammals.nwk") \
+  --iterations 100  \
+  -resume
+```
 
 ## Documentation
 
