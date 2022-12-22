@@ -174,6 +174,11 @@ def helpMsg() {
 
     NEXTFLOW-SPECIFIC:
         -qs                   Queue size (max number of processes that can be executed in parallel); e.g., 8
+        -w                    Path to the working directory to store intermediate results (default, "./work")
+        -resume               Execute the pipeline using the cached results.<br>Useful to continue executions that was stopped by an error
+        -profile              Configuration profile; e.g., "docker"
+        -params-file          Parameter file in YAML or JSON format (e.g., "Mammals.yaml")
+        -c / -C               Configuration file (`-C` ignores all default values) (default, "nextflow.config")
     """.stripIndent()
 }
 // Show help msg
