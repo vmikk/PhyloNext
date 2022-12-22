@@ -120,6 +120,8 @@ def helpMsg() {
         --phytree             Custom phylogenetic tree
         --taxgroup            Specific taxonomy group in Open Tree of Life (default, "All_life")
         --phylabels           Type of tip labels on a phylogenetic tree ("OTT" or "Latin")
+        --maxage              Manually assign root age for a tree obtained from Open Tree of Life; e.g., 127
+        --phyloonly           Prune Open Tree tips for which there are no phylogenetic inputs; logical, default, false
 
         --country             Country code, ISO 3166 (multiple comma-separated values allowed); e.g., "DE,PL,CZ"
         --latmin              Minimum latitude of species occurrences (decimal degrees); e.g., 5.1
