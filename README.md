@@ -76,6 +76,8 @@ OPTIONAL:
     --phytree             Custom phylogenetic tree
     --taxgroup            Specific taxonomy group in Open Tree of Life (default, "All_life")
     --phylabels           Type of tip labels on a phylogenetic tree ("OTT" or "Latin")
+    --maxage              Manually assign root age for a tree obtained from Open Tree of Life; e.g., 127
+    --phyloonly           Prune Open Tree tips for which there are no phylogenetic inputs; logical, default, false
 
     --country             Country code, ISO 3166 (multiple comma-separated values allowed); e.g., "DE,PL,CZ"
     --latmin              Minimum latitude of species occurrences (decimal degrees); e.g., 5.1
@@ -131,6 +133,8 @@ NEXTFLOW-SPECIFIC:
     -w                    Path to the working directory to store intermediate results (default, "./work")
     -resume               Execute the pipeline using the cached results.<br>Useful to continue executions that was stopped by an error
     -profile              Configuration profile; e.g., "docker"
+    -params-file          Parameter file in YAML or JSON format (e.g., "Mammals.yaml")
+    -c / -C               Configuration file (`-C` ignores all default values) (default, "nextflow.config")
 ```
 
 ## Credits
