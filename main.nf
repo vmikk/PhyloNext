@@ -555,11 +555,17 @@ process get_ott_tree {
       path "synth.log"
 
     script:
+    max_age    = params.maxage    ? "--max-age ${params.maxage}" : ""
+    phylo_only = params.phyloonly ? "--phylo-only" : ""
+
     """
     induced_synth_subtree_from_csv.py \
       --query ${spp_ott} \
       --output_dir "\$(pwd)" \
-      --label_format "name"
+      --label_format "name" \
+      ${max_age} \
+      ${phylo_only}
+
     """
 }
 
