@@ -17,7 +17,6 @@
 //   E.g., Define RAM limits based on file size
 //   memory = { bam.size() < 1000000000 ? 4.GB : check_max( ( bam.size()/1024/1024/1024) * 10.GB * task.attempt, 'memory')}
 // - 15_Leaflets.R - add coordinates of H3 cells and re-order columns
-// - add 'R.utils' to the container - 'install.packages('R.utils') !!
 // - add script names and descriptions to log files
 // - add corrected phylogenetic endemism to the default indices? (CPE = PE / PD)
 // - check `12_Prepare_Biodiverse_input.R` logs with Latin tip names (Species names not found in the phylogenetic tree ...)
