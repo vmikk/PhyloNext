@@ -1,6 +1,6 @@
 # Docker image with R packages required for GBIF occurrence filtering
 
-FROM rocker/r-ver:4.2.1
+FROM rocker/r-ver:4.2.2
 
 MAINTAINER vladimir.mikryukov@ut.ee
 
@@ -35,6 +35,9 @@ RUN install2.r --error --skipinstalled --ncpus -1 \
     dbscan \
     doFuture \
     webshot \
+    R.utils \
+    tinytest \
+    covr \
     && R -e 'remotes::install_github("crazycapivara/h3-r")' \
     && R -e 'remotes::install_github("chgrl/leafletR")' \
     && R -e 'remotes::install_github("r-spatial/mapview")' \
