@@ -49,7 +49,7 @@ at [https://phylonext.github.io/](https://phylonext.github.io/).
 
 Main pipeline parameters and output are desribed here:
 - [parameters](https://phylonext.github.io/parameters/)
-- [output](https://phylonext.github.io/outputs.md)
+- [output](https://phylonext.github.io/outputs/)
 
 To show a help message, run `nextflow run vmikk/phylonext -r main --helpMsg`.
 ```
