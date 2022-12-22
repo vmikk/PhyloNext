@@ -144,18 +144,20 @@ date_cites_file.write(date_citations)
 print("Node annotations\n", file=sys.stderr)
 node_annotations = annotations.generate_synth_node_annotation(dated_tree)
 
-# translation_dict = {}
-# for node in node_annotations:
-#     if node in taxa:
-#         translation_dict[node] = taxa[node]["species"]
-# 
-# annotations.write_itol_relabel(
-#     translation_dict, filename=args.output_dir + "/ottlabel.txt"
-# )
-# 
-# for tip in dated_tree.leaf_node_iter():
-#     tip.taxon.label = translation_dict[tip.taxon.label]
+translation_dict = {}
+for node in node_annotations:
+    if node in taxa:
+        translation_dict[node] = taxa[node]["species"]
 
+annotations.write_itol_relabel(
+    translation_dict, filename=args.output_dir + "/ottlabel.txt"
+)
+
+for tip in dated_tree.leaf_node_iter():
+    if tip.taxon.label in translation_dict:
+        tip.taxon.label = translation_dict[tip.taxon.label]
+    else:
+        print(f"No translation for {tip.taxon.label}")
 
 dated_tree.write(path=args.output_dir + "/ott_label_dated_tree.tre", schema="newick")
 
