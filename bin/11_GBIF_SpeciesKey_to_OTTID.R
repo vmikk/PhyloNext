@@ -5,7 +5,7 @@
 ## Output will be used as input for `induced_synth_subtree_from_csv.py` script
 
 cat("Species-level filtering of occurrence data and spatial binning\n")
-cat("Script name: 11_GBIF_SpeciesKet_to_OTTID.R\n")
+cat("Script name: 11_GBIF_SpeciesKey_to_OTTID.R\n")
 
 ## Usage:
 # ./11_GBIF_SpeciesKet_to_OTTID.R \
