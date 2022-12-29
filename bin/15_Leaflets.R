@@ -825,6 +825,8 @@ cat("..Exporting the results\n")
 ## Use mapdeck as the rendering platform instead of leaflet
 # mapviewOptions(platform = "mapdeck")
 
+cat("...Exporting Choropleth map in HTML\n")
+
 ## Save a leaflet map as .html
 mapshot(
   m,
@@ -839,6 +841,10 @@ mapshot(
 
 # library(htmlwidgets)
 # saveWidget(m, file="m.html")
+
+cat("...Exporting Leaflet object\n")
+
+saveRDS(object = m, file = "Leaflet_object.RData", compress = "xz")
 
 
 cat("Plotting finished\n")
