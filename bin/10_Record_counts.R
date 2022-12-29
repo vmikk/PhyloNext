@@ -293,19 +293,23 @@ if(!is.na(BASISINCL) & !is.na(BASISEXCL)){
 
   dsf <- dsf %>% 
     filter( (!basisofrecord %in% BASISEXCL) & (basisofrecord %in% BASISINCL) )
-}
-if(!is.na(BASISINCL) & is.na(BASISEXCL)){
+
+} else if (!is.na(BASISINCL) & is.na(BASISEXCL)){
   cat("..Filtering by basis of record (inclusion only)\n")
 
   BASISINCL <- strsplit(x = BASISINCL, split = ",")[[1]]
   dsf <- dsf %>% filter( basisofrecord %in% BASISINCL )
-}
-if(is.na(BASISINCL) & ! is.na(BASISEXCL)){
+
+} else if (is.na(BASISINCL) & ! is.na(BASISEXCL)){
   cat("..Filtering by basis of record (exclusion only)\n")
 
   BASISEXCL <- strsplit(x = BASISEXCL, split = ",")[[1]]
   dsf <- dsf %>% filter( ! basisofrecord %in% BASISEXCL )
+
+} else {
+  cat("..No filtering based on `Basis of record` field\n")
 }
+
 
 ## Year
 if(!is.na(MINYEAR)){
