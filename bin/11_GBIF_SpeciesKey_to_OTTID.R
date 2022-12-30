@@ -240,6 +240,12 @@ setcolorder(x = spnames, neworder = c(
 cat("..Number of species found in OTT: ", length(na.omit(unique(spnames$ott_id))), "\n")
 cat("..Number of species without matches in OTT: ", sum(is.na(spnames$ott_id)), "\n")
 
+if(any(is.na(spnames$ott_id))){
+  cat("WARNING: there are species without OTT IDs in the data! They will be excluded.\n")
+  cat("..GBIF specieskeys without matches in OTT: ", paste(spnames[ is.na(ott_id) ]$specieskey, collapse = ", "), "\n")
+  spnames <- spnames[ ! is.na(ott_id) ]
+}
+
 if(any(duplicated(spnames$ott_id))){
   cat("WARNING: there are non-unique OTT IDs in the data!\n")
   cat("..Number of duplicated OTT IDs: ", sum(duplicated(spnames$ott_id)), "\n")
