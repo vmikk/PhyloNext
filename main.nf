@@ -522,7 +522,7 @@ process prep_ott_ids {
 
     script:
     """
-    11_GBIF_SpeciesKet_to_OTTID.R \
+    11_GBIF_SpeciesKey_to_OTTID.R \
       --input    ${spp_all} \
       --taxgroup ${params.taxgroup} \
       --threads  ${task.cpus} \
