@@ -243,6 +243,7 @@ cat("..Number of species without matches in OTT: ", sum(is.na(spnames$ott_id)), 
 if(any(duplicated(spnames$ott_id))){
   cat("WARNING: there are non-unique OTT IDs in the data!\n")
   cat("..Number of duplicated OTT IDs: ", sum(duplicated(spnames$ott_id)), "\n")
+  cat("..Duplicates: ", paste(spnames$ott_id[ duplicated(spnames$ott_id) ], collapse = ", "), "\n")
 }
 
 ## Export results
