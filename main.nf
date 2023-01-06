@@ -16,26 +16,22 @@
 // - Dynamic computing resources for intensive tasks: https://www.nextflow.io/docs/latest/process.html#dynamic-computing-resources
 //   E.g., Define RAM limits based on file size
 //   memory = { bam.size() < 1000000000 ? 4.GB : check_max( ( bam.size()/1024/1024/1024) * 10.GB * task.attempt, 'memory')}
+//   memory { reads.size() < 70.KB ? 1.GB : 5.GB }
 // - 15_Leaflets.R - add coordinates of H3 cells and re-order columns
-// - add script names and descriptions to log files
-// - add corrected phylogenetic endemism to the default indices? (CPE = PE / PD)
 // - check `12_Prepare_Biodiverse_input.R` logs with Latin tip names (Species names not found in the phylogenetic tree ...)
 // - export outlier summary stats
 // - implement pre-computed outliers (in 10_Filtering and 10_Records)
 // - mask map-values based on a coverage threshold
-// - add country filter (gbif issues)
-// - local OTOL tax dump
+// - pre-built OTOL tax dump (do species name matching locally)
 // - add filtering summary (per species)
 // - autoname outdir (with current date?)
 // - add a text file with parameter summary to the results
-// - Vizualization: add channel with PD index names?
+// - Static vizualization: add channel with PD index names?
 // - include sha256 hash of the image in the container reference: https://www.nextflow.io/blog/2016/docker-and-nextflow.html
 // - add azure profiles
 // - Fix `10_Filter_occurrences.R`   In value[[3L]](cond) : double expected, got “NA”
 // - Add spatial constraints for the randomizations (e.g., shapefile with biomes?)
-// - For species name matchin to the Open Tree Taxonomy - use pre-built DB?
 // - Add alternative outlier detection algorithm (e.g., OPTICS algorithm)
-// - Add spatial constraints for randomizations (e.g., within biome)
 // - Split the pipeline into workflows?
 // - Colorize verbose messages
 // - Choose location for singularity image caching: with `singularity.cacheDir` or `NXF_SINGULARITY_CACHEDIR`
