@@ -4,6 +4,7 @@
 ## and estimate Z-scores
 
 cat("Aggregation of Biodiverse results\n")
+cat("Script name: 13_Aggregate_Biodiverse_results.R\n")
 
 ## Usage example:
 # ./13_Aggregate_Biodiverse_results.R \

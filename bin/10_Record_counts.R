@@ -3,6 +3,7 @@
 ## Count number of records per gridcell in the GBIF occurrence data
 
 cat("Counting the number of records per grid cell\n")
+cat("Script name: 10_Record_counts.R\n")
 
 ## Usage:
 # ./10_Record_counts.R \

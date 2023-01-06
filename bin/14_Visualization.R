@@ -3,6 +3,7 @@
 ## Visualization of Biodiverse results (will be deprecated in the future release)
 
 cat("Basic visualization of Biodiverse results\n")
+cat("Script name: 14_Visualization.R\n")
 
 ## Usage example:
 # ./14_Visualization.R \

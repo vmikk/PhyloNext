@@ -3,6 +3,7 @@
 ## Filter GBIF occurrence data
 
 cat("Filtering GBIF species occurrence data\n")
+cat("Script name: 10_Filter_occurrences.R\n")
 
 ## Input data could be located in the cloud.
 ## E.g., to query GBIF AWS snapshot use: 

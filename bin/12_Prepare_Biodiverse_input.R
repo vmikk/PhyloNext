@@ -3,6 +3,7 @@
 ## Prepare input data for Biodiverse
 
 cat("Preparation of the occurrence table and phylogenetic tree for Biodiverse\n")
+cat("Script name: 12_Prepare_Biodiverse_input.R\n")
 
 ## TO DO:
 # - test `--phylabels Latin` with complex names (e.g., "Dryopteris_filix-mas")

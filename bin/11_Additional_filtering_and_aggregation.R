@@ -3,6 +3,7 @@
 ## Additional filtering of GBIF occurrences and spatial binning
 
 cat("Species-level filtering of occurrence data and spatial binning\n")
+cat("Script name: 11_Additional_filtering_and_aggregation.R\n")
 
 ## TO DO:
 # - handle a case with single observation

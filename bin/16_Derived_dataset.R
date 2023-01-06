@@ -3,6 +3,7 @@
 ## Derived datasets are citable records of GBIF-mediated occurrence data
 
 cat("Preparation of derived dataset\n")
+cat("Script name: 16_Derived_dataset.R\n")
 
 ## Usage example:
 # ./16_Derived_dataset.R \
