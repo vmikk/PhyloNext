@@ -455,10 +455,15 @@ tree_trimmed <- ape::keep.tip(phy = TREE, tip = otts_to_keep)
 
 
 ## Export tree in Nexus format
-cat("..Exporting trimmed phylogentic tree for Biodiverse\n")
+cat("..Exporting trimmed phylogentic tree for Biodiverse (in Nexus format)\n")
 
 ape::write.nexus(tree_trimmed,
   file = file.path(OUTPUT, "Trimmed_tree.nex"))
+
+cat("..Exporting trimmed phylogentic tree in Newick format\n")
+
+ape::write.tree(phy = tree_trimmed,
+  file = file.path(OUTPUT, "Trimmed_tree.nwk"))
 
 
 ######################################
