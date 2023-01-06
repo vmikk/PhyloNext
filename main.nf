@@ -534,6 +534,7 @@ process get_ott_tree {
     queue "custom_pool"
 
     publishDir "$params.outdir/02.OTT_tree", mode: 'copy'
+    // publishDir "$params.tracedir", pattern: "citations.txt", mode: 'copy', saveAs: { filename -> "OTT_tree_citations.txt" }
     // cpus 1
 
     input:
@@ -583,6 +584,7 @@ process merge_occ {
       path "H3_GridCell_Centres.csv", emit: h3coords
       path "Trimmed_occurrences.csv", emit: occurrences
       path "Trimmed_tree.nex", emit: tree
+      path "Trimmed_tree.nwk", emit: treenwk
 
     script:
     """
