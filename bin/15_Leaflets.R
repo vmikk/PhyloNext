@@ -845,6 +845,8 @@ mapshot(
 
 cat("...Exporting Leaflet object\n")
 
+attr(m, which = "VARIABLES") <- VARIABLES
+
 saveRDS(object = m, file = "Leaflet_object.RData", compress = "xz")
 
 
