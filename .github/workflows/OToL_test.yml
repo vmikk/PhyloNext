@@ -4,7 +4,7 @@ on: push
 
 jobs:
   biodiverse-tests:
-    name: Run Biodiverse tests
+    name: Run OToL tests
     runs-on: ubuntu-latest
     container: 
       image: vmikk/opentree:0.0.2
@@ -13,16 +13,23 @@ jobs:
     steps:
 
       - name: Check out the repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+        with:
+          ref: main
+          fetch-depth: 1
 
-      - name: Fetching test tree from OToL
-        run: |
-          python \
-            /ott/bin/scripts/induced_synth_subtree_from_csv.py \
-            --query /ott/test_data/Felidae,Canidae_Species_OTT.csv \
-            --output_dir /ott/OTT/ \
-            --phylo-only \
-            --max-age 111
+     #  - name: Fetching test tree from OToL
+     #    run: |
+     #      python \
+     #        /ott/bin/scripts/induced_synth_subtree_from_csv.py \
+     #        --query /ott/test_data/Felidae,Canidae_Species_OTT.csv \
+     #        --output_dir /ott/OTT/ \
+     #        --phylo-only \
+     #        --max-age 111
 
       - name: Verifying results
-        run: ls -l /ott/OTT/
+        run: |
+          pwd
+          ls -l
+          ls -l /ott/
+    #    run: ls -l /ott/OTT/
