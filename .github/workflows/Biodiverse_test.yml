@@ -1,0 +1,67 @@
+name: PhyloNext automated tests [Biodiverse container]
+# This workflow runs tests for the Biodiverse-relate part of the PhyloNext pipeline
+on: push
+
+jobs:
+  biodiverse-tests:
+    name: Run Biodiverse tests
+    runs-on: ubuntu-latest
+    container: 
+      image: vmikk/biodiverse:1.0.0
+      volumes:
+        - ${{ github.workspace }}:/biodiverse
+    steps:
+
+      - name: Check out the repo
+        uses: actions/checkout@v3
+        with:
+          ref: main
+          fetch-depth: 1
+
+      # pwd = /__w/PhyloNext/PhyloNext
+
+      - name: Preparing Biodiverse input file
+        run: |
+          mkdir -p Biodiverse_Test
+          perl /__w/PhyloNext/PhyloNext/bin/00_create_bds.pl \
+            --csv_file /__w/PhyloNext/PhyloNext/test_data/Biodiverse_tests/FelidaeCanidae_occurrences.csv \
+            --out_file $(pwd)/Biodiverse_Test/occ.bds \
+            --label_column_number '0' \
+            --group_column_number_x '1'\
+            --cell_size_x '-1'
+
+      - name: Preparing the tree for Biodiverse
+        run: |
+          perl /__w/PhyloNext/PhyloNext/bin/00_create_bts.pl \
+            --input_tree_file /__w/PhyloNext/PhyloNext/test_data/Biodiverse_tests/FelidaeCanidae_tree.nex \
+            --out_file $(pwd)/Biodiverse_Test/tree.bts
+
+      - name: Running biodiversity analyses
+        run: |
+          perl /__w/PhyloNext/PhyloNext/bin/02_biodiverse_analyses.pl \
+            --input_bds_file $(pwd)/Biodiverse_Test/occ.bds \
+            --input_bts_file $(pwd)/Biodiverse_Test/tree.bts \
+            --calcs calc_richness,calc_pd,calc_pe
+
+      - name: Testing data export
+        run: |
+          perl /__w/PhyloNext/PhyloNext/bin/04_load_bds_and_export_results.pl \
+            --input_bds_file $(pwd)/Biodiverse_Test/occ_analysed.bds \
+            --output_csv_prefix $(pwd)/Biodiverse_Test/RND
+
+      - name: Verifying results
+        run: |
+          echo -e "Output file list:\n"
+          ls -l $(pwd)/Biodiverse_Test
+          echo -e "\nHead of RND_SPATIAL_RESULTS.csv:\n"
+          head -5 $(pwd)/Biodiverse_Test/RND_SPATIAL_RESULTS.csv
+
+      - name: Check file existence
+        id: check_files
+        uses: andstor/file-existence-action@v2
+        with:
+          files: "$(pwd)/Biodiverse_Test/RND_SPATIAL_RESULTS.csv,$(pwd)/Biodiverse_Test/occ_analysed.bds,$(pwd)/Biodiverse_Test/occ.bds,$(pwd)/Biodiverse_Test/tree.bts"
+
+      - name: File exists
+        if: steps.check_files.outputs.files_exists == 'true'
+        run: echo "Looks good, all expected output files are in place!"
