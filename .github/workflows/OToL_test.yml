@@ -18,18 +18,27 @@ jobs:
           ref: main
           fetch-depth: 1
 
-     #  - name: Fetching test tree from OToL
-     #    run: |
-     #      python \
-     #        /ott/bin/scripts/induced_synth_subtree_from_csv.py \
-     #        --query /ott/test_data/Felidae,Canidae_Species_OTT.csv \
-     #        --output_dir /ott/OTT/ \
-     #        --phylo-only \
-     #        --max-age 111
+      # pwd = /__w/PhyloNext/PhyloNext
+
+      - name: Fetching test tree from OToL
+        run: |
+          python \
+            /__w/PhyloNext/PhyloNext/bin/induced_synth_subtree_from_csv.py \
+            --query /__w/PhyloNext/PhyloNext/test_data/Felidae,Canidae_Species_OTT.csv \
+            --output_dir $(pwd)/OTT/ \
+            --phylo-only \
+            --max-age 111
 
       - name: Verifying results
         run: |
-          pwd
-          ls -l
-          ls -l /ott/
-    #    run: ls -l /ott/OTT/
+          ls -l $(pwd)/OTT/
+
+      - name: Check file existence
+        id: check_files
+        uses: andstor/file-existence-action@v2
+        with:
+          files: "$(pwd)/OTT/ott_label_dated_tree.tre"
+
+      - name: File exists
+        if: steps.check_files.outputs.files_exists == 'true'
+        run: echo "Looks good, Labeled and dated phylogenetic tree is in place!"
