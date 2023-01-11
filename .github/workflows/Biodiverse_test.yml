@@ -60,8 +60,16 @@ jobs:
         id: check_files
         uses: andstor/file-existence-action@v2
         with:
-          files: "$(pwd)/Biodiverse_Test/RND_SPATIAL_RESULTS.csv,$(pwd)/Biodiverse_Test/occ_analysed.bds,$(pwd)/Biodiverse_Test/occ.bds,$(pwd)/Biodiverse_Test/tree.bts"
+          files: "./Biodiverse_Test/RND_SPATIAL_RESULTS.csv, ./Biodiverse_Test/occ_analysed.bds, ./Biodiverse_Test/occ.bds, ./Biodiverse_Test/tree.bts"
 
       - name: File exists
         if: steps.check_files.outputs.files_exists == 'true'
-        run: echo "Looks good, all expected output files are in place!"
+        run: |
+          echo "Looks good, all expected output files are in place!"
+          exit 0
+      
+      - name: File is missing
+        if: steps.check_files.outputs.files_exists == 'false'
+        run: |
+          echo "ERROR! Some files are missing!"
+          exit 1
