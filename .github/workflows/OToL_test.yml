@@ -37,8 +37,17 @@ jobs:
         id: check_files
         uses: andstor/file-existence-action@v2
         with:
-          files: "$(pwd)/OTT/ott_label_dated_tree.tre"
+          files: "./OTT/ott_label_dated_tree.tre"
+          # `file-existence-action` does not intrpret $(pwd)? -> use relative path
 
-      - name: File exists
+      - name: Files exist?
         if: steps.check_files.outputs.files_exists == 'true'
-        run: echo "Looks good, Labeled and dated phylogenetic tree is in place!"
+        run: |
+          echo "Looks good, Labeled and dated phylogenetic tree is in place!"
+          exit 0
+      
+      - name: Files are missing?
+        if: steps.check_files.outputs.files_exists == 'false'
+        run: |
+          echo "ERROR! Some files are missing!"
+          exit 1
