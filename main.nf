@@ -662,6 +662,9 @@ process derived_datasets {
       --lonmin  ${params.lonmin} \
       --lonmax  ${params.lonmax} \
       --minyear ${params.minyear} \
+      --coordprecision          ${params.coordprecision} \
+      --coorduncertainty        ${params.coorduncertainty} \
+      --coorduncertaintyexclude ${params.coorduncertaintyexclude} \
       --basisofrecordinclude ${params.basisofrecordinclude} \
       --basisofrecordexclude ${params.basisofrecordexclude} \
       ${filter_specieskeys} \
