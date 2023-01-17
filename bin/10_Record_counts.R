@@ -72,6 +72,11 @@ option_list <- list(
   make_option("--basisofrecordinclude",  action="store", default=NA, type='character', help="Basis of record to include from the data"),
   make_option("--basisofrecordexclude", action="store", default="FOSSIL_SPECIMEN,LIVING_SPECIMEN", type='character', help="Basis of record to exclude from the data"),
 
+  ## Coordinate precision and uncertainty filters
+  make_option("--coordprecision", action="store", default=0.1, type='double', help="Coordinate precision threshold (max allowed value)"),
+  make_option("--coorduncertainty", action="store", default=10000, type='double', help="Maximum allowed coordinate uncertainty, meters"),
+  make_option("--coorduncertaintyexclude", action="store", default="301,3036,999,9999", type='character', help="Black-listed values of coordinate uncertainty"),
+
   ## Spatial filters (shapefile-based)
   make_option(c("-l", "--terrestrial"), action="store", default=NA, type='character', help="Remove non-terrestrial occurrences, provide land polygon in sf-format"),
   make_option(c("-c", "--rmcountrycentroids"), action="store", default=NA, type='character', help="Remove records within a radius around the geographic centroids of political countries and provinces"),
@@ -115,6 +120,10 @@ FAMILY <- to_na( opt$family )
 GENUS  <- to_na( opt$genus )
 SPECIESKEYS  <- to_na( opt$specieskeys )
 
+COORDPREC      <- as.numeric( to_na(opt$coordprecision) )
+COORDUNCRTMAX  <- as.numeric( to_na(opt$coorduncertainty) )
+COORDUNCRTEXCL <- to_na(opt$coorduncertaintyexclude)
+
 COUNTRY <- to_na( opt$country )
 LATMIN  <- as.numeric( to_na(opt$latmin) )
 LATMAX  <- as.numeric( to_na(opt$latmax) )
@@ -150,6 +159,10 @@ cat(paste("Selected orders: ",   ORDER,  "\n", sep = ""))
 cat(paste("Selected families: ", FAMILY, "\n", sep = ""))
 cat(paste("Selected genera: ",   GENUS,  "\n", sep = ""))
 cat(paste("File with GBIF specieskeys: ", SPECIESKEYS,  "\n", sep = ""))
+
+cat(paste("Coordinate precision threshold: ",                COORDPREC,      "\n", sep = ""))
+cat(paste("Maximum allowed coordinate uncertainty: ",        COORDUNCRTMAX,  "\n", sep = ""))
+cat(paste("Black-listed values of coordinate uncertainty: ", COORDUNCRTEXCL, "\n", sep = ""))
 
 cat(paste("Country codes: ",     COUNTRY, "\n", sep = ""))
 cat(paste("Minimum latitude: ",  LATMIN,  "\n", sep = ""))
@@ -229,6 +242,9 @@ quiet <- function(x) {
 
 ## Parameters for debugging
 # INPUT <- "/mnt/Dat2/GBIF/Parquet/2022-08-01/"
+# COORDPREC <- 0.1
+# COORDUNCRTMAX <- 10000
+# COORDUNCRTEXCL <- "301,3036,999,9999"
 # PHYLUM <- NA
 # CLASS <- NA
 # ORDER <- NA
@@ -275,10 +291,27 @@ dsf <- ds %>%
   filter(!is.na(decimallongitude)) %>% 
   filter(!is.na(decimallatitude)) %>% 
   filter(!decimallatitude == 0 | !decimallongitude == 0) %>%
-  filter(decimallatitude != decimallongitude) %>%
-  filter(coordinateprecision < 0.1 | is.na(coordinateprecision)) %>% 
-  filter(coordinateuncertaintyinmeters < 10000 | is.na(coordinateuncertaintyinmeters)) %>%
-  filter(!coordinateuncertaintyinmeters %in% c(301, 3036, 999, 9999))
+  filter(decimallatitude != decimallongitude)
+
+## Coordinate precision filter
+if(!is.na(COORDPREC)){
+  cat("..Filtering by coordinate precision\n")
+  dsf <- dsf %>% filter(coordinateprecision < COORDPREC | is.na(coordinateprecision))
+}
+
+## Coordinate uncertainty filter
+if(!is.na(COORDUNCRTMAX)){
+  cat("..Filtering by coordinate uncertainty\n")
+  dsf <- dsf %>% filter(coordinateuncertaintyinmeters < COORDUNCRTMAX | is.na(coordinateuncertaintyinmeters))
+}
+
+## Coordinate uncertainty blacklist filter
+if(!is.na(COORDUNCRTEXCL)){
+  cat("..Filtering by coordinate uncertainty black-listed values\n")
+  COORDUNCRTEXCL <- strsplit(x = COORDUNCRTEXCL, split = ",")[[1]]
+  COORDUNCRTEXCL <- as.numeric(COORDUNCRTEXCL)
+  dsf <- dsf %>% filter(!coordinateuncertaintyinmeters %in% COORDUNCRTEXCL)
+}
 
 ## Basis of record filters
 if(!is.na(BASISINCL) & !is.na(BASISEXCL)){
