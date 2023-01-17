@@ -8,13 +8,16 @@ on:
   release:
     types: [published]
 
-env:
-  NXF_ANSI_LOG: false
-  CAPSULE_LOG: none
+# Cancel if a newer run is started
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+
 
 jobs:
   test:
-    name: Run workflow tests
+    name: Run PhyloNext pipeline with test data
     if: ${{ github.event_name != 'push' || (github.event_name == 'push' && github.repository == 'vmikk/PhyloNext') }}
     runs-on: ubuntu-latest
     strategy:
@@ -27,12 +30,17 @@ jobs:
           # # Test latest edge release of Nextflow
           # - NXF_VER: ''
           #   NXF_EDGE: '1'
+    env:
+      NXF_ANSI_LOG: false
+      # CAPSULE_LOG: none
     steps:
       - name: Check out pipeline code
         uses: actions/checkout@v3
         with:
           ref: main
           fetch-depth: 1
+
+      # pwd = /__w/PhyloNext/PhyloNext
 
       - name: Install Nextflow
         env:
@@ -48,6 +56,22 @@ jobs:
         run: |
           nextflow run ${GITHUB_WORKSPACE} -profile test,docker
 
+      - name: Output log on failure
+        if: failure()
+        run: |
+          sudo apt install bat > /dev/null
+          batcat --decorations=always --color=always /home/runner/work/PhyloNext/PhyloNext/.nextflow.log
+
+      - name: Upload logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: logs-builtin-tree
+          path: |
+            /home/runner/work/PhyloNext/PhyloNext/.nextflow.log
+            /home/runner/work/PhyloNext/PhyloNext/work/**/.command.log
+
       - name: Run pipeline and fetch phylogenetic tree from OToL
         run: |
           nextflow run ${GITHUB_WORKSPACE} -profile test_ott,docker --maxage 111
+
