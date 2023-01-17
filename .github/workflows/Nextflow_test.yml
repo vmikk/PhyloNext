@@ -29,7 +29,10 @@ jobs:
           #   NXF_EDGE: '1'
     steps:
       - name: Check out pipeline code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+        with:
+          ref: main
+          fetch-depth: 1
 
       - name: Install Nextflow
         env:
