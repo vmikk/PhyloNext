@@ -1,4 +1,4 @@
-name: PhyloNext automated tests [Biodiverse container]
+name: Biodiverse tests
 # This workflow runs tests for the Biodiverse-relate part of the PhyloNext pipeline
 on: push
 

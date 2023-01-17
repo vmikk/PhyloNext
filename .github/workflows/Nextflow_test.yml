@@ -1,4 +1,4 @@
-name: PhyloNext automated tests [Nextflow pipeline]
+name: Nextflow tests
 # This workflow runs the PhyloNext pipeline with the minimal test dataset to check that it completes without any syntax errors
 on:
   push:

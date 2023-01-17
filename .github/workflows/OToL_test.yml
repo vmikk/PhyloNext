@@ -1,4 +1,4 @@
-name: PhyloNext automated tests [Open Tree of Life container]
+name: Open Tree of Life tests
 # This workflow runs tests for the OToL-related part of the PhyloNext pipeline
 on: push
 
