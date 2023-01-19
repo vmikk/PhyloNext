@@ -90,6 +90,9 @@ OPTIONAL:
     --lonmin              Minimum longitude of species occurrences (decimal degrees); e.g., 47.0
     --lonmax              Maximum longitude of species occurrences (decimal degrees); e.g., 55.5
     --minyear             Minimum year of record's occurrences; default, 1945
+    --coordprecision      Coordinate precision threshold (less than maximum allowed value; default, 0.1)
+    --coorduncertainty    Maximum allowed coordinate uncertainty, meters (default, 10000)
+    --coorduncertaintyexclude Black list of coordinate uncertainty values (default, "301,3036,999,9999")
     --basisofrecordinclude Basis of record to include from the data; e.g., "PRESERVED_SPECIMEN"
     --basisofrecordexclude Basis of record to exclude from the data; e.g., "FOSSIL_SPECIMEN,LIVING_SPECIMEN"
     --wgsrpd              Polygons of World Geographical Regions; e.g., "pipeline_data/WGSRPD.RData"
