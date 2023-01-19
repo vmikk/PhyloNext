@@ -10,7 +10,8 @@ CI/CD status:
 [![OToL](https://github.com/vmikk/PhyloNext/actions/workflows/OToL_test.yml/badge.svg)](https://github.com/vmikk/PhyloNext/actions/workflows/OToL_test.yml)
 [![Biodiverse](https://github.com/vmikk/PhyloNext/actions/workflows/Biodiverse_test.yml/badge.svg)](https://github.com/vmikk/PhyloNext/actions/workflows/Biodiverse_test.yml)
 
-The automated pipeline for the analysis of phylogenetic diversity using [GBIF occurrence data](https://www.gbif.org/occurrence/search?occurrence_status=present), species phylogenies from [Open Tree of Life](https://tree.opentreeoflife.org), and [Biodiverse software](https://shawnlaffan.github.io/biodiverse/).
+
+PhyloNext is the automated pipeline for the analysis of phylogenetic diversity using [GBIF occurrence data](https://www.gbif.org/occurrence/search?occurrence_status=present), species phylogenies from [Open Tree of Life](https://tree.opentreeoflife.org), and [Biodiverse software](https://shawnlaffan.github.io/biodiverse/).
 
 ## Introduction
 
