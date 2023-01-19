@@ -1,0 +1,30 @@
+# Docker image with the software required for obtaining phylogenetic trees from Open Tree of Life
+# https://github.com/McTavishLab/GBIF-Biodiverse-OpenTree
+
+Bootstrap: docker
+From: python:3.10.8-bullseye
+
+%labels
+  Maintainer vladimir.mikryukov@ut.ee
+  Python_Version 3.10.8
+
+%runscript
+  exec "$@"
+
+%apprun python
+  exec python "${@}"
+
+## Install the required dependencies
+%post
+
+  export LANG="C.UTF-8"
+  export SHELL="/bin/bash"
+
+  git clone --depth 1 https://github.com/McTavishLab/GBIF-Biodiverse-OpenTree
+
+  pip install DendroPy
+  pip install git+https://github.com/OpenTreeOfLife/python-opentree.git@itol_annot#egg=opentree
+  chmod +x /GBIF-Biodiverse-OpenTree/scripts/*.py  
+
+%test
+  python --version
