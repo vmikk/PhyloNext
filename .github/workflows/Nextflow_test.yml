@@ -54,7 +54,7 @@ jobs:
 
       - name: Run pipeline usning built-in phylogenetic tree
         run: |
-          nextflow run ${GITHUB_WORKSPACE} -profile test,docker
+          nextflow run ${GITHUB_WORKSPACE} -profile test,docker -work-dir $(pwd)/work1
 
       - name: Output log on failure
         if: failure()
@@ -69,9 +69,41 @@ jobs:
           name: logs-builtin-tree
           path: |
             /home/runner/work/PhyloNext/PhyloNext/.nextflow.log
-            /home/runner/work/PhyloNext/PhyloNext/work/**/.command.log
+            /home/runner/work/PhyloNext/PhyloNext/work1/**/.command.log
 
       - name: Run pipeline and fetch phylogenetic tree from OToL
         run: |
-          nextflow run ${GITHUB_WORKSPACE} -profile test_ott,docker --maxage 111
+          nextflow run ${GITHUB_WORKSPACE} -profile test_ott,docker --maxage 111 -work-dir $(pwd)/work2 -resume
 
+      - name: Output log on failure
+        if: failure()
+        run: |
+          sudo apt install bat > /dev/null
+          batcat --decorations=always --color=always /home/runner/work/PhyloNext/PhyloNext/.nextflow.log
+
+      - name: Upload logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: logs-ott-tree
+          path: |
+            /home/runner/work/PhyloNext/PhyloNext/.nextflow.log
+            /home/runner/work/PhyloNext/PhyloNext/work2/**/.command.log
+
+      - name: Check file existence
+        id: check_files
+        uses: andstor/file-existence-action@v2
+        with:
+          files: "./03.Plots/Biodiverse_results_merged.txt, ./03.Plots/Choropleth.html, ./03.Plots/Diversity_estimates.gpkg"
+
+      - name: File exists
+        if: steps.check_files.outputs.files_exists == 'true'
+        run: |
+          echo "Looks good, all expected output files are in place!"
+          exit 0
+      
+      - name: File is missing
+        if: steps.check_files.outputs.files_exists == 'false'
+        run: |
+          echo "ERROR! Some files are missing!"
+          exit 1
