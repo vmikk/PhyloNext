@@ -201,6 +201,24 @@
                     "description": "Basis of record to exclude from the data; e.g., \"FOSSIL_SPECIMEN,LIVING_SPECIMEN\" (default)",
                     "fa_icon": "fas fa-clipboard"
                 },
+                "coordprecision": {
+                    "type": "number",
+                    "default": 0.1,
+                    "fa_icon": "fas fa-map-marked",
+                    "description": "Coordinate precision threshold (less than)"
+                },
+                "coorduncertainty": {
+                    "type": "integer",
+                    "default": 10000,
+                    "fa_icon": "fas fa-map-marked",
+                    "description": "Maximum allowed coordinate uncertainty, meters"
+                },
+                "coorduncertaintyexclude": {
+                    "type": "string",
+                    "default": "301,3036,999,9999",
+                    "fa_icon": "fas fa-map-marked",
+                    "description": "Black list of coordinate uncertainty values"
+                },
                 "h3resolution": {
                     "type": "integer",
                     "default": 4,
