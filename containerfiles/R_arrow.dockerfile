@@ -13,11 +13,11 @@ RUN apt-get update -qq \
     zip unzip \
     curl git wget less \
     build-essential \
-    libgeos-dev libudunits2-dev libproj-dev libgdal-dev \
-    pandoc
+    libgeos-dev libudunits2-dev libproj-dev libgdal-dev
 
-## Install tidyverse packages along with arrow and data.table
+## Install tidyverse packages along with arrow and data.table, + pandoc
 RUN /rocker_scripts/install_tidyverse.sh \
+  && /rocker_scripts/install_pandoc.sh \
   && apt-get autoremove -y \
   && apt-get autoclean -y \
   && rm -rf /var/lib/apt/lists/*
