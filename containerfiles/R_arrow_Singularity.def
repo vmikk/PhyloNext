@@ -34,8 +34,9 @@ From: rocker/r-ver:4.2.2
   export LC_ALL=C.UTF-8
   export LANG=C.UTF-8
 
-  ## Install tidyverse packages along with arrow and data.table
+  ## Install tidyverse packages along with arrow and data.table, + pandoc
   /rocker_scripts/install_tidyverse.sh \
+    && /rocker_scripts/install_pandoc.sh \
     && apt-get autoremove -y \
     && apt-get autoclean -y \
     && rm -rf /var/lib/apt/lists/*
@@ -65,7 +66,6 @@ From: rocker/r-ver:4.2.2
   ## Install arrow
   # R -e 'arrow::install_arrow(minimal = FALSE)' \
   #     && rm -rf /tmp/downloaded_packages/
-
 
 %test
   R --quiet -e "stopifnot(getRversion() == '${R_VERSION}')"
