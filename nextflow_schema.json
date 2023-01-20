@@ -10,9 +10,7 @@
             "type": "object",
             "fa_icon": "fas fa-terminal",
             "description": "Define where the pipeline should find input data and save output data.",
-            "required": [
-                "input"
-            ],
+            "required": ["input"],
             "properties": {
                 "input": {
                     "type": "string",
@@ -308,9 +306,7 @@
                     "default": "rand_structured",
                     "fa_icon": "fas fa-cogs",
                     "description": "Randomisation scheme type; e.g., \"rand_structured\"",
-                    "enum": [
-                        "rand_structured"
-                    ]
+                    "enum": ["rand_structured"]
                 }
             },
             "fa_icon": "fas fa-cogs"
@@ -373,11 +369,7 @@
                     "default": "quantile",
                     "fa_icon": "fas fa-atlas",
                     "description": "Color palette for continuous variables (default, \"quantile\")",
-                    "enum": [
-                        "quantile",
-                        "equal",
-                        "continuous"
-                    ],
+                    "enum": ["quantile", "equal", "continuous"],
                     "help_text": "Defines mapping of data values to colors . See [Leaflet docs](https://rstudio.github.io/leaflet/colors.html):<br>\n`colorNumeric` is a simple linear mapping from continuous numeric data to an interpolated palette.<br>\n`colorBin` also maps continuous numeric data, but performs binning based on value (see the cut function). <br>\n`colorQuantile` similarly bins numeric data, but via the quantile function."
                 },
                 "leaflet_bins": {
@@ -422,11 +414,7 @@
                     "default": "pdf",
                     "fa_icon": "fas fa-chart-line",
                     "description": "Plot format (jpg,pdf,png)",
-                    "enum": [
-                        "pdf",
-                        "png",
-                        "jpg"
-                    ]
+                    "enum": ["pdf", "png", "jpg"]
                 },
                 "plotwidth": {
                     "type": "number",
@@ -445,11 +433,7 @@
                     "default": "in",
                     "fa_icon": "fas fa-chart-line",
                     "description": "Plot size units (in,cm)",
-                    "enum": [
-                        "in",
-                        "cm",
-                        "px"
-                    ]
+                    "enum": ["in", "cm", "px"]
                 },
                 "world": {
                     "type": "string",
@@ -527,10 +511,17 @@
                     "default": "Latin",
                     "fa_icon": "fas fa-tags",
                     "description": "Type of tip labels on a phylogenetic tree (\"OTT\" or \"Latin\")",
-                    "enum": [
-                        "Latin",
-                        "OTT"
-                    ]
+                    "enum": ["Latin", "OTT"]
+                },
+                "phyloonly": {
+                    "type": "boolean",
+                    "fa_icon": "fas fa-info-circle",
+                    "description": "Prune Open Tree tips for which there are no phylogenetic inputs"
+                },
+                "maxage": {
+                    "type": "string",
+                    "default": null,
+                    "fa_icon": "fas fa-compress-alt"
                 }
             }
         },
