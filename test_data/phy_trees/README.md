@@ -7,6 +7,14 @@
 Mishler, B. D., Knerr, N., González-Orozco, C. E., Thornhill, A. H., Laffan, S. W., & Miller, J. T. (2014). Phylogenetic measures of biodiversity and neo- and paleo-endemism in Australian Acacia. Nature Communications, 5(1), 4473. https://doi.org/10.1038/ncomms5473
 
 
+`Acacia_OpenTree_bladj_Latin-labels.nwk`
+`Acacia_OpenTree_bladj_OTT-labels.tre`
+
+Trees deriverd from the Open Tree of Life and dated with `bladj`. Node age esimates are from:  
+
+Miller, J. T., Murphy, D. J., Ho, S. Y. W., Cantrill, D. J., & Seigler, D. (2013). Comparative dating of Acacia: Combining fossils and multiple phylogenies to infer ages of clades with poor fossil records. Australian Journal of Botany, 61(6), 436–445. https://doi.org/10.1071/BT13149
+
+
 ## Mammals
 
 `Mammals_Gumbs,2022_imputed.nwk`
