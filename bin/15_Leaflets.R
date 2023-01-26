@@ -547,7 +547,7 @@ m <- leaflet() %>% addTiles()
 cat("..Preparing color palettes\n")
 
 ## Function to create color palette
-gen_color_palette <- function(x, type = "quantile", col = "RdYlBu", nbins = 5, rev = TRUE){
+gen_color_palette <- function(x, type = "quantile", col = "RdYlBu", colses = "threat", nbins = 5, rev = TRUE){
 
   ## Bin numeric data via the quantile function
   if(type %in% "quantile"){
@@ -578,6 +578,8 @@ gen_color_palette <- function(x, type = "quantile", col = "RdYlBu", nbins = 5, r
   ## SES-score mapping (symmetric around zero)
   if(type %in% "ses"){
 
+    ## Hotspot-type colors (high SES values = red, low = blue)
+    if(colses %in% "hotspots"){
     ses_colors <- c(
       HighlyNegative = "#27408B",
       Negative       = "#4876FF",
@@ -585,6 +587,18 @@ gen_color_palette <- function(x, type = "quantile", col = "RdYlBu", nbins = 5, r
       Positive       = "#FF0000",
       HighlyPositive = "#8B0000"
       )
+    }
+
+    ## Threat-type colors (high SES values = blue, low = red), as in Mishler et al., 2014
+    if(colses %in% "threat"){
+    ses_colors <- c(
+      HighlyNegative = "#8B0000",
+      Negative       = "#FF0000",
+      NotSignificant = "#FAFAD2",
+      Positive       = "#4876FF",
+      HighlyPositive = "#27408B"
+      )
+    }
 
     ses_bins <-c(-1000, -2.58, -1.96, 1.96, 2.58, 1000)
 
