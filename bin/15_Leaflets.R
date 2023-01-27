@@ -700,7 +700,7 @@ cat("..Adding polygons\n")
 
 
 ## Shortcut to add polygons with legend to the map
-add_polygons_with_legend <- function(m, v, pal){
+add_polygons_with_legend <- function(m, v, pal, ses_labels = FALSE){
   res <- m %>% 
       addPolygons(data = H3_poly,
         fillColor = ~ pal( H3_poly[[v]] ),
@@ -718,6 +718,22 @@ add_polygons_with_legend <- function(m, v, pal){
       ) %>%
       addLegend("bottomright", pal = pal, values = H3_poly[[v]],
         title = v, group = v,  opacity = 1)
+
+  ## Relable upper bounds of effect sizes
+  ## (unfortunately, addLegend(labels =...) does not work with `pal` argument)
+  if(ses_labels == TRUE){
+    
+    newlabs <- c("< -2.58", "< -1.96", "-1.96 - 1.96", "> 1.96", "> 2.58")
+    newlabs <- gsub(pattern = " - ", replacement = " &ndash; ", x = newlabs)
+
+    slotid <- length(res$x$calls)
+    if(
+      "labels" %in% names(res$x$calls[[ slotid ]]$args[[1]]) &                # `labels` slot is present
+      length(res$x$calls[[ slotid ]]$args[[1]]$labels) == length(newlabs)     # and has the same number of categories
+      ){
+      res$x$calls[[ slotid ]]$args[[1]]$labels <- newlabs
+    }
+  }
 
   return(res)
 }
@@ -737,7 +753,14 @@ for(v in VARIABLES[ ! VARIABLES %in% c("CANAPE", "Redundancy") ]){
     }
   }
 
-  tmp <- try( add_polygons_with_legend(m = m, v = v, pal = pals[[v]] ) )
+  ## SES lables?
+  if(v %in% VARIABLES_ses){
+    ses_lab <- TRUE
+  } else {
+    ses_lab <- FALSE
+  }
+
+  tmp <- try( add_polygons_with_legend(m = m, v = v, pal = pals[[v]], ses_labels = ses_lab) )
 
   ## Quantile palette may fail
   if(("try-error" %in% class(tmp) | attr(pals[[v]], "newbins") == 1) & PALETTE %in% "quantile"){
@@ -747,13 +770,13 @@ for(v in VARIABLES[ ! VARIABLES %in% c("CANAPE", "Redundancy") ]){
    tmppal <- gen_color_palette(x = H3_poly[[ v ]],
     type = "continuous", col = COLOR, nbins = BINS, rev = TRUE)
 
-   tmp <- add_polygons_with_legend(m = m, v = v, pal = tmppal )
+   tmp <- add_polygons_with_legend(m = m, v = v, pal = tmppal)
 
    rm(tmppal)
   } # end of `try-error`
 
   m <- tmp
-  rm(tmp)
+  rm(tmp, ses_lab)
 
 }   # end of loop
 rm(v)
