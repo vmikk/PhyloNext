@@ -125,6 +125,7 @@ Leaflet interactive visualization:
     --leaflet_color       Color scheme for continuous variables (default, "RdYlBu")
     --leaflet_palette     Color palette for continuous variables (default, "quantile")
     --leaflet_bins        Number of color bins for continuous variables (default, 5)
+    --leaflet_sescolor    Color scheme for standardized effect sizes, SES (default, "threat"; alternative - "hotspots")
     --leaflet_redundancy  Redundancy threshold for hiding the grid cells with low number of records (default, 0 = display all grid cells)
 
 Static visualization:
