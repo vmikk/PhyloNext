@@ -17,6 +17,7 @@
 //   E.g., Define RAM limits based on file size
 //   memory = { bam.size() < 1000000000 ? 4.GB : check_max( ( bam.size()/1024/1024/1024) * 10.GB * task.attempt, 'memory')}
 //   memory { reads.size() < 70.KB ? 1.GB : 5.GB }
+// - generated static images from Leaflet obj (with mapshot?)
 // - 15_Leaflets.R - add coordinates of H3 cells and re-order columns
 // - check `12_Prepare_Biodiverse_input.R` logs with Latin tip names (Species names not found in the phylogenetic tree ...)
 // - export outlier summary stats
@@ -71,7 +72,7 @@ if(params.phytree == null & params.phylabels == "OTT"){
 }
 
 // Optional input files
-specieskeys        = params.specieskeys        ? file(params.specieskeys)      : file("${params.outdir}/no_file0") 
+specieskeys        = params.specieskeys        ? file(params.specieskeys)        : file("${params.outdir}/no_file0") 
 noextinct          = params.noextinct          ? file(params.noextinct)          : file("${params.outdir}/no_file1") 
 terrestrial        = params.terrestrial        ? file(params.terrestrial)        : file("${params.outdir}/no_file2") 
 rmcountrycentroids = params.rmcountrycentroids ? file(params.rmcountrycentroids) : file("${params.outdir}/no_file3") 
@@ -160,6 +161,7 @@ def helpMsg() {
         --leaflet_color       Color scheme for continuous variables (default, "RdYlBu")
         --leaflet_palette     Color palette for continuous variables (default, "quantile")
         --leaflet_bins        Number of color bins for continuous variables (default, 5)
+        --leaflet_sescolor    Color scheme for standardized effect sizes, SES (default, "threat"; alternative - "hotspots)
         --leaflet_redundancy  Redundancy threshold for hiding the grid cells with low number of records (default, 0 = display all grid cells)
 
     Static visualization:
@@ -918,6 +920,7 @@ process plot_leaflet {
       --palette    ${params.leaflet_palette} \
       --color      ${params.leaflet_color} \
       --bins       ${params.leaflet_bins} \
+      --colorses   ${params.leaflet_sescolor} \
       --redundancy ${params.leaflet_redundancy} \
       --output "Choropleth.html"
 
