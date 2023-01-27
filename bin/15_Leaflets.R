@@ -62,6 +62,7 @@ option_list <- list(
   make_option(c("-p", "--palette"), action="store", default="quantile", type='character', help="Color palette type"),
   make_option(c("-c", "--color"), action="store", default="RdYlBu", type='character', help="Color gradient scheme for the diversity indices (except for SES, CANAPE, and redundancy metrics)"),
   make_option(c("-b", "--bins"), action="store", default=5L, type='integer', help="Number of color bins for quantile palette"),
+  make_option(c("--colorses"), action="store", default="threat", type='character', help="Color scheme for standardized effect sizes, SES (default, `threat`; alternative - `hotspots`"),
   make_option(c("-j", "--redundancy"), action="store", default=0, type='double', help="Redundancy threshold for hiding the grid cells with low number of records (disabled by default)"),
   make_option(c("--shortid"), action="store", default=TRUE, type='logical', help="Shorten H3 index name of grid cell labels on the map"),
   make_option(c("--antimeridianfix"), action="store", default=TRUE, type='logical', help="Fix H3 polygons that cross the antimeridian"),
@@ -104,6 +105,7 @@ VARIABLES <- opt$variables
 PALETTE <- opt$palette
 COLOR <- opt$color
 BINS <- as.numeric( opt$bins )
+COLORSES <- opt$colorses
 REDUNDANCYTRSH <- as.numeric(to_na( opt$redundancy ))
 SHORTID <- as.logical( opt$shortid )
 ANTIFIX <- as.logical( opt$antimeridianfix )
@@ -125,6 +127,7 @@ cat(paste("Indices to plot: ", VARIABLES, "\n", sep=""))
 cat(paste("Color palette type: ", PALETTE, "\n", sep=""))
 cat(paste("Color gradient scheme: ", COLOR, "\n", sep=""))
 cat(paste("Number of color bins: ", BINS, "\n", sep=""))
+cat(paste("SES color palette: ", COLORSES, "\n", sep=""))
 cat(paste("Redundancy threshold: ", REDUNDANCYTRSH, "\n", sep=""))
 cat(paste("Display short H3 index names: ", SHORTID, "\n", sep=""))
 cat(paste("Antimeridian fix: ", ANTIFIX, "\n", sep=""))
@@ -667,7 +670,7 @@ if(length(VARIABLES_ses) > 0){
 
   pals_ses <- alply(.data = VARIABLES_ses, .margins = 1,
     .fun = function(v, ...){ gen_color_palette(x = H3_poly[[ v ]], ...) }, 
-    type = "ses")
+    type = "ses", colses = COLORSES)
 
   names(pals_ses) <- VARIABLES_ses
   pals <- c(pals, pals_ses)
