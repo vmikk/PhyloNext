@@ -55,13 +55,6 @@ rmurban            = params.rmurban            ? file(params.rmurban)           
 wgsrpd             = params.wgsrpd             ? file(params.wgsrpd)             : file("${params.outdir}/no_file7") 
 phytree            = params.phytree            ? file(params.phytree)            : file("${params.outdir}/no_file8") 
 world              = params.world              ? file(params.world)              : file("${params.outdir}/no_file9") 
-
-// Define output paths for different steps
-out_flt1 = params.outdir + "/00.filtered1.parquet"
-out_flt2 = params.outdir + "/01.filtered2"
-out_recs = params.outdir + "/01.NumRecords"
-out_biod = params.outdir + "/02.Biodiverse_input"
-out_plot = params.outdir + "/03.Plots"
 polygon            = params.polygon            ? file(params.polygon)            : file("${params.outdir}/no_file10") 
 
 
@@ -191,7 +184,7 @@ process occ_filter {
     label "container_r"
     queue "custom_pool"
 
-    publishDir "${out_flt1}", mode: 'copy'
+    publishDir "$params.outdir/00.Filtered1.parquet", mode: 'copy'
     // cpus 10
 
     input:
@@ -257,7 +250,7 @@ process record_count {
     label "container_r"
     queue "custom_pool"
 
-    publishDir "${out_recs}", mode: 'copy'
+    publishDir "$params.outdir/01.NumRecords", mode: 'copy'
     // cpus 10
 
     input:
@@ -333,7 +326,7 @@ process outl_low {
     label "container_r"
     queue "custom_pool"
 
-    publishDir "${out_flt2}", mode: 'copy'
+    publishDir "$params.outdir/01.Filtered2_by_species", mode: 'copy'
     // cpus 5
 
     input:
@@ -386,7 +379,7 @@ process outl_high {
     label "container_r"
     queue "custom_pool"
 
-    publishDir "${out_flt2}", mode: 'copy'
+    publishDir "$params.outdir/01.Filtered2_by_species", mode: 'copy'
     // cpus 1
 
     // Add species ID to the log file
