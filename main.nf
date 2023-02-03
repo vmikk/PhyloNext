@@ -98,6 +98,7 @@ def helpMsg() {
         --coorduncertaintyexclude Black list of coordinate uncertainty values (default, "301,3036,999,9999")
         --basisofrecordinclude Basis of record to include from the data; e.g., "PRESERVED_SPECIMEN"
         --basisofrecordexclude Basis of record to exclude from the data; e.g., "FOSSIL_SPECIMEN,LIVING_SPECIMEN"
+        --polygon             Custom area of interest (a file with polygons in GeoPackage format)
         --wgsrpd              Polygons of World Geographical Regions; e.g., "pipeline_data/WGSRPD.RData"
         --regions             Names of World Geographical Regions; e.g., "L1_EUROPE,L1_ASIA_TEMPERATE"
         --noextinct           File with extinct species specieskeys for their removal (file with a single column, with header)
