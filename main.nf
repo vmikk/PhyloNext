@@ -961,7 +961,10 @@ workflow {
     // Run stage-I filtering
     occ_filter(
         input_ch,
-        noextinct)
+        noextinct,
+        polygon,
+        wgsrpd
+        )
 
     // occ_filter.out.part_low.view()
     // occ_filter.out.part_high.view()
@@ -970,21 +973,25 @@ workflow {
     record_count(
         input_ch,
         noextinct,
+        polygon,
+        wgsrpd,
         terrestrial,
         rmcountrycentroids,
         rmcountrycapitals,
         rminstitutions,
-        rmurban)
+        rmurban
+        )
 
     // Run stage-II filtering for species with low abundance (no DBSCAN)
     outl_low(
         occ_filter.out.part_low,
+        polygon,
+        wgsrpd,
         terrestrial,
         rmcountrycentroids,
         rmcountrycapitals,
         rminstitutions,
-        rmurban,
-        wgsrpd
+        rmurban
         )
 
     // Channel for DBSCAN-based filtering (iterate for each species)
@@ -995,12 +1002,13 @@ workflow {
     outl_high(
         species_ch,
         occ_filter.out.part_high,
+        polygon,
+        wgsrpd,
         terrestrial,
         rmcountrycentroids,
         rmcountrycapitals,
         rminstitutions,
-        rmurban,
-        wgsrpd
+        rmurban
         )
 
     // Collect outlier removal statistics
@@ -1081,6 +1089,8 @@ workflow {
       derived_datasets(
         input_ch,
         noextinct,
+        polygon,
+        wgsrpd,
         terrestrial,
         rmcountrycentroids,
         rmcountrycapitals,
