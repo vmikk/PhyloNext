@@ -51,6 +51,7 @@ option_list <- list(
   make_option(c("-s", "--specieskey"), action="store", default=NA, type='character', help="GBIF species ID (optional)"),
 
   ## Additional filters
+  make_option(c("-g", "--polygon"), action="store", default=NA, type='character', help="Custom area of interest (a file with polygons in GeoPackage format)"),
   make_option(c("-l", "--terrestrial"), action="store", default=NA, type='character', help="Remove non-terrestrial occurrences, provide land polygon in sf-format"),
   make_option(c("-w", "--wgsrpd"), action="store", default=NA, type='character', help="Path to the World Geographical Scheme for Recording Plant Distributions data (polygons in sf-format)"),
   make_option(c("-x", "--regions"), action="store", default=NA, type='character', help="Comma-separated list of WGSRPD regions"),
@@ -96,6 +97,8 @@ to_na <- function(x){
 ## Assign variables
 INPUT      <- opt$input
 SPECIESKEY <- to_na( opt$specieskey )
+
+POLYGON     <- to_na( opt$polygon )
 TERRESTRIAL <- to_na( opt$terrestrial )
 
 WGSRPD        <- to_na( opt$wgsrpd )
@@ -119,6 +122,7 @@ OUTPUT <- opt$output
 cat(paste("Input occurrences: ", INPUT,      "\n", sep=""))
 cat(paste("GBIF specieskey: ",   SPECIESKEY, "\n", sep=""))
 
+cat(paste("Custom polygons: ",  POLYGON,       "\n", sep=""))
 cat(paste("Terrestrial data: ", TERRESTRIAL,   "\n", sep=""))
 cat(paste("WGSRPD data: ",      WGSRPD,        "\n", sep=""))
 cat(paste("WGSRPD regions: ",   WGSRPDREGIONS, "\n", sep=""))
