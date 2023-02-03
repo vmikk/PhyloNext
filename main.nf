@@ -459,12 +459,13 @@ process outl_high {
     input:
       val sp
       path(part_high)
+      path(polygon)
+      path(wgsrpd)
       path(terrestrial)
       path(rmcountrycentroids)
       path(rmcountrycapitals)
       path(rminstitutions)
       path(rmurban)
-      path(wgsrpd)
 
     output:
       path "${sp}.RData", emit: sp, optional: true
@@ -472,6 +473,7 @@ process outl_high {
 
     script:
 
+    filter_polygon      = params.polygon            ? "--polygon $polygon"         : ""
     filter_terrestrial  = params.terrestrial        ? "--terrestrial $terrestrial" : ""
     filter_country      = params.rmcountrycentroids ? "--rmcountrycentroids $rmcountrycentroids" : ""
     filter_capitals     = params.rmcountrycapitals  ? "--rmcountrycapitals $rmcountrycapitals" : ""
@@ -487,13 +489,15 @@ process outl_high {
       --epsilon    ${params.dbscanepsilon} \
       --minpts     ${params.dbscanminpts} \
       --resolution ${params.h3resolution} \
+      ${filter_polygon} \
+      ${filter_wgsrpd} \
       ${filter_terrestrial} \
       ${filter_country} \
       ${filter_capitals} \
       ${filter_institutions} \
       ${filter_urban} \
-      ${filter_wgsrpd} \
       --threads ${task.cpus} \
+      --rcode   \$(which "Shapefile_filters.R") \
       --output "."
 
     """
