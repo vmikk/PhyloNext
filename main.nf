@@ -7,8 +7,7 @@
     Version: 1.1.0
     License: MIT
     Github : https://github.com/vmikk/phylonext
-    Website: TBA
-    Slack  : TBA
+    Website: https://phylonext.github.io/
 ----------------------------------------------------------------------------------------
 */
 
