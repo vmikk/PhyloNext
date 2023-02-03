@@ -401,12 +401,13 @@ process outl_low {
 
     input:
       path(part_low)
+      path(polygon)
+      path(wgsrpd)
       path(terrestrial)
       path(rmcountrycentroids)
       path(rmcountrycapitals)
       path(rminstitutions)
       path(rmurban)
-      path(wgsrpd)
 
     output:
       path "NoSpKey.RData", emit: lowabsp, optional: true
@@ -414,6 +415,7 @@ process outl_low {
 
     script:
 
+    filter_polygon      = params.polygon            ? "--polygon $polygon"         : ""
     filter_terrestrial  = params.terrestrial        ? "--terrestrial $terrestrial" : ""
     filter_country      = params.rmcountrycentroids ? "--rmcountrycentroids $rmcountrycentroids" : ""
     filter_capitals     = params.rmcountrycapitals  ? "--rmcountrycapitals $rmcountrycapitals" : ""
@@ -426,13 +428,15 @@ process outl_low {
       --input "${part_low}" \
       --dbscan false \
       --resolution ${params.h3resolution} \
+      ${filter_polygon} \
+      ${filter_wgsrpd} \
       ${filter_terrestrial} \
       ${filter_country} \
       ${filter_capitals} \
       ${filter_institutions} \
       ${filter_urban} \
-      ${filter_wgsrpd} \
       --threads ${task.cpus} \
+      --rcode   \$(which "Shapefile_filters.R") \
       --output "."
 
     """
