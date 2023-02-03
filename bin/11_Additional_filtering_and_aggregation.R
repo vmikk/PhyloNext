@@ -70,6 +70,8 @@ option_list <- list(
   make_option(c("-r", "--resolution"), action="store", default=4L, type='integer', help="Spatial resolution of the H3 Geospatial Indexing System"),
 
   make_option(c("-t", "--threads"), action="store", default=2L, type='integer', help="Number of CPU threads for arrow, default 4"),
+  make_option("--rcode", action="store", default="Shapefile_filters.R", type='character', help="File with R-code for spatial filtering"),
+
   make_option(c("-o", "--output"), action="store", default=NA, type='character', help="Output directory")
   )
 opt <- parse_args(OptionParser(option_list=option_list))
@@ -92,11 +94,11 @@ to_na <- function(x){
 }
 
 ## Assign variables
-INPUT <- opt$input
+INPUT      <- opt$input
 SPECIESKEY <- to_na( opt$specieskey )
 TERRESTRIAL <- to_na( opt$terrestrial )
 
-WGSRPD <- to_na( opt$wgsrpd )
+WGSRPD        <- to_na( opt$wgsrpd )
 WGSRPDREGIONS <- to_na( opt$regions )
 
 CC_COUNTRY <- to_na( opt$rmcountrycentroids )
@@ -114,20 +116,21 @@ OUTPUT <- opt$output
 
 
 ## Log assigned variables
-cat(paste("Input occurrences: ", INPUT, "\n", sep=""))
-cat(paste("GBIF specieskey: ", SPECIESKEY, "\n", sep=""))
-cat(paste("Terrestrial data: ", TERRESTRIAL, "\n", sep=""))
-cat(paste("WGSRPD data: ", WGSRPD, "\n", sep=""))
-cat(paste("WGSRPD regions: ", WGSRPDREGIONS, "\n", sep=""))
+cat(paste("Input occurrences: ", INPUT,      "\n", sep=""))
+cat(paste("GBIF specieskey: ",   SPECIESKEY, "\n", sep=""))
+
+cat(paste("Terrestrial data: ", TERRESTRIAL,   "\n", sep=""))
+cat(paste("WGSRPD data: ",      WGSRPD,        "\n", sep=""))
+cat(paste("WGSRPD regions: ",   WGSRPDREGIONS, "\n", sep=""))
 
 cat(paste("Country and province centroids: ", CC_COUNTRY, "\n", sep=""))
-cat(paste("Capitals: ", CC_CAPITAL, "\n", sep=""))
-cat(paste("Institutions: ", CC_INSTIT, "\n", sep=""))
-cat(paste("Uraban areas: ", CC_URBAN, "\n", sep=""))
+cat(paste("Capitals: ",     CC_CAPITAL, "\n", sep=""))
+cat(paste("Institutions: ", CC_INSTIT,  "\n", sep=""))
+cat(paste("Uraban areas: ", CC_URBAN,   "\n", sep=""))
 
 cat(paste("Perform DBSCAN: ", DBSCAN, "\n", sep=""))
 if(DBSCAN == TRUE){
-  cat(paste("DBSCAN parameter epsilon: ", DBSCAN_EPS, "\n", sep=""))
+  cat(paste("DBSCAN parameter epsilon: ",    DBSCAN_EPS, "\n", sep=""))
   cat(paste("DBSCAN min number of points: ", DBSCAN_PTS, "\n", sep=""))
 }
 
@@ -157,7 +160,7 @@ load_pckg("dbscan")
 cat("\n")
 
 ## Set CPU thread pool
-cat("Number of available CPU threads: ", cpu_count(), "\n")
+cat("Number of available CPU threads: ",  cpu_count(), "\n")
 cat("Setting number of CPU threads to: ", CPUTHREADS, "\n")
 set_cpu_count(CPUTHREADS)           # for libarrow
 setDTthreads(threads = CPUTHREADS)  # for data.table
@@ -169,7 +172,7 @@ quiet <- function(x) {
   sink("/dev/null")
   on.exit(sink()) 
   invisible(force(x)) 
-} 
+}
 
 ############################################## Main pipeline
 
@@ -197,280 +200,12 @@ if(is.na(SPECIESKEY)){ cat("No specieskey is specified\n") }
 cat("There are ", length(unique(datt$specieskey)), "unique specieskeys in the data.\n")
 
 
-## Function to handle case with no observations
-## (in the case if everithing was removed during the filtering)
-check_nodata <- function(x){
-  if(! nrow(x) > 0){ 
-    cat("WARNING: no speciecies occurrences after the filtering\n")
-  }
-}
 
-
-## Remove non-terrestrial records 
-if(!is.na(TERRESTRIAL) & nrow(datt) > 0){
-  cat("Removing non-terrestrial records\n")
-  
-  ## Load land mask
-  cat("..Loading land mask\n")
-  TERRESTRIAL <- readRDS(TERRESTRIAL)
-
-  ## Convert coordinates to sf class
-  pts <- st_as_sf(
-    x = datt[, .(decimallongitude, decimallatitude)],
-    coords = c("decimallongitude", "decimallatitude"),
-    crs = "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0")
-
-  ## Check which points are on land
-  cat("..Intersecting polygons and data points\n")
-  land_intersect <- st_intersects(pts, TERRESTRIAL)
-  land <- lengths(land_intersect) > 0
-
-  non_terr <- sum(!land)
-  cat("..Number of non-terrestrial points: ", non_terr, "\n")
-
-  ## Visualization
-  # ggplot(data = pts) + 
-  #   geom_sf(color = "red") + 
-  #   geom_sf(data = TERRESTRIAL, fill = "grey")
-
-  ## Remove outliers
-  if(non_terr > 0){
-    removed_nonterrestrial <- datt[ ! land ]   # outliers
-    datt <- datt[ land ]
-  } else {
-    removed_nonterrestrial <- NULL   # no non-terrestrial samples found
-  }
-
-  check_nodata(datt)
-  rm(pts, TERRESTRIAL)
-  quiet( gc() )
-} else {
-  removed_nonterrestrial <- NULL     # no terrestrial filtering was performed
-}
-
-
-
-
-## Subset to WGSRPD regions
-if(!is.na(WGSRPD) & !is.na(WGSRPDREGIONS) & nrow(datt) > 0){
-  cat("Subsetting by World Geographical Regions\n")
-
-  ## Load WGSRPD polygons
-  cat("..Loading WGSRPD polygons\n")
-  WGSRPD <- readRDS(WGSRPD)
-
-  ## Split the selected regions (if there are more than one)
-  WGSRPDREGIONS <- strsplit(x = WGSRPDREGIONS, split = ",")[[1]]
-
-  ## Check if selected regions are in the shapefile
-  in_polygons <- WGSRPDREGIONS %in% WGSRPD$LevelName
-  if(any(!in_polygons)){
-    cat("\n...! Check: ", WGSRPDREGIONS[!in_polygons], "!...\n")
-    stop("ERROR: Some of the selected regions are not in the shapefile!\n")
-  }
-
-  ## Extract polygons of the selected regions
-  POLY <- WGSRPD[ which(WGSRPD$LevelName %in% WGSRPDREGIONS),  ]
-
-  ## Convert coordinates to sf class
-  pts <- st_as_sf(
-    x = datt[, .(decimallongitude, decimallatitude)],
-    coords = c("decimallongitude", "decimallatitude"),
-    crs = "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0")
-
-  ## Check which points belong to the polygons
-  cat("..Intersecting world polygons and data points\n")
-  poly_intersect <- st_intersects(pts, POLY)
-  poly <- lengths(poly_intersect) > 0
-
-  non_poly <- sum(!poly)
-  cat("..Number of points inside the selected polygons: ", sum(poly), "\n")
-  cat("..Number of points outside the selected polygons: ", non_poly, "\n")
-
-  ## Remove outliers
-  if(non_poly > 0){
-    removed_WGSRPD <- datt[ ! poly ]   # outliers
-    datt <- datt[ poly ]
-  } else {
-    removed_WGSRPD <- NULL   # no non-WGSRPD samples found
-  }
-
-  check_nodata(datt)
-  rm(pts, WGSRPD)
-  quiet( gc() )
-} else {
-  removed_WGSRPD <- NULL     # no WGSRPD-filtering was performed
-}
-
-
-
-
-## Remove country centroids and province centroids (similar to CoordinateCleaner::cc_cen)
-## https://github.com/ropensci/CoordinateCleaner/blob/master/R/cc_cen.R
-## Default buffer = 1 km
-if(!is.na(CC_COUNTRY) & nrow(datt) > 0){
-  cat("Removing occurrences inside country and province centroids\n")
-
-  ## Load polygons
-  cat("..Loading polygons\n")
-  CC_COUNTRY <- readRDS(CC_COUNTRY)
-  cat("..Number of polygons provided: ", nrow(CC_COUNTRY), "\n")
-
-  ## Convert coordinates to sf class
-  pts <- st_as_sf(
-    x = datt[, .(decimallongitude, decimallatitude)],
-    coords = c("decimallongitude", "decimallatitude"),
-    crs = "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0")
-
-  ## Check which points belong to the polygons
-  cat("..Intersecting polygons and data points\n")
-  poly_intersect <- st_intersects(pts, CC_COUNTRY)
-  poly <- lengths(poly_intersect) > 0
-
-  non_poly <- sum(!poly)
-  cat("..Number of points inside the selected polygons: ", sum(poly), "\n")
-  cat("..Number of points outside the selected polygons: ", non_poly, "\n")
-
-  ## Remove outliers
-  if(non_poly > 0){
-    removed_CC_COUNTRY <- datt[ poly ]   # outliers
-    datt <- datt[ ! poly ]
-  } else {
-    removed_CC_COUNTRY <- NULL   # no found
-  }
-
-  check_nodata(datt)
-  rm(pts, CC_COUNTRY)
-  quiet( gc() )
-} else {
-  removed_CC_COUNTRY <- NULL     # no filtering was performed
-}
-
-
-## Filter country capitals (similar to CoordinateCleaner::cc_cap)
-## https://github.com/ropensci/CoordinateCleaner/blob/master/R/cc_cap.R
-## Default buffer = 10 km
-if(!is.na(CC_CAPITAL) & nrow(datt) > 0){
-  cat("Removing occurrences within capitals\n")
-
-  ## Load polygons
-  cat("..Loading polygons\n")
-  CC_CAPITAL <- readRDS(CC_CAPITAL)
-  cat("..Number of polygons provided: ", nrow(CC_CAPITAL), "\n")
-
-  ## Convert coordinates to sf class
-  pts <- st_as_sf(
-    x = datt[, .(decimallongitude, decimallatitude)],
-    coords = c("decimallongitude", "decimallatitude"),
-    crs = "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0")
-
-  ## Check which points belong to the polygons
-  cat("..Intersecting polygons and data points\n")
-  poly_intersect <- st_intersects(pts, CC_CAPITAL)
-  poly <- lengths(poly_intersect) > 0
-
-  non_poly <- sum(!poly)
-  cat("..Number of points inside the selected polygons: ", sum(poly), "\n")
-  cat("..Number of points outside the selected polygons: ", non_poly, "\n")
-
-  ## Remove outliers
-  if(non_poly > 0){
-    removed_CC_CAPITAL <- datt[ poly ]   # outliers
-    datt <- datt[ ! poly ]
-  } else {
-    removed_CC_CAPITAL <- NULL   # no found
-  }
-
-  check_nodata(datt)
-  rm(pts, CC_CAPITAL)
-  quiet( gc() )
-} else {
-  removed_CC_CAPITAL <- NULL     # no filtering was performed
-}
-
-
-## Remove records in the vicinity of biodiversity institutions (similar to CoordinateCleaner::cc_inst)
-## https://github.com/ropensci/CoordinateCleaner/blob/master/R/cc_inst.R
-## Default buffer = 100 m
-if(!is.na(CC_INSTIT) & nrow(datt) > 0){
-  cat("Removing occurrences in the vicinity of biodiversity institutions\n")
-
-  ## Load polygons
-  cat("..Loading polygons\n")
-  CC_INSTIT <- readRDS(CC_INSTIT)
-  cat("..Number of polygons provided: ", nrow(CC_INSTIT), "\n")
-
-  ## Convert coordinates to sf class
-  pts <- st_as_sf(
-    x = datt[, .(decimallongitude, decimallatitude)],
-    coords = c("decimallongitude", "decimallatitude"),
-    crs = "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0")
-
-  ## Check which points belong to the polygons
-  cat("..Intersecting polygons and data points\n")
-  poly_intersect <- st_intersects(pts, CC_INSTIT)
-  poly <- lengths(poly_intersect) > 0
-
-  non_poly <- sum(!poly)
-  cat("..Number of points inside the selected polygons: ", sum(poly), "\n")
-  cat("..Number of points outside the selected polygons: ", non_poly, "\n")
-
-  ## Remove outliers
-  if(non_poly > 0){
-    removed_CC_INSTIT <- datt[ poly ]   # outliers
-    datt <- datt[ ! poly ]
-  } else {
-    removed_CC_INSTIT <- NULL   # no found
-  }
-
-  check_nodata(datt)
-  rm(pts, CC_INSTIT)
-  quiet( gc() )
-} else {
-  removed_CC_INSTIT <- NULL     # no filtering was performed
-}
-
-
-## Remove records inside urban areas (similar to CoordinateCleaner::cc_urb)
-## https://github.com/ropensci/CoordinateCleaner/blob/master/R/cc_urb.R
-if(!is.na(CC_URBAN) & nrow(datt) > 0){
-  cat("Removing occurrences inside urban areas\n")
-
-  ## Load polygons
-  cat("..Loading polygons\n")
-  CC_URBAN <- readRDS(CC_URBAN)
-  cat("..Number of polygons provided: ", nrow(CC_URBAN), "\n")
-
-  ## Convert coordinates to sf class
-  pts <- st_as_sf(
-    x = datt[, .(decimallongitude, decimallatitude)],
-    coords = c("decimallongitude", "decimallatitude"),
-    crs = "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0")
-
-  ## Check which points belong to the polygons
-  cat("..Intersecting polygons and data points\n")
-  poly_intersect <- st_intersects(pts, CC_URBAN)
-  poly <- lengths(poly_intersect) > 0
-
-  non_poly <- sum(!poly)
-  cat("..Number of points inside the selected polygons: ", sum(poly), "\n")
-  cat("..Number of points outside the selected polygons: ", non_poly, "\n")
-
-  ## Remove outliers
-  if(non_poly > 0){
-    removed_CC_URBAN <- datt[ poly ]   # outliers
-    datt <- datt[ ! poly ]
-  } else {
-    removed_CC_URBAN <- NULL   # no found
-  }
-
-  check_nodata(datt)
-  rm(pts, CC_URBAN)
-  quiet( gc() )
-} else {
-  removed_CC_URBAN <- NULL     # no filtering was performed
-}
-
+## Spatial filtering (shapefile-based)
+cat("\nSpatial filtering\n")
+cat("..Loading a file with external code: ", opt$rcode, "\n")
+source(opt$rcode)
+cat("Shapefile-based filtering finished.\n")
 
 
 ## Density-based outlier removal
@@ -556,7 +291,9 @@ if(DBSCAN == TRUE & nrow(datt) > 0){
     removed_dbscan <- NULL    # DBSCAN-based filtering was not performed
 }
 
+## Check the data
 check_nodata(datt)
+
 
 ######## Spatial aggregation
 cat("Spatial aggregation using H3 system\n")
