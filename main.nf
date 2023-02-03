@@ -62,6 +62,7 @@ out_flt2 = params.outdir + "/01.filtered2"
 out_recs = params.outdir + "/01.NumRecords"
 out_biod = params.outdir + "/02.Biodiverse_input"
 out_plot = params.outdir + "/03.Plots"
+polygon            = params.polygon            ? file(params.polygon)            : file("${params.outdir}/no_file10") 
 
 
 // Pipeline help message
