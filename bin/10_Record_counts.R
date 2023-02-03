@@ -83,6 +83,8 @@ option_list <- list(
   make_option(c("-k", "--rmcountrycapitals"), action="store", default=NA, type='character', help="Remove records within a radius around country capitals"),
   make_option(c("-b", "--rminstitutions"), action="store", default=NA, type='character', help="Remove records in the vicinity of biodiversity institutions"),
   make_option(c("-u", "--rmurban"), action="store", default=NA, type='character', help="Remove records inside urban areas"),
+  make_option(c("-w", "--wgsrpd"), action="store", default=NA, type='character', help="Path to the World Geographical Scheme for Recording Plant Distributions data (polygons in sf-format)"),
+  make_option(c("-x", "--regions"), action="store", default=NA, type='character', help="Comma-separated list of WGSRPD regions"),
 
   ## Spatial aggregation
   make_option(c("-r", "--resolution"), action="store", default=4L, type='integer', help="Spatial resolution of the H3 Geospatial Indexing System"),
@@ -139,6 +141,8 @@ EXCLUDEHUMAN <- as.logical( opt$excludehuman )
 BASISINCL <- to_na( opt$basisofrecordinclude )
 BASISEXCL <- to_na( opt$basisofrecordexclude )
 
+WGSRPD        <- to_na( opt$wgsrpd )
+WGSRPDREGIONS <- to_na( opt$regions )
 TERRESTRIAL   <- to_na( opt$terrestrial )
 CC_COUNTRY    <- to_na( opt$rmcountrycentroids )
 CC_CAPITAL    <- to_na( opt$rmcountrycapitals )
@@ -179,6 +183,8 @@ cat(paste("List of extict species: ",     EXTINCT, "\n", sep=""))
 cat(paste("Exclusion of human records: ", EXCLUDEHUMAN, "\n", sep=""))
 cat(paste("Round coordinates: ",          ROUNDCOORDS, "\n", sep=""))
 
+cat(paste("WGSRPD data: ",      WGSRPD,        "\n", sep=""))
+cat(paste("WGSRPD regions: ",   WGSRPDREGIONS, "\n", sep=""))
 cat(paste("Terrestrial data: ", TERRESTRIAL,   "\n", sep=""))
 cat(paste("Country and province centroids: ", CC_COUNTRY, "\n", sep=""))
 cat(paste("Capitals: ",     CC_CAPITAL, "\n", sep=""))
@@ -263,6 +269,8 @@ quiet <- function(x) {
 # EXCLUDEHUMAN <- TRUE
 # BASISINCL <- NA
 # BASISEXCL <- "FOSSIL_SPECIMEN,LIVING_SPECIMEN"
+# WGSRPD <- NA
+# WGSRPDREGIONS <- NA
 # TERRESTRIAL <- " ~/.nextflow/assets/vmikk/phylonext/pipeline_data/Land_Buffered_025_dgr.RData"
 # CC_COUNTRY  <- " ~/.nextflow/assets/vmikk/phylonext/pipeline_data/CC_CountryCentroids_buf_1000m.RData"
 # CC_CAPITAL  <- " ~/.nextflow/assets/vmikk/phylonext/pipeline_data/CC_Capitals_buf_10000m.RData"
