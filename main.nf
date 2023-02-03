@@ -326,6 +326,8 @@ process record_count {
     input:
       path(input)
       path(noextinct)
+      path(polygon)
+      path(wgsrpd)
       path(terrestrial)
       path(rmcountrycentroids)
       path(rmcountrycapitals)
@@ -333,7 +335,7 @@ process record_count {
       path(rmurban)
 
     output:
-      path "Record_counts_H3.RData", emit: n_recr
+      path "Record_counts_H3.RData",  emit: n_recr
       path "Record_counts_H3.txt.gz", emit: n_rect
       path "Record_counts_Outliers.txt.gz", emit: n_outl, optional: true
 
@@ -341,11 +343,13 @@ process record_count {
 
     filter_specieskeys  = params.specieskeys        ? "--specieskeys $specieskeys" : ""
     filter_extinct      = params.noextinct          ? "--noextinct $noextinct"     : ""
+    filter_polygon      = params.polygon            ? "--polygon $polygon"         : ""
     filter_terrestrial  = params.terrestrial        ? "--terrestrial $terrestrial" : ""
     filter_country      = params.rmcountrycentroids ? "--rmcountrycentroids $rmcountrycentroids" : ""
     filter_capitals     = params.rmcountrycapitals  ? "--rmcountrycapitals $rmcountrycapitals"   : ""
     filter_institutions = params.rminstitutions     ? "--rminstitutions $rminstitutions" : ""
     filter_urban        = params.rmurban            ? "--rmurban $rmurban" : ""
+    filter_wgsrpd       = params.wgsrpd             ? "--wgsrpd $wgsrpd --regions ${params.regions}" : ""
 
     """
     10_Record_counts.R \
@@ -369,6 +373,8 @@ process record_count {
       ${filter_specieskeys} \
       ${filter_extinct} \
       --excludehuman ${params.excludehuman} \
+      ${filter_polygon} \
+      ${filter_wgsrpd} \
       ${filter_terrestrial} \
       ${filter_country} \
       ${filter_capitals} \
@@ -377,6 +383,7 @@ process record_count {
       --roundcoords ${params.roundcoords} \
       --resolution  ${params.h3resolution} \
       --threads     ${task.cpus} \
+      --rcode       \$(which "Shapefile_filters.R") \
       --output      "Record_counts"
 
     """
