@@ -89,6 +89,8 @@ option_list <- list(
   make_option(c("--roundcoords"), action="store", default=2L, type='integer', help="Round spatial coordinates to the N decimal places, to reduce the dataset size (default, 2). To disable, set to a negative value."),
 
   make_option(c("-t", "--threads"), action="store", default=4L, type='integer', help="Number of CPU threads for arrow, default 4"),
+  make_option("--rcode", action="store", default="Shapefile_filters.R", type='character', help="File with R-code for spatial filtering"),
+
   make_option(c("-o", "--output"), action="store", default=NA, type='character', help="Output prefix")
 )
 opt <- parse_args(OptionParser(option_list=option_list))
@@ -137,11 +139,11 @@ EXCLUDEHUMAN <- as.logical( opt$excludehuman )
 BASISINCL <- to_na( opt$basisofrecordinclude )
 BASISEXCL <- to_na( opt$basisofrecordexclude )
 
-TERRESTRIAL <- to_na( opt$terrestrial )
-CC_COUNTRY  <- to_na( opt$rmcountrycentroids )
-CC_CAPITAL  <- to_na( opt$rmcountrycapitals )
-CC_INSTIT   <- to_na( opt$rminstitutions )
-CC_URBAN    <- to_na( opt$rmurban )
+TERRESTRIAL   <- to_na( opt$terrestrial )
+CC_COUNTRY    <- to_na( opt$rmcountrycentroids )
+CC_CAPITAL    <- to_na( opt$rmcountrycapitals )
+CC_INSTIT     <- to_na( opt$rminstitutions )
+CC_URBAN      <- to_na( opt$rmurban )
 
 RESOLUTION  <- as.integer(opt$resolution)
 ROUNDCOORDS <- as.numeric( opt$roundcoords )
@@ -177,7 +179,7 @@ cat(paste("List of extict species: ",     EXTINCT, "\n", sep=""))
 cat(paste("Exclusion of human records: ", EXCLUDEHUMAN, "\n", sep=""))
 cat(paste("Round coordinates: ",          ROUNDCOORDS, "\n", sep=""))
 
-cat(paste("Terrestrial data: ",  TERRESTRIAL, "\n", sep=""))
+cat(paste("Terrestrial data: ", TERRESTRIAL,   "\n", sep=""))
 cat(paste("Country and province centroids: ", CC_COUNTRY, "\n", sep=""))
 cat(paste("Capitals: ",     CC_CAPITAL, "\n", sep=""))
 cat(paste("Institutions: ", CC_INSTIT, "\n", sep=""))
@@ -456,215 +458,15 @@ cat("Data table created\n")
 
 ################################################# Spatial filtering
 
-cat("Spatial filtering\n")
-
-
-## Remove non-terrestrial records 
-if(!is.na(TERRESTRIAL)){
-  cat("..Removing non-terrestrial records\n")
-  
-  ## Load land mask
-  cat("...Loading land mask\n")
-  TERRESTRIAL <- readRDS(TERRESTRIAL)
-
-  ## Convert coordinates to sf class
-  pts <- st_as_sf(
-    x = datt[, .(decimallongitude, decimallatitude)],
-    coords = c("decimallongitude", "decimallatitude"),
-    crs = "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0")
-
-  ## Check which points are on land
-  cat("...Intersecting polygons and data points\n")
-  land_intersect <- st_intersects(pts, TERRESTRIAL)
-  land <- lengths(land_intersect) > 0
-
-  non_terr <- sum(!land)
-  cat("...Number of non-terrestrial points: ", non_terr, "\n")
-
-  ## Remove outliers
-  if(non_terr > 0){
-    removed_nonterrestrial <- datt[ ! land ]   # outliers
-    datt <- datt[ land ]
-  } else {
-    removed_nonterrestrial <- NULL   # no non-terrestrial samples found
-  }
-
-  rm(pts, TERRESTRIAL)
-  quiet( gc() )
-} else {
-  removed_nonterrestrial <- NULL     # no terrestrial filtering was performed
-}
-
-
-## Remove country centroids and province centroids (similar to CoordinateCleaner::cc_cen)
-## https://github.com/ropensci/CoordinateCleaner/blob/master/R/cc_cen.R
-## Default buffer = 1 km
-if(!is.na(CC_COUNTRY)){
-  cat("..Removing occurrences inside country and province centroids\n")
-
-  ## Load polygons
-  cat("...Loading polygons\n")
-  CC_COUNTRY <- readRDS(CC_COUNTRY)
-  cat("...Number of polygons provided: ", nrow(CC_COUNTRY), "\n")
-
-  ## Convert coordinates to sf class
-  pts <- st_as_sf(
-    x = datt[, .(decimallongitude, decimallatitude)],
-    coords = c("decimallongitude", "decimallatitude"),
-    crs = "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0")
-
-  ## Check which points belong to the polygons
-  cat("...Intersecting polygons and data points\n")
-  poly_intersect <- st_intersects(pts, CC_COUNTRY)
-  poly <- lengths(poly_intersect) > 0
-
-  non_poly <- sum(!poly)
-  cat("...Number of points inside the selected polygons: ", sum(poly), "\n")
-  cat("...Number of points outside the selected polygons: ", non_poly, "\n")
-
-  ## Remove outliers
-  if(non_poly > 0){
-    removed_CC_COUNTRY <- datt[ poly ]   # outliers
-    datt <- datt[ ! poly ]
-  } else {
-    removed_CC_COUNTRY <- NULL   # no found
-  }
-
-  rm(pts, CC_COUNTRY)
-  quiet( gc() )
-} else {
-  removed_CC_COUNTRY <- NULL     # no filtering was performed
-}
-
-
-## Filter country capitals (similar to CoordinateCleaner::cc_cap)
-## https://github.com/ropensci/CoordinateCleaner/blob/master/R/cc_cap.R
-## Default buffer = 10 km
-if(!is.na(CC_CAPITAL)){
-  cat("..Removing occurrences within capitals\n")
-
-  ## Load polygons
-  cat("...Loading polygons\n")
-  CC_CAPITAL <- readRDS(CC_CAPITAL)
-  cat("...Number of polygons provided: ", nrow(CC_CAPITAL), "\n")
-
-  ## Convert coordinates to sf class
-  pts <- st_as_sf(
-    x = datt[, .(decimallongitude, decimallatitude)],
-    coords = c("decimallongitude", "decimallatitude"),
-    crs = "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0")
-
-  ## Check which points belong to the polygons
-  cat("...Intersecting polygons and data points\n")
-  poly_intersect <- st_intersects(pts, CC_CAPITAL)
-  poly <- lengths(poly_intersect) > 0
-
-  non_poly <- sum(!poly)
-  cat("...Number of points inside the selected polygons: ", sum(poly), "\n")
-  cat("...Number of points outside the selected polygons: ", non_poly, "\n")
-
-  ## Remove outliers
-  if(non_poly > 0){
-    removed_CC_CAPITAL <- datt[ poly ]   # outliers
-    datt <- datt[ ! poly ]
-  } else {
-    removed_CC_CAPITAL <- NULL   # no found
-  }
-
-  rm(pts, CC_CAPITAL)
-  quiet( gc() )
-} else {
-  removed_CC_CAPITAL <- NULL     # no filtering was performed
-}
-
-
-## Remove records in the vicinity of biodiversity institutions (similar to CoordinateCleaner::cc_inst)
-## https://github.com/ropensci/CoordinateCleaner/blob/master/R/cc_inst.R
-## Default buffer = 100 m
-if(!is.na(CC_INSTIT)){
-  cat("..Removing occurrences in the vicinity of biodiversity institutions\n")
-
-  ## Load polygons
-  cat("...Loading polygons\n")
-  CC_INSTIT <- readRDS(CC_INSTIT)
-  cat("...Number of polygons provided: ", nrow(CC_INSTIT), "\n")
-
-  ## Convert coordinates to sf class
-  pts <- st_as_sf(
-    x = datt[, .(decimallongitude, decimallatitude)],
-    coords = c("decimallongitude", "decimallatitude"),
-    crs = "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0")
-
-  ## Check which points belong to the polygons
-  cat("...Intersecting polygons and data points\n")
-  poly_intersect <- st_intersects(pts, CC_INSTIT)
-  poly <- lengths(poly_intersect) > 0
-
-  non_poly <- sum(!poly)
-  cat("...Number of points inside the selected polygons: ", sum(poly), "\n")
-  cat("...Number of points outside the selected polygons: ", non_poly, "\n")
-
-  ## Remove outliers
-  if(non_poly > 0){
-    removed_CC_INSTIT <- datt[ poly ]   # outliers
-    datt <- datt[ ! poly ]
-  } else {
-    removed_CC_INSTIT <- NULL   # no found
-  }
-
-  rm(pts, CC_INSTIT)
-  quiet( gc() )
-} else {
-  removed_CC_INSTIT <- NULL     # no filtering was performed
-}
-
-
-## Remove records inside urban areas (similar to CoordinateCleaner::cc_urb)
-## https://github.com/ropensci/CoordinateCleaner/blob/master/R/cc_urb.R
-if(!is.na(CC_URBAN)){
-  cat("..Removing occurrences inside urban areas\n")
-
-  ## Load polygons
-  cat("...Loading polygons\n")
-  CC_URBAN <- readRDS(CC_URBAN)
-  cat("...Number of polygons provided: ", nrow(CC_URBAN), "\n")
-
-  ## Convert coordinates to sf class
-  pts <- st_as_sf(
-    x = datt[, .(decimallongitude, decimallatitude)],
-    coords = c("decimallongitude", "decimallatitude"),
-    crs = "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0")
-
-  ## Check which points belong to the polygons
-  cat("...Intersecting polygons and data points\n")
-  poly_intersect <- st_intersects(pts, CC_URBAN)
-  poly <- lengths(poly_intersect) > 0
-
-  non_poly <- sum(!poly)
-  cat("...Number of points inside the selected polygons: ", sum(poly), "\n")
-  cat("...Number of points outside the selected polygons: ", non_poly, "\n")
-
-  ## Remove outliers
-  if(non_poly > 0){
-    removed_CC_URBAN <- datt[ poly ]   # outliers
-    datt <- datt[ ! poly ]
-  } else {
-    removed_CC_URBAN <- NULL   # no found
-  }
-
-  rm(pts, CC_URBAN)
-  quiet( gc() )
-} else {
-  removed_CC_URBAN <- NULL     # no filtering was performed
-}
-
-
-
+cat("\nSpatial filtering\n")
+cat("..Loading a file with external code: ", opt$rcode, "\n")
+source(opt$rcode)
+cat("Shapefile-based filtering finished.\n")
 
 
 ################################################# Spatial binning (H3) and Estimation of the number of records
 
-cat("Spatial binning\n")
+cat("\nSpatial binning\n")
 
 ## H3 system
 datt[ , H3 := h3::geo_to_h3(datt[, .(decimallatitude, decimallongitude)], res = RESOLUTION) ]
