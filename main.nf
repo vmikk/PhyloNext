@@ -4,7 +4,7 @@
 ========================================================================================
     PhyloNext: GBIF phylogenetic diversity pipeline
 ========================================================================================
-    Version: 1.0
+    Version: 1.1.0
     License: MIT
     Github : https://github.com/vmikk/phylonext
     Website: TBA
@@ -43,7 +43,7 @@
 nextflow.enable.dsl = 2
 
 // Pipeline version
-version = '1.0'
+version = '1.1.0'
 
 // Parameters are defined in the `conf/params.config` file
 
