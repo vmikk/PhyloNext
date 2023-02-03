@@ -38,7 +38,6 @@ cat("Script name: 15_Leaflets.R\n")
 # - Diversity_estimates.gpkg = Polygons with diversity metrics in GeoPackage format
 
 ## TO DO:
-# - fix SES legend (1000)
 # - handle NA values (e.g., if Richness == 1)
 
 
