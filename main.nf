@@ -645,6 +645,8 @@ process derived_datasets {
     input:
       path(input)
       path(noextinct)
+      path(polygon)
+      path(wgsrpd)
       path(terrestrial)
       path(rmcountrycentroids)
       path(rmcountrycapitals)
@@ -659,11 +661,13 @@ process derived_datasets {
 
     filter_specieskeys  = params.specieskeys        ? "--specieskeys $specieskeys" : ""
     filter_extinct      = params.noextinct          ? "--noextinct $noextinct"     : ""
+    filter_polygon      = params.polygon            ? "--polygon $polygon"         : ""
     filter_terrestrial  = params.terrestrial        ? "--terrestrial $terrestrial" : ""
     filter_country      = params.rmcountrycentroids ? "--rmcountrycentroids $rmcountrycentroids" : ""
     filter_capitals     = params.rmcountrycapitals  ? "--rmcountrycapitals $rmcountrycapitals"   : ""
     filter_institutions = params.rminstitutions     ? "--rminstitutions $rminstitutions" : ""
     filter_urban        = params.rmurban            ? "--rmurban $rmurban" : ""
+    filter_wgsrpd       = params.wgsrpd             ? "--wgsrpd $wgsrpd --regions ${params.regions}" : ""
 
     """
     16_Derived_dataset.R \
@@ -688,6 +692,8 @@ process derived_datasets {
       --speciestree ${speciesinphylotree} \
       ${filter_extinct} \
       --excludehuman ${params.excludehuman} \
+      ${filter_polygon} \
+      ${filter_wgsrpd} \
       ${filter_terrestrial} \
       ${filter_country} \
       ${filter_capitals} \
@@ -696,6 +702,7 @@ process derived_datasets {
       --roundcoords ${params.roundcoords} \
       --resolution  ${params.h3resolution} \
       --threads     ${task.cpus} \
+      --rcode       \$(which "Shapefile_filters.R") \
       --output      "Dataset_DOIs.txt"
     """
 }
