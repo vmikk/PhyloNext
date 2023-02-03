@@ -857,8 +857,9 @@ process plot_leaflet {
     output:
       path "Choropleth.html"
       path "Choropleth_files",              optional: true
-      path "Biodiverse_results_merged.txt", optional: true
-      path "Diversity_estimates.gpkg"
+      path "Biodiverse_results_merged.txt", optional: true, emit: tab
+      path "Diversity_estimates.gpkg",      emit: geopackage
+      path "Leaflet_object.RData",          emit: leaflet
 
     script:
 
