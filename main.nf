@@ -202,45 +202,8 @@ log.info """
         ====================================================================
         GBIF occurrence dump:     ${params.input}
         Output path:              ${params.outdir}
-        H3 spatial resolution:    ${params.h3resolution}
-        Land-mask:                ${params.terrestrial}
-        WGSRPD mask:              ${params.wgsrpd}
-        WGSRPD regions:           ${params.regions}
-        Spatial outliers removal: ${params.dbscan}
-        """
-        .stripIndent()
-
-if(params.dbscan == true){
-    log.info "  DBSCAN epsilon:           ${params.dbscanepsilon}".stripIndent()
-    log.info "  DBSCAN minpts:            ${params.dbscanminpts}".stripIndent()
-}
-
-log.info """
-        Biodiverse params:
-          Biodiverse indices:         ${params.indices}
-          Biodiverse randomizations:  ${params.iterations}
-          Biodiverse threads:         ${params.biodiversethreads}
-          Biodiverse rand per thread: ${iterations_per_thread}
-          Biodiverse args:            ${biodiverse_args}
-        """
-        .stripIndent()
-
-log.info """
-        Pipeline info:
-          Pipeline version:                ${version}
-          Pipeline scripts location:       ${params.scripts_path}
-          Pipeline internal data location: ${params.data_path}
-          Pipeline profile:                ${workflow.profile}
-          Config file used:                ${workflow.configFiles}
-          Container engine:                ${workflow.containerEngine}
-        """
-        .stripIndent()
-
-log.info """
-        Core Nextflow options:
-          launchDir:              ${workflow.launchDir}
-          workDir:                ${workflow.workDir}
-          projectDir:             ${workflow.projectDir}
+        Launch directory:         ${workflow.launchDir}
+        Working directory:        ${workflow.workDir}
         """
         .stripIndent()
 
