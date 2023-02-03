@@ -74,6 +74,7 @@ option_list <- list(
   make_option("--coorduncertaintyexclude", action="store", default="301,3036,999,9999", type='character', help="Black-listed values of coordinate uncertainty"),
 
   ## Spatial filters (shapefile-based)
+  make_option(c("-g", "--polygon"), action="store", default=NA, type='character', help="Custom area of interest (a file with polygons in GeoPackage format)"),
   make_option(c("-l", "--terrestrial"), action="store", default=NA, type='character', help="Remove non-terrestrial occurrences, provide land polygon in sf-format"),
   make_option(c("-c", "--rmcountrycentroids"), action="store", default=NA, type='character', help="Remove records within a radius around the geographic centroids of political countries and provinces"),
   make_option(c("-k", "--rmcountrycapitals"), action="store", default=NA, type='character', help="Remove records within a radius around country capitals"),
@@ -137,6 +138,7 @@ EXCLUDEHUMAN <- as.logical( opt$excludehuman )
 BASISINCL <- to_na( opt$basisofrecordinclude )
 BASISEXCL <- to_na( opt$basisofrecordexclude )
 
+POLYGON       <- to_na( opt$polygon )
 WGSRPD        <- to_na( opt$wgsrpd )
 WGSRPDREGIONS <- to_na( opt$regions )
 TERRESTRIAL   <- to_na( opt$terrestrial )
@@ -180,6 +182,7 @@ cat(paste("List of extict species: ",     EXTINCT, "\n", sep=""))
 cat(paste("Exclusion of human records: ", EXCLUDEHUMAN, "\n", sep=""))
 cat(paste("Round coordinates: ",          ROUNDCOORDS, "\n", sep=""))
 
+cat(paste("Custom polygons: ",  POLYGON,       "\n", sep=""))
 cat(paste("WGSRPD data: ",      WGSRPD,        "\n", sep=""))
 cat(paste("WGSRPD regions: ",   WGSRPDREGIONS, "\n", sep=""))
 cat(paste("Terrestrial data: ", TERRESTRIAL,   "\n", sep=""))
@@ -276,6 +279,7 @@ quiet <- function(x) {
 # EXCLUDEHUMAN <- TRUE
 # BASISINCL <- NA
 # BASISEXCL <- "FOSSIL_SPECIMEN,LIVING_SPECIMEN"
+# POLYGON <- NA
 # WGSRPD <- NA
 # WGSRPDREGIONS <- NA
 # TERRESTRIAL <- " ~/.nextflow/assets/vmikk/phylonext/pipeline_data/Land_Buffered_025_dgr.RData"
