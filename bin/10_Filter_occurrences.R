@@ -60,6 +60,11 @@ option_list <- list(
   make_option("--lonmin", action="store", default=NA, type='double', help="Minimum longitude"),
   make_option("--lonmax", action="store", default=NA, type='double', help="Maximum longitude"),
 
+  ## Polygons (to find a bounding box if no coordinates are provided)
+  make_option(c("-g", "--polygon"), action="store", default=NA, type='character', help="Custom area of interest (a file with polygons in GeoPackage format)"),
+  make_option(c("-w", "--wgsrpd"),  action="store", default=NA, type='character', help="Path to the World Geographical Scheme for Recording Plant Distributions data (polygons in sf-format)"),
+  make_option(c("-x", "--regions"), action="store", default=NA, type='character', help="Comma-separated list of WGSRPD regions"),
+
   ## Additional filters
   make_option("--minyear", action="store", default=1945, type='integer', help="Minimum year of occurrence (default, 1945)"),
   make_option("--noextinct", action="store", default=NA, type='character', help="Remove extinct species (provide a file with extinct specieskeys)"),
@@ -116,6 +121,10 @@ LATMAX  <- as.numeric( to_na(opt$latmax) )
 LONMIN  <- as.numeric( to_na(opt$lonmin) )
 LONMAX  <- as.numeric( to_na(opt$lonmax) )
 
+POLYGON       <- to_na( opt$polygon )
+WGSRPD        <- to_na( opt$wgsrpd )
+WGSRPDREGIONS <- to_na( opt$regions )
+
 MINYEAR      <- as.numeric(to_na( opt$minyear) )
 EXTINCT      <- to_na( opt$noextinct )
 EXCLUDEHUMAN <- as.logical( opt$excludehuman )
@@ -149,6 +158,10 @@ cat(paste("Maximum latitude: ",  LATMAX,  "\n", sep = ""))
 cat(paste("Minimum longitude: ", LONMIN,  "\n", sep = ""))
 cat(paste("Maximum longitude: ", LONMAX,  "\n", sep = ""))
 
+cat(paste("Custom polygons: ",  POLYGON,       "\n", sep=""))
+cat(paste("WGSRPD data: ",      WGSRPD,        "\n", sep=""))
+cat(paste("WGSRPD regions: ",   WGSRPDREGIONS, "\n", sep=""))
+
 cat(paste("Basis of record to include: ", BASISINCL, "\n", sep=""))
 cat(paste("Basis of record to exclude: ", BASISEXCL, "\n", sep=""))
 cat(paste("Minimum year of occurrence: ", MINYEAR, "\n", sep=""))
@@ -174,6 +187,7 @@ load_pckg <- function(pkg = "data.table"){
 load_pckg("arrow")
 load_pckg("data.table")
 load_pckg("dplyr")
+load_pckg("sf")
 
 cat("\n")
 
@@ -319,13 +333,69 @@ if(!is.na(SPECIESKEYS[[1]][1])){
 }
 
 
-## Spatial filters
+## Country-based filtering
 if(!is.na(COUNTRY)){
   cat("..Filtering by Country\n")
   COUNTRY <- strsplit(x = COUNTRY, split = ",")[[1]]
   dsf <- dsf %>% filter(countrycode %in% COUNTRY)
 }
 
+
+
+### Filtering by coordinates
+
+## If no coordinates specified,
+## but filtering by custom polygons or WGSRPD is required,
+## find a coordinate box
+any_coordinates <- sum(!is.na(LATMIN), !is.na(LATMAX), !is.na(LONMIN), !is.na(LONMAX))
+any_polygons <- sum(!is.na(POLYGON), !is.na(WGSRPDREGIONS))
+if(any_coordinates == 0 & any_polygons > 0){
+
+  cat("Coordinate box is not specified, but spatial polygons are provided for filtering\n")
+  cat("Infering coordinate box from polygons\n")
+
+  ## User-supplied polygons
+  if(!is.na(POLYGON)){
+    cat("..Loading GeoPackge file\n")
+    POLYGON <- read_sf(POLYGON)
+    poly_bbox <- st_bbox(POLYGON)  # x = longitude, y = latitude
+    poly_latmin <- poly_bbox$ymin
+    poly_latmax <- poly_bbox$ymax
+    poly_lonmin <- poly_bbox$xmin
+    poly_lonmax <- poly_bbox$xmax
+  } else {
+    poly_latmin <- poly_latmax <- poly_lonmin <- poly_lonmax <- NA
+  }
+
+  ## WGSRPD polygons
+  if(!is.na(WGSRPD) & !is.na(WGSRPDREGIONS)){
+    cat("..Loading WGSRPD polygons\n")
+    WGSRPD <- readRDS(WGSRPD)
+    WGSRPDREGIONS <- strsplit(x = WGSRPDREGIONS, split = ",")[[1]]
+    WGSRPD <- WGSRPD[ which(WGSRPD$LevelName %in% WGSRPDREGIONS),  ]
+    wgsrpd_bbox <- st_bbox(WGSRPD)
+    wgsrpd_latmin <- wgsrpd_bbox$ymin
+    wgsrpd_latmax <- wgsrpd_bbox$ymax
+    wgsrpd_lonmin <- wgsrpd_bbox$xmin
+    wgsrpd_lonmax <- wgsrpd_bbox$xmax
+  } else {
+    wgsrpd_latmin <- wgsrpd_latmax <- wgsrpd_lonmin <- wgsrpd_lonmax <- NA
+  }
+
+  cat("..Finding coordinate bounding box:\n")
+  LATMIN <- min(c(poly_latmin, wgsrpd_latmin), na.rm = TRUE)
+  LATMAX <- max(c(poly_latmax, wgsrpd_latmax), na.rm = TRUE)
+  LONMIN <- min(c(poly_lonmin, wgsrpd_lonmin), na.rm = TRUE)
+  LONMAX <- max(c(poly_lonmax, wgsrpd_lonmax), na.rm = TRUE)
+
+  cat(paste("...Minimum latitude from polygons: ",  LATMIN,  "\n", sep = ""))
+  cat(paste("...Maximum latitude from polygons: ",  LATMAX,  "\n", sep = ""))
+  cat(paste("...Minimum longitude from polygons: ", LONMIN,  "\n", sep = ""))
+  cat(paste("...Maximum longitude from polygons: ", LONMAX,  "\n", sep = ""))
+
+}
+
+## Filter by coordinates
 if(!is.na(LATMIN)){
   cat("..Filtering by min latitude\n")
   dsf <- dsf %>% filter(decimallatitude >= LATMIN)
@@ -342,6 +412,7 @@ if(!is.na(LONMAX)){
   cat("..Filtering by max longitude\n")
   dsf <- dsf %>% filter(decimallongitude <= LONMAX)
 }
+
 
 
 ## Remove extinct species
