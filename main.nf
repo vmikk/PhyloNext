@@ -189,8 +189,10 @@ process occ_filter {
     // cpus 10
 
     input:
-      path input
-      path noextinct
+      path(input)
+      path(noextinct)
+      path(polygon)
+      path(wgsrpd)
 
     output:
       path "Partition_low",     emit: part_low,  type: "dir", optional: true
@@ -202,6 +204,8 @@ process occ_filter {
 
     filter_specieskeys = params.specieskeys ? "--specieskeys $specieskeys" : ""
     filter_extinct     = params.noextinct   ? "--noextinct $noextinct"     : ""
+    filter_polygon     = params.polygon     ? "--polygon $polygon"         : ""
+    filter_wgsrpd      = params.wgsrpd      ? "--wgsrpd $wgsrpd --regions ${params.regions}" : ""
 
     """
     10_Filter_occurrences.R \
@@ -224,6 +228,8 @@ process occ_filter {
       --basisofrecordexclude ${params.basisofrecordexclude} \
       ${filter_specieskeys} \
       ${filter_extinct} \
+      ${filter_polygon} \
+      ${filter_wgsrpd} \
       --excludehuman ${params.excludehuman} \
       --roundcoords  ${params.roundcoords} \
       --threads      ${task.cpus} \
