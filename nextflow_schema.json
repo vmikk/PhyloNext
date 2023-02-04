@@ -386,6 +386,13 @@
                     "minimum": 0,
                     "maximum": 1,
                     "help_text": "Sampling redundancy = [1 \u2013 (richness / number of specimens)] in a grid cell."
+                },
+                "leaflet_sescolor": {
+                    "type": "string",
+                    "default": "threat",
+                    "fa_icon": "fas fa-atlas",
+                    "description": "Color scheme for standardized effect sizes, SES",
+                    "help_text": "default, \"threat\"; alternative - \"hotspots"
                 }
             },
             "fa_icon": "fas fa-passport"
@@ -519,9 +526,9 @@
                     "description": "Prune Open Tree tips for which there are no phylogenetic inputs"
                 },
                 "maxage": {
-                    "type": "string",
-                    "default": null,
-                    "fa_icon": "fas fa-compress-alt"
+                    "type": "number",
+                    "fa_icon": "fas fa-compress-alt",
+                    "description": "Manually assign root age for a tree obtained from Open Tree of Life"
                 }
             }
         },
