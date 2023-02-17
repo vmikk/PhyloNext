@@ -131,6 +131,9 @@ def helpMsg() {
         --leaflet_bins        Number of color bins for continuous variables (default, 5)
         --leaflet_sescolor    Color scheme for standardized effect sizes, SES (default, "threat"; alternative - "hotspots)
         --leaflet_redundancy  Redundancy threshold for hiding the grid cells with low number of records (default, 0 = display all grid cells)
+        --leaflet_zoom        Zoom factor of the image for Leaflet-based screenshots (default, 2)
+        --leaflet_width       Image width of Leaflet-based screenshots (default, 3840)
+        --leaflet_height      Image height of Leaflet-based screenshots (default, 2160)
 
     Static visualization:
         --plotvar             Variables to plot (multiple comma-separated values allowed); e.g., "RICHNESS_ALL,PD,PD_P"
