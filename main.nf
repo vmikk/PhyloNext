@@ -888,6 +888,37 @@ process plot_leaflet {
 }
 
 
+// Leaflet screenshots
+process leaflet_mapshots {
+
+    label "container_r"
+    queue "custom_pool"
+
+    publishDir "$params.outdir/03.Plots/Mapshots", mode: 'copy'
+    tag "$ind"
+
+    input:
+      path leaf    // leaflet object
+      val  ind     // Index to plot
+
+    output:
+      path "*.png", optional: true
+
+    script:
+    """
+    
+    15_Leaflets_mapshots.R \
+      --input  ${leaf} \
+      --metric ${ind}  \
+      --allmetrics ${params.leaflet_var} \
+      --zoom       ${params.leaflet_zoom} \
+      --width      ${params.leaflet_width} \
+      --height     ${params.leaflet_height}
+
+    """
+}
+
+
 
 
 //  The default workflow
