@@ -1056,6 +1056,20 @@ workflow {
         div_to_csv.out.RND3,
         record_count.out.n_recr)
 
+    
+    // Prepare a channel with diversity index names
+    ind_ch = Channel.value( params.leaflet_var )
+      .splitText( { it.split(',') } )
+      .distinct()
+      .flatten()
+      .map { it.trim() }
+
+    // Leaflet screenshots
+    // leaflet_mapshots(
+    //   plot_leaflet.out.leaflet,
+    //   ind_ch
+    //   )
+
     // Prepare a list of DOIs for the GBIF datasets
     if(params.deriveddataset == true){
       derived_datasets(
