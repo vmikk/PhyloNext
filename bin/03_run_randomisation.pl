@@ -17,6 +17,8 @@
 
 use strict;
 use warnings;
+use 5.010;
+
 
 use Data::Dumper qw/Dumper/;
 use File::Spec;
@@ -31,7 +33,7 @@ use rlib;
 
 local $| = 1;
 
-our $VERSION = '3.99_002';
+our $VERSION = '4.1';
 
 use Biodiverse::Config;
 use Biodiverse::BaseData;
@@ -158,10 +160,10 @@ exit 0 if $success;
 
 sub report_error {
     my $error = shift;
-    
+
     if (blessed $error) {
         warn $error->error, "\n\n", $error->trace->as_string, "\n";
-        
+
     }
     else {
         warn $error;
