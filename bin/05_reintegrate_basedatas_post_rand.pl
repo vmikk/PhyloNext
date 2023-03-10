@@ -15,11 +15,12 @@ use Getopt::Long::Descriptive;
 
 my ($opt, $usage) = describe_options(
   '%c <arguments>',
-  [ 'glob=s',     'glob to find files', { required => 1 } ],
-  [ 'output_prefix|opfx=s', 'The output prefix for exported files', {required => 1}],
-  [ 'no_verify|n!', 'do not verify that the basedatas match', { default => 1} ],
-  [],
-  [ 'help',       "print usage message and exit" ],
+
+  [ 'glob=s',               'glob to find files',                     { required => 1 } ],
+  [ 'output_prefix|opfx=s', 'The output prefix for exported files',   { required => 1 } ],
+  [ 'no_verify|n!',         'do not verify that the basedatas match', { default  => 1 } ],
+
+  [ 'help',                 "print usage message and exit" ],
 );
 
 
