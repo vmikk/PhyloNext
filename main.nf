@@ -45,17 +45,17 @@ if(params.phytree == null & params.phylabels == "OTT"){
 }
 
 // Optional input files
-specieskeys        = params.specieskeys        ? file(params.specieskeys)        : file("${params.outdir}/no_file0") 
-noextinct          = params.noextinct          ? file(params.noextinct)          : file("${params.outdir}/no_file1") 
-terrestrial        = params.terrestrial        ? file(params.terrestrial)        : file("${params.outdir}/no_file2") 
-rmcountrycentroids = params.rmcountrycentroids ? file(params.rmcountrycentroids) : file("${params.outdir}/no_file3") 
-rmcountrycapitals  = params.rmcountrycapitals  ? file(params.rmcountrycapitals)  : file("${params.outdir}/no_file4") 
-rminstitutions     = params.rminstitutions     ? file(params.rminstitutions)     : file("${params.outdir}/no_file5") 
-rmurban            = params.rmurban            ? file(params.rmurban)            : file("${params.outdir}/no_file6") 
-wgsrpd             = params.wgsrpd             ? file(params.wgsrpd)             : file("${params.outdir}/no_file7") 
-phytree            = params.phytree            ? file(params.phytree)            : file("${params.outdir}/no_file8") 
-world              = params.world              ? file(params.world)              : file("${params.outdir}/no_file9") 
-polygon            = params.polygon            ? file(params.polygon)            : file("${params.outdir}/no_file10") 
+specieskeys        = params.specieskeys        ? file(params.specieskeys)        : file("${params.outdir}/no_file0")
+noextinct          = params.noextinct          ? file(params.noextinct)          : file("${params.outdir}/no_file1")
+terrestrial        = params.terrestrial        ? file(params.terrestrial)        : file("${params.outdir}/no_file2")
+rmcountrycentroids = params.rmcountrycentroids ? file(params.rmcountrycentroids) : file("${params.outdir}/no_file3")
+rmcountrycapitals  = params.rmcountrycapitals  ? file(params.rmcountrycapitals)  : file("${params.outdir}/no_file4")
+rminstitutions     = params.rminstitutions     ? file(params.rminstitutions)     : file("${params.outdir}/no_file5")
+rmurban            = params.rmurban            ? file(params.rmurban)            : file("${params.outdir}/no_file6")
+wgsrpd             = params.wgsrpd             ? file(params.wgsrpd)             : file("${params.outdir}/no_file7")
+phytree            = params.phytree            ? file(params.phytree)            : file("${params.outdir}/no_file8")
+world              = params.world              ? file(params.world)              : file("${params.outdir}/no_file9")
+polygon            = params.polygon            ? file(params.polygon)            : file("${params.outdir}/no_file10")
 
 
 // Pipeline help message
@@ -64,11 +64,11 @@ def helpMsg() {
     =====================================================================
     PhyloNext: GBIF phylogenetic diversity pipeline :  Version ${version}
     =====================================================================
-    
+
     Pipeline Usage:
     To run the pipeline, enter the following in the command line:
         nextflow run vmikk/phylonext -r main --input ... --outdir ...
-    
+
     Options:
     REQUIRED:
         --input               Path to the directory with parquet files (GBIF occurrcence dump)
@@ -105,18 +105,18 @@ def helpMsg() {
         --excludehuman        Logical, exclude genus "Homo" from occurrence data (default, true)
         --roundcoords         Numeric, round spatial coordinates to N decimal places, to reduce the dataset size (default, 2; set to negative to disable rounding)
         --h3resolution        Spatial resolution of the H3 geospatial indexing system; e.g., 4
-        
+
         --dbscan              Logical, remove spatial outliers with density-based clustering; e.g., "false"
         --dbscannoccurrences  Minimum species occurrence to perform DBSCAN; e.g., 30
         --dbscanepsilon       DBSCAN parameter epsilon, km; e.g., "700"
         --dbscanminpts        DBSCAN min number of points; e.g., "3"
-        
+
         --terrestrial         Land polygon for removal of non-terrestrial occurrences; e.g., "pipeline_data/Land_Buffered_025_dgr.RData"
         --rmcountrycentroids  Polygons with country and province centroids; e.g., "pipeline_data/CC_CountryCentroids_buf_1000m.RData"
         --rmcountrycapitals   Polygons with country capitals; e.g., "pipeline_data/CC_Capitals_buf_10000m.RData"
         --rminstitutions      Polygons with biological institutuions and museums; e.g., "pipeline_data/CC_Institutions_buf_100m.RData"
         --rmurban             Polygons with urban areas; e.g., "pipeline_data/CC_Urban.RData"
-        
+
         --deriveddataset      Prepare a list of DOIs for the datasets used (default, true)
 
         --indices             Comma-seprated list of diversity and endemism indices; e.g., "calc_richness,calc_pd,calc_pe"
@@ -448,16 +448,16 @@ process outl_high {
 // // If there are a lot of files - it triggers and error:
 // // String too long. The given string is 265799 Unicode code units long, but only a maximum of 65535 is allowed.
 // process filtered_filelist {
-// 
+//
 //     // container image is required for Cloud only
 //     label "container_r"
-// 
+//
 //     input:
 //     val spp
-// 
+//
 //     output:
 //     path "filtered_results.txt", emit: FLT
-// 
+//
 //     shell:
 //     $/
 //     echo "${spp}" \
@@ -1033,6 +1033,7 @@ workflow {
         flt_ch,
         phytree)
 
+
     // Prepare Biodiverse input files
     prep_biodiv(merge_occ.out.occurrences, merge_occ.out.tree)
 
@@ -1067,7 +1068,7 @@ workflow {
         div_to_csv.out.RND3,
         record_count.out.n_recr)
 
-    
+
     // Prepare a channel with diversity index names
     ind_ch = Channel.value( params.leaflet_var )
       .splitText( { it.split(',') } )
