@@ -40,6 +40,7 @@ option_list <- list(
   make_option(c("--resolution"),  action="store", default=4L, type='integer', help="Spatial resolution of the H3 Geospatial Indexing System"),
   make_option(c("-p", "--plotz"), action="store", default="raw", type='character', help="Plot raw estimates or Z-scores"),
   make_option(c("-w", "--world"), action="store", default=NA, type='character', help="File with contour map of the world"),
+  make_option(c("--antimeridianfix"), action="store", default=TRUE, type='logical', help="Fix H3 polygons that cross the antimeridian"),
   make_option(c("-t", "--threads"), action="store", default=1L, type='integer', help="Number of CPU threads for arrow, default 4"),
   make_option(c("-f", "--format"), action="store", default="pdf", type='character', help="Image format (pdf, png, svg, jpg)"),
   make_option(c("-n", "--width"), action="store", default=18, type='double', help="Image size, width"),
@@ -74,6 +75,7 @@ VARIABLES  <- opt$variables
 RESOLUTION <- as.integer(opt$resolution)
 PLOTZ      <- opt$plotz
 WORLD      <- to_na( opt$world )
+ANTIFIX    <- as.logical( opt$antimeridianfix )
 
 CPUTHREADS <- as.numeric(opt$threads)
 FORMAT <- opt$format
@@ -90,6 +92,7 @@ cat(paste("Indices to plot: ",               VARIABLES,  "\n", sep=""))
 cat(paste("Spatial resolution: ",            RESOLUTION, "\n", sep=""))
 cat(paste("Variable type to plot (raw or Z-scores): ", PLOTZ, "\n", sep=""))
 cat(paste("Adding world map: ",             WORLD,      "\n", sep=""))
+cat(paste("Antimeridian fix: ",             ANTIFIX,    "\n", sep=""))
 cat(paste("Number of CPU threads to use: ", CPUTHREADS, "\n", sep=""))
 cat(paste("Output image format: ",          FORMAT,     "\n", sep=""))
 cat(paste("Output image width: ",           WIDTH,      "\n", sep=""))
@@ -218,6 +221,13 @@ if(PLOTZ %in% c("z", "Z", "z-scores", "Z-scores")){
   
   cat("..Adding Z-scores of diversity estimates to polygons\n")
   H3_poly <- cbind(H3_poly, res_z[, ..VARIABLES])
+}
+
+
+## Fix H3 polygons that cross the antimeridian by cutting them in two
+if(ANTIFIX == TRUE){
+  cat("..Fixing antimeridian issue\n")
+  H3_poly <- st_wrap_dateline(H3_poly, options = c("WRAPDATELINE=YES", "DATELINEOFFSET=180"))
 }
 
 
