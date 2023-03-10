@@ -8,6 +8,12 @@
 ## Based on `create_bds.pl` (988881a, Aug 6, 2014)
 # https://github.com/NunzioKnerr/biodiverse_pipeline/blob/master/perl/create_bds.pl
 
+## Input data format:
+# Column 1 = species name
+# Column 2 = H3 grid cell ID
+# Column 5 = Latitude
+# Column 6 = Longitude
+
 
 use strict;
 use warnings;
@@ -21,16 +27,25 @@ use Getopt::Long::Descriptive;
 
 $| = 1;
 
+
+## NB! column numbers are zero-based!
+# label = species name
+# group = grid cell
+
 my ($opt, $usage) = describe_options(
   '%c <arguments>',
-  [ 'csv_file=s',   'The input csv file', { required => 1 } ],
-  [ 'out_file|output_bd=s',  'The output basedata file', { required => 1 }],
-  [ 'label_column_number:i',    'Column containing the label name [default= "0"]', { default => 0 } ],
-  [ 'group_column_number_x:i',  'Column containing the x-axis values [default= "1"]', { default => 1 } ],
-  # [ 'group_column_number_y:i',  'Column containing the y-axis values [default= "2"]', { default => 2 } ],
-  [ 'cell_size_x:f',  'Cell size of x-axis [default= "100000"]', { default => 100000 } ],
-  # [ 'cell_size_y:f',  'Cell size of y-axis [default= "100000"]', { default => 100000 } ],
-  [],
+  
+  [ 'csv_file=s',              'The input csv file',       { required => 1 } ],
+  [ 'out_file|output_bd=s',    'The output basedata file', { required => 1 } ],
+
+  [ 'label_column_number:i',   'Column containing the label name [default= "0"]',    { default => 0 } ],
+# [ 'group_column_text:i',     'Column containing the group name [default= "1"]',    { default => 1 } ],
+  [ 'group_column_number_x:i', 'Column containing the x-axis values [default= "2"]', { default => 4 } ],
+  [ 'group_column_number_y:i', 'Column containing the y-axis values [default= "3"]', { default => 5 } ],
+  
+  [ 'cell_size_x:f',           'Cell size of x-axis [default= "0"]', { default => 0 } ],
+  [ 'cell_size_y:f',           'Cell size of y-axis [default= "0"]', { default => 0 } ],
+
   [ 'help',       "print usage message and exit" ],
 );
 
@@ -44,11 +59,15 @@ print "Preparing occurrence data for Biodiverse\n";
 
 my $csv_file              = $opt->csv_file;
 my $out_file              = $opt->out_file;
+
 my $label_column_number   = $opt->label_column_number;
+
+# my $group_column_text     = $opt->group_column_text;
 my $group_column_number_x = $opt->group_column_number_x;
-# my $group_column_number_y = $opt->group_column_number_y;
-my $cell_size_x = $opt->cell_size_x;
-# my $cell_size_y = $opt->cell_size_y;
+my $group_column_number_y = $opt->group_column_number_y;
+
+my $cell_size_x           = $opt->cell_size_x;
+my $cell_size_y           = $opt->cell_size_y;
 
 
 my @table;
@@ -65,8 +84,8 @@ my %input_files = (
     $names[0] => {
         input_quotes    => $double_quotes,
         label_columns   => [$label_column_number],
-        group_columns   => [$group_column_number_x],
-        # group_columns   => [$group_column_number_x, $group_column_number_y],
+        group_columns   => [$group_column_number_x, $group_column_number_y],
+        # group_columns   => [$group_column_number_x],
     }
 );
 
@@ -83,8 +102,8 @@ if (not defined $bd) {
 sub create_bd {
     my $bd = Biodiverse::BaseData -> new (
         NAME        => $out_file,
-        CELL_SIZES  => [$cell_size_x],
-        # CELL_SIZES  => [$cell_size_x, $cell_size_y],
+        CELL_SIZES  => [$cell_size_x, $cell_size_y],
+        # CELL_SIZES  => [$cell_size_x],
     );
 
     foreach my $file (@names) {
