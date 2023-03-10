@@ -57,7 +57,8 @@ option_list <- list(
   make_option(c("-s", "--sesscores"), action="store", default=NA, type='character', help="Input file (CSV) with Biodiverse results - SES-scores"),
   make_option(c("-q", "--sigscores"), action="store", default=NA, type='character', help="Input file (CSV) with Biodiverse results - Randomization p-values"),
   make_option(c("-n", "--reccounts"), action="store", default=NA, type='character', help="File with the total number of (filtered) records per H3 cell"),
-  make_option(c("-v", "--variables"), action="store", default="RICHNESS_ALL,PD,zPD,PD_P,zPD_P", type='character', help="Diversity variables to plot (comma-separated entries)"),
+  make_option(c("--resolution"),      action="store", default=4L, type='integer', help="Spatial resolution of the H3 Geospatial Indexing System"),
+  make_option(c("-v", "--variables"), action="store", default="RICHNESS_ALL,PD,SES_PD,PD_P,SES_PD_P", type='character', help="Diversity variables to plot (comma-separated entries)"),
   make_option(c("-p", "--palette"), action="store", default="quantile", type='character', help="Color palette type"),
   make_option(c("-c", "--color"), action="store", default="RdYlBu", type='character', help="Color gradient scheme for the diversity indices (except for SES, CANAPE, and redundancy metrics)"),
   make_option(c("-b", "--bins"), action="store", default=5L, type='integer', help="Number of color bins for quantile palette"),
@@ -96,19 +97,20 @@ to_na <- function(x){
 }
 
 ## Assign variables
-INPUTR <- opt$observed          # observed results (raw index values)
-INPUTS <- opt$sesscores         # standardized index values (SES)
-INPUTP <- opt$sigscores         # randomisations for each index in SPATIAL_RESULTS
-NRECORDS <- opt$reccounts       # total number of GBIF records per H3-cell
-VARIABLES <- opt$variables
-PALETTE <- opt$palette
-COLOR <- opt$color
-BINS <- as.numeric( opt$bins )
-COLORSES <- opt$colorses
+INPUTR      <- opt$observed       # observed results (raw index values)
+INPUTS      <- opt$sesscores      # standardized index values (SES)
+INPUTP      <- opt$sigscores      # randomisations for each index in SPATIAL_RESULTS
+NRECORDS    <- opt$reccounts      # total number of GBIF records per H3-cell
+VARIABLES   <- opt$variables
+RESOLUTION  <- as.integer(opt$resolution)
+PALETTE     <- opt$palette
+COLOR       <- opt$color
+BINS        <- as.numeric( opt$bins )
+COLORSES    <- opt$colorses
 REDUNDANCYTRSH <- as.numeric(to_na( opt$redundancy ))
 SHORTID <- as.logical( opt$shortid )
 ANTIFIX <- as.logical( opt$antimeridianfix )
-OUTPUT <- opt$output
+OUTPUT  <- opt$output
 
 ## Check the redundancy range
 if(!is.na(REDUNDANCYTRSH)){
@@ -118,19 +120,20 @@ if(!is.na(REDUNDANCYTRSH)){
 }
 
 ## Log assigned variables
-cat(paste("Input file (observed indices): ", INPUTR, "\n", sep=""))
-cat(paste("Input file (SES-scores): ", INPUTS, "\n", sep=""))
-cat(paste("Input file (p-values): ", INPUTP, "\n", sep=""))
-cat(paste("Input file (number of records): ", NRECORDS, "\n", sep=""))
-cat(paste("Indices to plot: ", VARIABLES, "\n", sep=""))
-cat(paste("Color palette type: ", PALETTE, "\n", sep=""))
-cat(paste("Color gradient scheme: ", COLOR, "\n", sep=""))
-cat(paste("Number of color bins: ", BINS, "\n", sep=""))
-cat(paste("SES color palette: ", COLORSES, "\n", sep=""))
-cat(paste("Redundancy threshold: ", REDUNDANCYTRSH, "\n", sep=""))
-cat(paste("Display short H3 index names: ", SHORTID, "\n", sep=""))
-cat(paste("Antimeridian fix: ", ANTIFIX, "\n", sep=""))
-cat(paste("Output file: ", OUTPUT, "\n", sep=""))
+cat(paste("Input file (observed indices): ",  INPUTR,     "\n", sep=""))
+cat(paste("Input file (SES-scores): ",        INPUTS,     "\n", sep=""))
+cat(paste("Input file (p-values): ",          INPUTP,     "\n", sep=""))
+cat(paste("Input file (number of records): ", NRECORDS,   "\n", sep=""))
+cat(paste("Spatial resolution: ",             RESOLUTION, "\n", sep=""))
+cat(paste("Indices to plot: ",                VARIABLES,  "\n", sep=""))
+cat(paste("Color palette type: ",             PALETTE,    "\n", sep=""))
+cat(paste("Color gradient scheme: ",          COLOR,      "\n", sep=""))
+cat(paste("Number of color bins: ",           BINS,       "\n", sep=""))
+cat(paste("SES color palette: ",              COLORSES,   "\n", sep=""))
+cat(paste("Redundancy threshold: ",           REDUNDANCYTRSH, "\n", sep=""))
+cat(paste("Display short H3 index names: ",   SHORTID,    "\n", sep=""))
+cat(paste("Antimeridian fix: ",               ANTIFIX,    "\n", sep=""))
+cat(paste("Output file: ",                    OUTPUT,     "\n", sep=""))
 
 # CPUTHREADS <- as.numeric(opt$threads)
 # cat(paste("Number of CPU threads to use: ", CPUTHREADS, "\n", sep=""))
@@ -205,22 +208,39 @@ res_s <- fread(INPUTS)
 cat("..P-values\n")
 res_p <- fread(INPUTP)
 
-## The first columns should be a gridcell ID
-colnames(res_r)[1] <- "H3"
-colnames(res_s)[1] <- "H3"
-colnames(res_p)[1] <- "H3"
 
-## Remove redundant column
-res_r[, Axis_0 := NULL ]
-res_s[, Axis_0 := NULL ]
-res_p[, Axis_0 := NULL ]
+## Test if the first column cotains valid H3 IDs
+if( h3_is_valid(res_r[[1,1]]) ){
+  colnames(res_r)[1] <- "H3"
+  colnames(res_z)[1] <- "H3"
+  colnames(res_p)[1] <- "H3"
+} else {
+  ## Get H3 IDs for grid cells
+  cat("H3 index was not found in the data\n")
+  cat("..Indexing geo-coordinates\n")
+  res_r[ , H3 := h3::geo_to_h3(res_r[, .(Axis_0, Axis_1)], res = RESOLUTION) ]
+  res_s[ , H3 := h3::geo_to_h3(res_s[, .(Axis_0, Axis_1)], res = RESOLUTION) ]
+  res_p[ , H3 := h3::geo_to_h3(res_p[, .(Axis_0, Axis_1)], res = RESOLUTION) ]
+}
+
+## Remove redundant columns
+cat("Removing redundant columns\n")
+res_r[, c("ELEMENT", "Axis_0", "Axis_1") := NULL ]
+res_s[, c("ELEMENT", "Axis_0", "Axis_1") := NULL ]
+res_p[, c("ELEMENT", "Axis_0", "Axis_1") := NULL ]
+
 
 ## Rename SES-scores (add `SES_` prefix)
-colnames(res_s)[-1] <- paste0("SES_", colnames(res_s)[-1])
+setnames(res_s,
+  old = colnames(res_s)[ ! colnames(res_s) %in% "H3" ],
+  new = paste0("SES_", colnames(res_s)[ ! colnames(res_s) %in% "H3" ]))
 
 ## Merge the data into a single table
+cat("Merging data into a single table\n")
 res <- merge(x = res_r, y = res_s, by = "H3", all.x = TRUE)
 
+## Clean up
+rm(res_r, res_s)
 
 ## If there are multiple variables selected - split them
 if(any(grepl(pattern = ",", x = VARIABLES))){
@@ -396,7 +416,7 @@ if(!"RICHNESS_ALL" %in% colnames(res)){
 colz <- colnames(res)
 if(any(!VARIABLES %in% colz)){
   cat("Some of the selected indices are not present in tables with results!\n")
-  cat("Please check the spelling of index names or eneble their estimation in Biodiverse.\n")
+  cat("Please check the spelling of index names or enable their estimation in Biodiverse.\n")
   missing <- VARIABLES[ ! VARIABLES %in% colz ]
   cat("Indices missing: ", paste(missing, collapse = ", "), "\n")
 
