@@ -885,17 +885,18 @@ process plot_leaflet {
 
     """
     15_Leaflets.R \
-      --observed   ${BDOBS} \
-      --sesscores  ${RND4} \
-      --sigscores  ${RND3} \
-      --reccounts  ${NRECORDS} \
-      --variables  ${params.leaflet_var} \
-      --palette    ${params.leaflet_palette} \
-      --color      ${params.leaflet_color} \
-      --bins       ${params.leaflet_bins} \
-      --colorses   ${params.leaflet_sescolor} \
-      --redundancy ${params.leaflet_redundancy} \
-      --output "Choropleth.html"
+      --observed    ${BDOBS} \
+      --sesscores   ${RND4} \
+      --sigscores   ${RND3} \
+      --reccounts   ${NRECORDS} \
+      --resolution  ${params.h3resolution} \
+      --variables   ${params.leaflet_var} \
+      --palette     ${params.leaflet_palette} \
+      --color       ${params.leaflet_color} \
+      --bins        ${params.leaflet_bins} \
+      --colorses    ${params.leaflet_sescolor} \
+      --redundancy  ${params.leaflet_redundancy} \
+      --output      "Choropleth.html"
 
     """
 }
@@ -919,7 +920,7 @@ process leaflet_mapshots {
 
     script:
     """
-    
+
     15_Leaflets_mapshots.R \
       --input  ${leaf} \
       --metric ${ind}  \
