@@ -706,12 +706,12 @@ process phylodiv {
     label "container_biodiverse"
     queue "custom_pool"
 
-    // publishDir "$params.outdir/02.Biodiverse_results", mode: 'copy'
+    publishDir "$params.outdir/02.Biodiverse_results", mode: 'copy'
     // cpus 1
 
     input:
-      path BDA
-      val chunkid
+      path(BDA)
+      val(chunkid)
 
     output:
       path "Biodiv_randomized_${chunkid}.bds", emit: BDArand
@@ -724,7 +724,8 @@ process phylodiv {
       --out_file "Biodiv_randomized.bds" \
       --rand_name 'rand' \
       --iterations ${params.iterations} \
-      --args ${biodiverse_args}
+      --args ${biodiverse_args} \
+      seed={chunkid}
 
     ## Add chunk ID into the file name
     mv "Biodiv_randomized.bds" "Biodiv_randomized_${chunkid}.bds"
