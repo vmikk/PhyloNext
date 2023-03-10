@@ -670,29 +670,31 @@ process prep_biodiv {
 
     script:
     """
- 
     ## For debugging - check which Perl are we using?
     # perl --version
 
     ## Prepare Biodiverse input file
+    ## NB! column numbers are zero-based here
     00_create_bds.pl \
       --csv_file ${occurrences} \
       --out_file "occ.bds" \
-      --label_column_number '0' \
-      --group_column_number_x '1' \
-      --cell_size_x '-1'
-    
+      --label_column_number   '0' \
+      --group_column_number_x '4' \
+      --group_column_number_y '5' \
+      --cell_size_x '0' \
+      --cell_size_y '0'
+
     ## Prepare the tree for Biodiverse
     00_create_bts.pl \
       --input_tree_file ${tree} \
       --out_file "tree.bts"
-    
+
     ## Run the analyses
     02_biodiverse_analyses.pl \
       --input_bds_file "occ.bds" \
       --input_bts_file "tree.bts" \
       --calcs ${params.indices}
- 
+
     """
 }
 
