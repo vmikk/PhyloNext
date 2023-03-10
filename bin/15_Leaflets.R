@@ -256,16 +256,16 @@ if("CANAPE" %in% VARIABLES){
   do_CANAPE <- TRUE
 
   required_vars <- c(
-    "P_PHYLO_RPD1", "P_PHYLO_RPD2", 
+    "P_PHYLO_RPD2", 
     "P_PD_P", "P_PE_WE_P", "P_PD_P_per_taxon",
-    "P_PHYLO_RPE1", "P_PHYLO_RPE2",
-    "P_PHYLO_RPE_NULL1", "P_PHYLO_RPE_NULL2")
+    "P_PHYLO_RPE2",
+    "P_PHYLO_RPE_NULL2")
 
   ## Check if we have all the required variables in the data
   if(any(! required_vars %in% colnames(res_p) )){
     cat("..WARNING: some variables required for the CANAPE analysis are missing from the data!\n")
     cat(paste(required_vars[ ! required_vars %in% colnames(res_p) ], collapse = ", "), "\n")
-    cat("..You may add `calc_phylo_rpe1,calc_phylo_rpe2` to the `indices` parameter of the pipeline\n")
+    cat("..Please add `calc_phylo_rpd2,calc_phylo_rpe2` to the `indices` parameter of the pipeline\n")
     cat("..Skipping the CANAPE analysis\n")
     do_CANAPE <- FALSE
   } else {
