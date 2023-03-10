@@ -59,6 +59,7 @@ option_list <- list(
   make_option(c("-n", "--reccounts"), action="store", default=NA, type='character', help="File with the total number of (filtered) records per H3 cell"),
   make_option(c("--resolution"),      action="store", default=4L, type='integer', help="Spatial resolution of the H3 Geospatial Indexing System"),
   make_option(c("-v", "--variables"), action="store", default="RICHNESS_ALL,PD,SES_PD,PD_P,SES_PD_P", type='character', help="Diversity variables to plot (comma-separated entries)"),
+  make_option(c("--canapesuper"),     action="store", default=TRUE, type='logical', help="Include the `superendemism` class in CANAPE results (default, FALSE)"),
   make_option(c("-p", "--palette"), action="store", default="quantile", type='character', help="Color palette type"),
   make_option(c("-c", "--color"), action="store", default="RdYlBu", type='character', help="Color gradient scheme for the diversity indices (except for SES, CANAPE, and redundancy metrics)"),
   make_option(c("-b", "--bins"), action="store", default=5L, type='integer', help="Number of color bins for quantile palette"),
@@ -103,6 +104,7 @@ INPUTP      <- opt$sigscores      # randomisations for each index in SPATIAL_RES
 NRECORDS    <- opt$reccounts      # total number of GBIF records per H3-cell
 VARIABLES   <- opt$variables
 RESOLUTION  <- as.integer(opt$resolution)
+CANAPESUPER <- as.logical( opt$canapesuper)
 PALETTE     <- opt$palette
 COLOR       <- opt$color
 BINS        <- as.numeric( opt$bins )
@@ -126,6 +128,7 @@ cat(paste("Input file (p-values): ",          INPUTP,     "\n", sep=""))
 cat(paste("Input file (number of records): ", NRECORDS,   "\n", sep=""))
 cat(paste("Spatial resolution: ",             RESOLUTION, "\n", sep=""))
 cat(paste("Indices to plot: ",                VARIABLES,  "\n", sep=""))
+cat(paste("CANAPE superendemism enabled: ",   CANAPESUPER,"\n", sep=""))
 cat(paste("Color palette type: ",             PALETTE,    "\n", sep=""))
 cat(paste("Color gradient scheme: ",          COLOR,      "\n", sep=""))
 cat(paste("Number of color bins: ",           BINS,       "\n", sep=""))
@@ -315,9 +318,9 @@ if("CANAPE" %in% VARIABLES){
         if (x <= 0.95 & y <= 0.95) {
            return ("NotSignificant")
          } else if (z < 0.025) {
-           return ("Neo_endemism")
+           return ("Neo_endemism")         # RPE < 0.025
          } else if (z > 0.975) {
-           return ("Paleo_endemism")
+           return ("Paleo_endemism")       # RPE > 0.975
          } else {
            return ("Mixed_endemism")
          }
@@ -364,7 +367,8 @@ if("CANAPE" %in% VARIABLES){
       CANAPE = sig2(
           res_p[[ "P_PE_WE_P" ]],
           res_p[[ "P_PHYLO_RPE_NULL2" ]],
-          res_p[[ "P_PHYLO_RPE2" ]])
+          res_p[[ "P_PHYLO_RPE2" ]],
+          with_super = CANAPESUPER)
       )
 
     canape_data$CANAPE <- factor(canape_data$CANAPE,
