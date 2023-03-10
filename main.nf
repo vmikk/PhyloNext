@@ -773,7 +773,7 @@ process aggregate_rnds_biodiv {
 
     publishDir "$params.outdir/02.Biodiverse_results", mode: 'copy'
     // cpus 1
-    
+
     input:
       path RND
       path BDArand
@@ -843,10 +843,11 @@ process plot_pd {
 
     """
     14_Visualization.R \
-      --observed  ${BDOBS} \
-      --zscores   ${RND4} \
-      --threads   ${task.cpus} \
-      --variables ${params.plotvar} \
+      --observed   ${BDOBS} \
+      --zscores    ${RND4} \
+      --threads    ${task.cpus} \
+      --variables  ${params.plotvar} \
+      --resolution ${params.h3resolution} \
       ${add_world_map} \
       --format "${params.plotformat}" \
       --plotz  "${params.plottype}" \
