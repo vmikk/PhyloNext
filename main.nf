@@ -743,8 +743,14 @@ process rand_filelist {
     label "container_r"
     queue "custom_pool"
 
-    input: path randfiles
-    output: path "randomization_results.txt", emit: RND
+    input:
+      path(randfiles)
+      
+      //// To avoid name collisions if analysis was done for multiple datasets
+      // path(randfiles, stageAs: "?/*")   
+
+    output:
+      path "randomization_results.txt", emit: RND
 
     shell:
     $/
@@ -753,8 +759,8 @@ process rand_filelist {
       > randomization_results.txt
     /$
 }
-// Groovy allows an alternative syntax for string definitions 
-// which uses the $ as escape character in place of \ character. 
+// Groovy allows an alternative syntax for string definitions
+// which uses the $ as escape character in place of \ character.
 // These strings are delimited with an opening $/ and and a closing /$
 
 
