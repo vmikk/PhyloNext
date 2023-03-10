@@ -9,8 +9,9 @@ cat("Script name: 14_Visualization.R\n")
 # ./14_Visualization.R \
 #   --observed "02.Biodiverse_input/occ.bds.csv" \
 #   --zscores "02.Biodiverse_results/RND_rand--z_scores--SPATIAL_RESULTS.csv" \
-#   --threads 1 \
 #   --variables "RICHNESS_ALL,PD,PD_P" \
+#   --resolution 4 \
+#   --threads 1 \
 #   --plotz "raw" \
 #   --world "pipeline_data/WorldMap_NaturalEarth_Medium.RData" \
 #   --output "03.Plots" \
@@ -36,6 +37,7 @@ option_list <- list(
   make_option(c("-r", "--observed"), action="store", default=NA, type='character', help="Input file (CSV) with Biodiverse results - observed indices"),
   make_option(c("-z", "--zscores"),  action="store", default=NA, type='character', help="Input file (CSV) with Biodiverse results - Z-scores"),
   make_option(c("-v", "--variables"), action="store", default="RICHNESS_ALL,PD,PD_P", type='character', help="Diversity variables to plot (comma-separated entries)"),
+  make_option(c("--resolution"),  action="store", default=4L, type='integer', help="Spatial resolution of the H3 Geospatial Indexing System"),
   make_option(c("-p", "--plotz"), action="store", default="raw", type='character', help="Plot raw estimates or Z-scores"),
   make_option(c("-w", "--world"), action="store", default=NA, type='character', help="File with contour map of the world"),
   make_option(c("-t", "--threads"), action="store", default=1L, type='integer', help="Number of CPU threads for arrow, default 4"),
@@ -66,11 +68,12 @@ to_na <- function(x){
 }
 
 ## Assign variables
-INPUTO <- opt$observed
-INPUTZ <- opt$zscores
-VARIABLES <- opt$variables
-PLOTZ <- opt$plotz
-WORLD <- to_na( opt$world )
+INPUTO     <- opt$observed
+INPUTZ     <- opt$zscores
+VARIABLES  <- opt$variables
+RESOLUTION <- as.integer(opt$resolution)
+PLOTZ      <- opt$plotz
+WORLD      <- to_na( opt$world )
 
 CPUTHREADS <- as.numeric(opt$threads)
 FORMAT <- opt$format
@@ -81,17 +84,18 @@ OUTPUT <- opt$output
 
 
 ## Log assigned variables
-cat(paste("Input file (observed indices): ", INPUTO, "\n", sep=""))
-cat(paste("Input file (Z-scores): ", INPUTZ, "\n", sep=""))
-cat(paste("Indices to plot: ", VARIABLES, "\n", sep=""))
+cat(paste("Input file (observed indices): ", INPUTO,     "\n", sep=""))
+cat(paste("Input file (Z-scores): ",         INPUTZ,     "\n", sep=""))
+cat(paste("Indices to plot: ",               VARIABLES,  "\n", sep=""))
+cat(paste("Spatial resolution: ",            RESOLUTION, "\n", sep=""))
 cat(paste("Variable type to plot (raw or Z-scores): ", PLOTZ, "\n", sep=""))
-cat(paste("Adding world map: ", WORLD, "\n", sep=""))
+cat(paste("Adding world map: ",             WORLD,      "\n", sep=""))
 cat(paste("Number of CPU threads to use: ", CPUTHREADS, "\n", sep=""))
-cat(paste("Output image format: ", FORMAT, "\n", sep=""))
-cat(paste("Output image width: ", WIDTH, "\n", sep=""))
-cat(paste("Output image height: ", HEIGTH, "\n", sep=""))
-cat(paste("Output image size units: ", UNITS, "\n", sep=""))
-cat(paste("Output directory: ", OUTPUT, "\n", sep=""))
+cat(paste("Output image format: ",          FORMAT,     "\n", sep=""))
+cat(paste("Output image width: ",           WIDTH,      "\n", sep=""))
+cat(paste("Output image height: ",          HEIGTH,     "\n", sep=""))
+cat(paste("Output image size units: ",      UNITS,      "\n", sep=""))
+cat(paste("Output directory: ",             OUTPUT,     "\n", sep=""))
 
 cat("\n")
 
@@ -157,9 +161,18 @@ res_r <- fread(INPUTO)
 cat("..Z-scores\n")
 res_z <- fread(INPUTZ)
 
-## The first columns should be a gridcell
-colnames(res_r)[1] <- "H3"
-colnames(res_z)[1] <- "H3"
+
+## Test if the first column cotains valid H3 IDs
+if( h3_is_valid(res_r[[1,1]]) ){
+  colnames(res_r)[1] <- "H3"
+  colnames(res_z)[1] <- "H3"
+} else {
+  ## Get H3 IDs for grid cells
+  cat("H3 index was not found in the data\n")
+  cat("..Indexing geo-coordinates\n")
+  res_r[ , H3 := h3::geo_to_h3(res_r[, .(Axis_0, Axis_1)], res = RESOLUTION) ]
+  res_z[ , H3 := h3::geo_to_h3(res_z[, .(Axis_0, Axis_1)], res = RESOLUTION) ]
+}
 
 ## If there are multiple variables selected - split them
 if(any(grepl(pattern = ",", x = VARIABLES))){
