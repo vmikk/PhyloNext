@@ -126,6 +126,7 @@ def helpMsg() {
 
     Leaflet interactive visualization:
         --leaflet_var         Variables to plot; e.g., "RICHNESS_ALL,PD,SES_PD,PD_P,ENDW_WE,SES_ENDW_WE,PE_WE,SES_PE_WE,CANAPE,Redundancy"
+        --leaflet_canapesuper Include the `superendemism` class in CANAPE results (default, false)
         --leaflet_color       Color scheme for continuous variables (default, "RdYlBu")
         --leaflet_palette     Color palette for continuous variables (default, "quantile")
         --leaflet_bins        Number of color bins for continuous variables (default, 5)
