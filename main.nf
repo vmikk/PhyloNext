@@ -891,6 +891,7 @@ process plot_leaflet {
       --reccounts   ${NRECORDS} \
       --resolution  ${params.h3resolution} \
       --variables   ${params.leaflet_var} \
+      --canapesuper ${params.leaflet_canapesuper} \
       --palette     ${params.leaflet_palette} \
       --color       ${params.leaflet_color} \
       --bins        ${params.leaflet_bins} \
