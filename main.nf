@@ -1109,7 +1109,7 @@ workflow {
 
     } else {
     // Use user-supplied hylogenetic tree
-      phytree = file(params.phytree) 
+      phytree = file(params.phytree)
     }
 
 
@@ -1133,12 +1133,48 @@ workflow {
     // Channel of randomization chunks
     rnd_ch = Channel.fromList( randomization_chunks )
 
-    // Perform Biodiverse randomizations
-    phylodiv(prep_biodiv.out.BDA, rnd_ch)
 
-    // Prepare a file with paths of `phylodiv` output (multiple chunks of randomizations)
-    // and create a new channel from it
-    rand_filelist(phylodiv.out.BDArand.collect())
+    // If no spatial constraints (for randomization) are provided
+    if(params.randconstrain == null){
+
+      // Perform unconstrained randomizations
+      phylodiv(prep_biodiv.out.BDA, rnd_ch)
+
+      // Prepare a file with paths of `phylodiv` output (multiple chunks of randomizations)
+      // and create a new channel from it
+      rand_filelist(phylodiv.out.BDArand.collect())
+
+      // Aggregate randomization results (with Biodiverse script)
+      aggregate_rnds_biodiv(
+          rand_filelist.out.RND,
+          phylodiv.out.BDArand.collect())
+
+    } else {
+
+      // If spatial constraints are provided, split dataset in parts (for each polygon)
+
+      // A channel with spatial polygons
+      polygons = file(params.randconstrain)
+
+      // Prepare a shapefile with polygons
+      prep_shapefile(merge_occ.out.occurrences, polygons)
+
+      // Run spatially-constrained randomizations
+      phylodiv_constrianed(
+        prep_biodiv.out.BDA,
+        prep_shapefile.out.shapefile,
+        rnd_ch)
+
+      // Collect `phylodiv_constrianed` output (multiple chunks of randomizations)
+      rand_filelist(phylodiv_constrianed.out.BDArand.collect())
+
+      // Aggregate randomization results (with Biodiverse script)
+      aggregate_rnds_biodiv(
+          rand_filelist.out.RND,
+          phylodiv_constrianed.out.BDArand.collect())
+    
+    } // end of randomizations
+
 
     // Aggregate randomization results (with Biodiverse script)
     aggregate_rnds_biodiv(
