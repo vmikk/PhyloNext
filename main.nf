@@ -761,6 +761,43 @@ process prep_shapefile {
     """
 }
 
+
+// Estimate phylogenetic diversity using spatially-constrained randomizations
+process phylodiv_constrianed {
+
+    label "container_biodiverse"
+    queue "custom_pool"
+
+    // publishDir "$params.outdir/02.Biodiverse_results", mode: 'copy'
+    // cpus 1
+
+    input:
+      path(BDA)
+      path(polygons)
+      val(chunkid)
+
+    output:
+      path "Biodiv_randomized_${chunkid}.bds", emit: BDArand
+
+    script:
+    """
+    03_run_randomisation.pl \
+      --basedata ${BDA} \
+      --bd_name  ${BDA} \
+      --out_file "Biodiv_randomized.bds" \
+      --rand_name 'rand_structured' \
+      --iterations ${iterations_per_thread} \
+      --args ${biodiverse_args} \
+      seed=${chunkid} \
+      spatial_conditions_for_subset='sp_points_in_same_poly_shape (file => "shapefile.shp")'
+
+    ## Add chunk ID into the file name
+    mv "Biodiv_randomized.bds" "Biodiv_randomized_${chunkid}.bds"
+
+    """
+}
+
+
 // Create a file with paths to all chunks with randomization results
 process rand_filelist {
 
