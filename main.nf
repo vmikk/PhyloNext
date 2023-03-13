@@ -736,6 +736,30 @@ process phylodiv {
 
 
 
+// Prepare a shapefile to spatially constrain randomizations
+process prep_shapefile {
+
+    label "container_r"
+    queue "custom_pool"
+
+    // cpus 1
+
+    input:
+      path(occurrences)
+      path(polygons)
+
+    output:
+      path "shapefile*", emit: shapefile
+
+    script:
+    """
+    12_Prepare_SpatialConstraints.R \
+      --input ${occurrences} \
+      --randconstrain ${polygons} \
+      --threads ${task.cpus} \
+      --output "shapefile"
+    """
+}
 
 // Create a file with paths to all chunks with randomization results
 process rand_filelist {
