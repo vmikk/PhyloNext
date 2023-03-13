@@ -649,6 +649,36 @@ process derived_datasets {
 }
 
 
+
+// // Split dataset based on spatial constraints
+// process split_by_polygons {
+// 
+//     label "container_r"
+//     queue "custom_pool"
+// 
+//     publishDir "$params.outdir/02.Biodiverse_input", mode: 'copy'
+//     // cpus 2
+// 
+//     input:
+//       path occurrences
+//       path polygons
+// 
+//     output:
+//       path "SpatConstrained_*.csv",  emit: occsplit
+// 
+//     script:
+//     """
+// 
+//     12_Split_dataset_SpatialConstraints.R \
+//       --input ${occurrences} \
+//       --randconstrain ${polygons} \
+//       --threads ${task.cpus} \
+//       --output "SpatConstrained_"
+// 
+//     """
+// }
+
+
 // Create Biodiverse input files
 process prep_biodiv {
 
