@@ -724,7 +724,7 @@ process phylodiv {
       --bd_name  ${BDA} \
       --out_file "Biodiv_randomized.bds" \
       --rand_name 'rand' \
-      --iterations ${params.iterations} \
+      --iterations ${iterations_per_thread} \
       --args ${biodiverse_args} \
       seed=${chunkid}
 
