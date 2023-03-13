@@ -307,6 +307,11 @@
                     "fa_icon": "fas fa-cogs",
                     "description": "Randomisation scheme type; e.g., \"rand_structured\"",
                     "enum": ["rand_structured"]
+                },
+                "randconstrain": {
+                    "type": "string",
+                    "default": null,
+                    "fa_icon": "fas fa-cogs"
                 }
             },
             "fa_icon": "fas fa-cogs"
