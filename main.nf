@@ -123,6 +123,7 @@ def helpMsg() {
         --randname            Randomisation scheme type; e.g., "rand_structured"
         --iterations          Number of randomisation iterations; e.g., 1000
         --biodiversethreads   Number of Biodiverse threads; e.g., 10
+        --randconstrain       Polygons to perform spatially constrained randomization (GeoPackage format)
 
     Leaflet interactive visualization:
         --leaflet_var         Variables to plot; e.g., "RICHNESS_ALL,PD,SES_PD,PD_P,ENDW_WE,SES_ENDW_WE,PE_WE,SES_PE_WE,CANAPE,Redundancy"
@@ -1176,10 +1177,26 @@ workflow {
     } // end of randomizations
 
 
-    // Aggregate randomization results (with Biodiverse script)
-    aggregate_rnds_biodiv(
-        rand_filelist.out.RND,
-        phylodiv.out.BDArand.collect())
+    // // Split occurrences by polygons and run randomizations independently
+    // polygons = file(params.randconstrain)
+    //
+    // // Split dataset
+    // split_by_polygons(merge_occ.out.occurrences, polygons)
+    //
+    // // Channel with spatially-constrained datasets
+    // ch_spatconstr = split_by_polygons.out.occsplit.flatten()
+    // ch_spatconstr.view()
+    //
+    // // Prepare data for Biodiverse
+    // prep_biodiv(ch_spatconstr, merge_occ.out.tree)
+    //
+    // // Channel with the number of randomization chunks
+    // rnd_ch_tmp = Channel.fromList( randomization_chunks )
+    //
+    // // Apply randomization chunks for each spatially-contrained dataset (cartesian product)
+    // rnd_ch = prep_biodiv.out.BDA.combine(rnd_ch_tmp)
+    // rnd_ch.view()
+
 
     // Output results as CSV
     div_to_csv(aggregate_rnds_biodiv.out.Biodiv)
