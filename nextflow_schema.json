@@ -126,6 +126,11 @@
                     "fa_icon": "fas fa-flag",
                     "description": "Country code, ISO 3166 (multiple comma-separated values allowed); e.g., \"DE,PL,CZ\""
                 },
+                "polygon": {
+                    "type": "string",
+                    "default": null,
+                    "fa_icon": "fas fa-draw-polygon"
+                },
                 "wgsrpd": {
                     "type": "string",
                     "fa_icon": "fas fa-globe-americas",
