@@ -902,6 +902,7 @@ process div_to_csv {
       path "RND_rand--SPATIAL_RESULTS.csv",           emit: RND3
       path "RND_rand--z_scores--SPATIAL_RESULTS.csv", emit: RND4
       path "RND_SPATIAL_RESULTS.csv",                 emit: RND5
+      path "RND_rand--CANAPE--.csv",                  emit: RND6, optional: true
 
     script:
     """
