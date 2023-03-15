@@ -119,7 +119,7 @@ NGRIDS <- length(lf$x$calls[[2]]$args[[1]])
 cat("... Number of grids: ", NGRIDS, "\n")
 
 if(NGRIDS < 500){
-  DELAY <- 10
+  DELAY <- 1
 } else if (NGRIDS < 1000) {
   DELAY <- 5
 } else if (NGRIDS < 2000) {
