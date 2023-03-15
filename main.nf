@@ -816,7 +816,7 @@ process phylodiv_constrianed {
       --basedata ${BDA} \
       --bd_name  ${BDA} \
       --out_file "Biodiv_randomized.bds" \
-      --rand_name 'rand_structured' \
+      --rand_name 'rand' \
       --iterations ${iterations_per_thread} \
       --args ${biodiverse_args} \
       seed=${chunkid} \
