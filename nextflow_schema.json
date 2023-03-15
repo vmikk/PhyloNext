@@ -333,6 +333,11 @@
                     "fa_icon": "fas fa-atlas",
                     "description": "Variables to plot; e.g., \"RICHNESS_ALL,PD,SES_PD,PD_P,ENDW_WE,SES_ENDW_WE,PE_WE,SES_PE_WE,CANAPE,Redundancy\""
                 },
+                "leaflet_canapesuper": {
+                    "type": "boolean",
+                    "fa_icon": "fas fa-atlas",
+                    "description": "Include the `superendemism` class in CANAPE results"
+                },
                 "leaflet_color": {
                     "type": "string",
                     "default": "RdYlBu",
