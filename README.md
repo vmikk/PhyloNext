@@ -95,6 +95,7 @@ OPTIONAL:
     --coorduncertaintyexclude Black list of coordinate uncertainty values (default, "301,3036,999,9999")
     --basisofrecordinclude Basis of record to include from the data; e.g., "PRESERVED_SPECIMEN"
     --basisofrecordexclude Basis of record to exclude from the data; e.g., "FOSSIL_SPECIMEN,LIVING_SPECIMEN"
+    --polygon             Custom area of interest (a file with polygons in GeoPackage format)
     --wgsrpd              Polygons of World Geographical Regions; e.g., "pipeline_data/WGSRPD.RData"
     --regions             Names of World Geographical Regions; e.g., "L1_EUROPE,L1_ASIA_TEMPERATE"
     --noextinct           File with extinct species specieskeys for their removal (file with a single column, with header)
@@ -119,9 +120,11 @@ OPTIONAL:
     --randname            Randomisation scheme type; e.g., "rand_structured"
     --iterations          Number of randomisation iterations; e.g., 1000
     --biodiversethreads   Number of Biodiverse threads; e.g., 10
+    --randconstrain       Polygons to perform spatially constrained randomization (GeoPackage format)
 
 Leaflet interactive visualization:
     --leaflet_var         Variables to plot; e.g., "RICHNESS_ALL,PD,SES_PD,PD_P,ENDW_WE,SES_ENDW_WE,PE_WE,SES_PE_WE,CANAPE,Redundancy"
+    --leaflet_canapesuper Include the `superendemism` class in CANAPE results (default, false)
     --leaflet_color       Color scheme for continuous variables (default, "RdYlBu")
     --leaflet_palette     Color palette for continuous variables (default, "quantile")
     --leaflet_bins        Number of color bins for continuous variables (default, 5)
