@@ -450,6 +450,17 @@ if(!nrow(res) > 0){
   stop("There are no grid cells to display!\n")
 }
 
+
+cat("Preparing data table for export\n")
+
+## Add grid cell coordinates
+cat(".. Adding geo-coordinates for grid cell centers\n")
+res[, c("Latitude", "Longitude") := as.data.table(h3::h3_to_geo(H3)) ]
+
+## Reorder columns
+cat(".. Reordering columns\n")
+setcolorder(res, c("H3", "Latitude", "Longitude"))
+
 ## Export the data
 cat("Exporting the data table\n")
 fwrite(x = res, file = "Biodiverse_results_merged.txt", sep = "\t")
