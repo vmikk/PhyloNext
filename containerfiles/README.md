@@ -1,15 +1,15 @@
 # PhyloNext containers
 
-Currently, all software dependencies used by PhyloNext are grouped into 3 containers:
+Currently, all software dependencies used by PhyloNext are grouped into 3 containers:  
 - `rarrow` - R
 - `biodiverse` - Biodiverse and Perl
 - `opentree` - Open Tree of Life and Python
 
 ## `rarrow` changelog
 
-A Docker image with R packages required for GBIF occurrence filtering and mapping.
-Docker hub: [https://hub.docker.com/r/vmikk/rarrow/tags](https://hub.docker.com/r/vmikk/rarrow/tags)
-Singularity Library: [https://cloud.sylabs.io/library/vmiks/gbif/rarrow](https://cloud.sylabs.io/library/vmiks/gbif/rarrow)
+A Docker image with R packages required for GBIF occurrence filtering and mapping.  
+Docker hub: [https://hub.docker.com/r/vmikk/rarrow/tags](https://hub.docker.com/r/vmikk/rarrow/tags)  
+Singularity Library: [https://cloud.sylabs.io/library/vmiks/gbif/rarrow](https://cloud.sylabs.io/library/vmiks/gbif/rarrow)  
 
 ### v.1.2.0 (Mar 15, 2023)
 
