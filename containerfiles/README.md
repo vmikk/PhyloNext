@@ -128,3 +128,43 @@ Compressed Size ~ 819.36 MB
 Decompressed Size ~ 2.64 GB  
 
 
+
+## `biodiverse` changelog
+
+A Docker image with `Biodiverse` and `Perl` for estimation of phylogenetic diversity.  
+Docker hub: [https://hub.docker.com/r/vmikk/biodiverse/tags](https://hub.docker.com/r/vmikk/biodiverse/tags)  
+Singularity Library: [https://cloud.sylabs.io/library/vmiks/gbif/biodiverse](https://cloud.sylabs.io/library/vmiks/gbif/biodiverse)  
+
+### v.1.2.0 (Mar 15, 2023)
+
+- Biodiverse v4.1 `d70b531` (https://github.com/vmikk/biodiverse-docker/releases/tag/v.1.2.0)  
+
+Docker compressed image size ~ 820.3 MB  
+Docker decompressed image size ~ 2.77 GB  
+Singularity image size ~ 635.50 MB  
+
+Docker image digest: `sha256:4cf5e5800b804303f7c9a90ef201c301ce63a84590c21fde5d8eaff0ba66da44`  
+Singularity unique ID: `sha256.031397ea4334a40db8d94af08a3791dff9f9209990f6990be8dc80b925880098`  
+
+### v.1.0.0 (Dec 17, 2022)
+
+- Biodiverse v4 `fe66697` (https://github.com/vmikk/biodiverse-docker/releases/tag/v.1.0.0)  
+
+Compressed Size ~ 818.57 MB  
+Decompressed Size ~ 2.76 GB  
+
+Docker image digest: `sha256:0f6d5c64938d7bd9cd54943a8f717c15bdc008672f256f2b93bc74e0caa65f1d`  
+Singularity unique ID: `sha256.3c9edf889a2339fa3d1d51ddff54a8dd7a9b969e9da4d1a651fc783f41b78326`  
+
+### v.0.0.2 (Jun 13, 2022)
+
+- Biodiverse v.3.99_003 `c06bbad`  
+- Remove `perlbrew` as a dependency.  
+https://github.com/vmikk/biodiverse-docker/releases/tag/v.0.0.2
+
+### v.0.0.1 (Apr 22, 2022)
+
+- Biodiverse v.3.99_002 `d20a9ce`  
+https://github.com/vmikk/biodiverse-docker/releases/tag/v.0.0.1
+
+
