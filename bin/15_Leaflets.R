@@ -201,15 +201,32 @@ cat("Loading Biodiverse results\n")
 
 ## Raw indices
 cat("..Observed indices\n")
-res_r <- fread(INPUTR)
+res_r <- fread(INPUTR)            # RND_SPATIAL_RESULTS.csv
 
 ## SES-scores
 cat("..SES-scores\n")
-res_s <- fread(INPUTS)
+res_s <- fread(INPUTS)            # RND_rand--z_scores--SPATIAL_RESULTS.csv
 
 ## P-values
 cat("..P-values\n")
-res_p <- fread(INPUTP)
+res_p <- fread(INPUTP)            # RND_rand--p_rank--SPATIAL_RESULTS.csv
+
+## CANAPE results
+## RND_rand--CANAPE--.csv
+
+## Rename coordinates (from Biodiverse basedata)
+setnames(x = res_r,
+  old = c("Axis_1", "Axis_0"),
+  new = c("Latitude", "Longitude"))
+
+setnames(x = res_s,
+  old = c("Axis_1", "Axis_0"),
+  new = c("Latitude", "Longitude"))
+
+setnames(x = res_p,
+  old = c("Axis_1", "Axis_0"),
+  new = c("Latitude", "Longitude"))
+
 
 
 ## Test if the first column cotains valid H3 IDs
@@ -221,16 +238,16 @@ if( h3_is_valid(res_r[[1,1]]) ){
   ## Get H3 IDs for grid cells
   cat("H3 index was not found in the data\n")
   cat("..Indexing geo-coordinates\n")
-  res_r[ , H3 := h3::geo_to_h3(res_r[, .(Axis_0, Axis_1)], res = RESOLUTION) ]
-  res_s[ , H3 := h3::geo_to_h3(res_s[, .(Axis_0, Axis_1)], res = RESOLUTION) ]
-  res_p[ , H3 := h3::geo_to_h3(res_p[, .(Axis_0, Axis_1)], res = RESOLUTION) ]
+  res_r[ , H3 := h3::geo_to_h3(res_r[, .(Latitude, Longitude)], res = RESOLUTION) ]
+  res_s[ , H3 := h3::geo_to_h3(res_s[, .(Latitude, Longitude)], res = RESOLUTION) ]
+  res_p[ , H3 := h3::geo_to_h3(res_p[, .(Latitude, Longitude)], res = RESOLUTION) ]
 }
 
 ## Remove redundant columns
 cat("Removing redundant columns\n")
-res_r[, c("ELEMENT", "Axis_0", "Axis_1") := NULL ]
-res_s[, c("ELEMENT", "Axis_0", "Axis_1") := NULL ]
-res_p[, c("ELEMENT", "Axis_0", "Axis_1") := NULL ]
+res_r[, c("ELEMENT", "Latitude", "Longitude") := NULL ]
+res_s[, c("ELEMENT", "Latitude", "Longitude") := NULL ]
+res_p[, c("ELEMENT", "Latitude", "Longitude") := NULL ]
 
 
 ## Rename SES-scores (add `SES_` prefix)
