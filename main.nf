@@ -707,12 +707,13 @@ process prep_biodiv {
 
     ## Prepare Biodiverse input file
     ## NB! column numbers are zero-based here
+    ## Latitude = Y, Longitude = X
     00_create_bds.pl \
       --csv_file ${occurrences} \
       --out_file "occ.bds" \
       --label_column_number   '0' \
-      --group_column_number_x '4' \
-      --group_column_number_y '5' \
+      --group_column_number_x '5' \
+      --group_column_number_y '4' \
       --cell_size_x '0' \
       --cell_size_y '0'
 
