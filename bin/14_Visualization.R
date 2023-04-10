@@ -165,6 +165,16 @@ cat("..Z-scores\n")
 res_z <- fread(INPUTZ)
 
 
+## Rename coordinates
+setnames(x = res_r,
+  old = c("Axis_1", "Axis_0"),
+  new = c("Latitude", "Longitude"))
+
+setnames(x = res_z,
+  old = c("Axis_1", "Axis_0"),
+  new = c("Latitude", "Longitude"))
+
+
 ## Test if the first column cotains valid H3 IDs
 if( h3_is_valid(res_r[[1,1]]) ){
   colnames(res_r)[1] <- "H3"
@@ -173,8 +183,8 @@ if( h3_is_valid(res_r[[1,1]]) ){
   ## Get H3 IDs for grid cells
   cat("H3 index was not found in the data\n")
   cat("..Indexing geo-coordinates\n")
-  res_r[ , H3 := h3::geo_to_h3(res_r[, .(Axis_0, Axis_1)], res = RESOLUTION) ]
-  res_z[ , H3 := h3::geo_to_h3(res_z[, .(Axis_0, Axis_1)], res = RESOLUTION) ]
+  res_r[ , H3 := h3::geo_to_h3(res_r[, .(Latitude, Longitude)], res = RESOLUTION) ]
+  res_z[ , H3 := h3::geo_to_h3(res_z[, .(Latitude, Longitude)], res = RESOLUTION) ]
 }
 
 ## If there are multiple variables selected - split them
