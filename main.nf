@@ -156,7 +156,7 @@ def helpMsg() {
     """.stripIndent()
 }
 // Show help msg
-if (params.helpMsg){
+if (params.helpMsg | params.help){
     helpMsg()
     exit(0)
 }
