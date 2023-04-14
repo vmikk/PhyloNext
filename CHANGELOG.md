@@ -4,6 +4,20 @@ This project tries to adhere to [Semantic Versioning](https://semver.org/spec/v2
 For version numbering, we use the following convention: `MAJOR.MINOR.PATCH`.  
 Each element increases numerically (e.g., `1.9.0` -> `1.10.0` -> `1.11.0`).  
 
+
+## v.1.0.0 - [Feb 1, 2023]
+
+First stable version.  
+
+- `Added`: derived datasets;  
+- `Added`: basis-of-record filtering;  
+- `Added`: GeoPackage output;  
+- `Added`: Newick tree output;  
+- `Added`: `maxage` and `phyloonly` parameters for phylogenetic tree fetching from the Open Tree of Life;  
+- `Added`: `leaflet_sescolor` parameter to adjust Z-score coloring scheme;  
+- `Added`: CI tests;  
+- `Fixed`: urban areas shapefile;  
+
 ## v.0.0.2 - [Dec 22, 2022]
 
 Code refactoring targeting for the execution in a cloud environment (in particular, MS Azure Batch).  
