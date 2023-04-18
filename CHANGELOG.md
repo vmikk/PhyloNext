@@ -5,6 +5,23 @@ For version numbering, we use the following convention: `MAJOR.MINOR.PATCH`.
 Each element increases numerically (e.g., `1.9.0` -> `1.10.0` -> `1.11.0`).  
 
 
+## v1.2.0 - [Apr 11, 2023]
+
+- `Added`: spatially-constrained randomizations;  
+- `Added`: spatial filtering using user-supplied polygons;  
+- `Added`: CANAPE output in tabular format from Biodiverse;  
+- `Added`: `leaflet_canapesuper` parameter (for 3-class or 4-class endemism types in CANAPE);  
+- `Added`: geographic coordinates of H3 cells to the output table;  
+- `Added`: `leaflet_mapshots` script;  
+- `Changes`: previously, the spatial unit was categorical (H3 grid cell); to spatially constrain records, now we use geographic coordinates of grid cells;  
+- `Changes`: record counts, derived dataset, and additional filtering now re-use the same code base;  
+- `Changes`: screen output is less verbose now;  
+- `Changes`: PRNG randomization seeds are explicit now;  
+- `Fixed`: Number of Biodiverse randomizations per thread;  
+- `Fixed`: CANAPE index requirements;  
+- `Fixed`: antimeridian issue in static visualization;  
+- `Fixed`: record counts and derived dataset take polygon-filtering into account;  
+
 ## v.1.0.0 - [Feb 1, 2023]
 
 First stable version.  
