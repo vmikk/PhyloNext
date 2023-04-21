@@ -1,9 +1,9 @@
 # PhyloNext - PD (Phylogenetic Diversity) in the cloud <img src='images/PhyloNext_logo.png' align="right" height="100" />
 
+![GitHub (latest release)](https://img.shields.io/github/v/release/vmikk/PhyloNext?label=GitHub%20release)
 [![Nextflow](https://img.shields.io/badge/Nextflow%20DSL2-%E2%89%A522.10.0-23aa62.svg?labelColor=000000)](https://www.nextflow.io/)
 [![run with docker](https://img.shields.io/badge/run%20with-docker-0db7ed?labelColor=000000&logo=docker)](https://www.docker.com/)
 [![run with singularity](https://img.shields.io/badge/run%20with-singularity-blue?style=flat&logo=singularity)](https://sylabs.io/docs/)
-[![Github_Status_Badge](https://img.shields.io/badge/GitHub-1.0.0-blue.svg)](https://github.com/vmikk/PhyloNext)
 [![GitHub license](https://img.shields.io/github/license/vmikk/PhyloNext)](https://github.com/vmikk/PhyloNext/blob/main/LICENSE)  
 CI/CD status: 
 [![Nextflow (full pipeline)](https://github.com/vmikk/PhyloNext/actions/workflows/Nextflow_test.yml/badge.svg)](https://github.com/vmikk/PhyloNext/actions/workflows/Nextflow_test.yml)
