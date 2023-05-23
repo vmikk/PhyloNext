@@ -1,6 +1,6 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema",
-    "$id": "https://raw.githubusercontent.com/vmikk/PhyloNext/master/nextflow_schema.json",
+    "$id": "https://raw.githubusercontent.com/vmikk/PhyloNext/main/nextflow_schema.json",
     "title": "PhyloNext pipeline parameters",
     "description": "A pipeline for phylogenetic diversity analysis of GBIF-mediated data",
     "type": "object",
