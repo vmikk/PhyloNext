@@ -440,13 +440,13 @@
                 },
                 "plotwidth": {
                     "type": "number",
-                    "default": 18,
+                    "default": 18.0,
                     "fa_icon": "fas fa-chart-line",
                     "description": "Plot width (default, 18 inches)"
                 },
                 "plotheight": {
                     "type": "number",
-                    "default": 18,
+                    "default": 18.0,
                     "fa_icon": "fas fa-chart-line",
                     "description": "Plot height (default, 18 inches)"
                 },
