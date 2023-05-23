@@ -128,7 +128,7 @@
                 },
                 "polygon": {
                     "type": "string",
-                    "default": null,
+                    "default": "None",
                     "fa_icon": "fas fa-draw-polygon"
                 },
                 "wgsrpd": {
