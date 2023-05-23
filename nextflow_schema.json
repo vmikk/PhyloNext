@@ -395,7 +395,7 @@
                 },
                 "leaflet_redundancy": {
                     "type": "number",
-                    "default": 0,
+                    "default": 0.0,
                     "fa_icon": "fas fa-atlas",
                     "description": "Redundancy threshold for hiding the grid cells with low number of records (default, 0 = display all grid cells)",
                     "minimum": 0,
