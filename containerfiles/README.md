@@ -168,3 +168,17 @@ https://github.com/vmikk/biodiverse-docker/releases/tag/v.0.0.2
 https://github.com/vmikk/biodiverse-docker/releases/tag/v.0.0.1
 
 
+
+## `OpenTree` changelog
+
+A Docker image with `OpenTree` and `Python` for phylogenetic tree fetching from Open Tree of Life.  
+Docker hub: [https://hub.docker.com/r/vmikk/opentree/tags](https://hub.docker.com/r/vmikk/opentree/tags)  
+Singularity Library: [https://cloud.sylabs.io/library/vmiks/gbif/opentree](https://cloud.sylabs.io/library/vmiks/gbif/opentree)  
+
+### v.0.0.2 (Apr 22, 2022)
+
+Compressed Size ~ 360.47 MB  
+Decompressed Size ~ 968 MB  
+
+Docker image digest: `sha256:8b1dba9bd654e4fe5768f42e09b3444aa5a190c9bb622692eb19438171a9a85a`  
+Singularity unique ID: `sha256.b41dd6c6ec3a2b6da41d594b30e16d035477ef218ebd89c907106024166003b5`  
