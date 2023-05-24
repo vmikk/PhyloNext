@@ -135,7 +135,7 @@ LONMAX  <- as.numeric( to_na(opt$lonmax) )
 MINYEAR <- as.numeric(to_na( opt$minyear) )
 MAXYEAR <- as.numeric(to_na( opt$maxyear) )
 
-EXTINCT <- to_na( opt$noextinct)
+EXTINCT      <- to_na( opt$noextinct)
 EXCLUDEHUMAN <- as.logical( opt$excludehuman )
 
 BASISINCL <- to_na( opt$basisofrecordinclude )
@@ -376,9 +376,9 @@ if(!is.na(MINYEAR)){
   cat("..Filtering by collection date (min year)\n")
   dsf <- dsf %>% filter(year >= MINYEAR)
 }
-if(!is.na(MAX)){
+if(!is.na(MAXYEAR)){
   cat("..Filtering by collection date (max year)\n")
-  dsf <- dsf %>% filter(year <= MAX)
+  dsf <- dsf %>% filter(year <= MAXYEAR)
 }
 
 ## Taxonomy filters
