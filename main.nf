@@ -226,6 +226,7 @@ process occ_filter {
       --lonmin  ${params.lonmin} \
       --lonmax  ${params.lonmax} \
       --minyear ${params.minyear} \
+      --maxyear ${params.maxyear} \
       --coordprecision          ${params.coordprecision} \
       --coorduncertainty        ${params.coorduncertainty} \
       --coorduncertaintyexclude ${params.coorduncertaintyexclude} \
@@ -307,6 +308,7 @@ process record_count {
       --lonmin  ${params.lonmin} \
       --lonmax  ${params.lonmax} \
       --minyear ${params.minyear} \
+      --maxyear ${params.maxyear} \
       --coordprecision          ${params.coordprecision} \
       --coorduncertainty        ${params.coorduncertainty} \
       --coorduncertaintyexclude ${params.coorduncertaintyexclude} \
@@ -625,6 +627,7 @@ process derived_datasets {
       --lonmin  ${params.lonmin} \
       --lonmax  ${params.lonmax} \
       --minyear ${params.minyear} \
+      --maxyear ${params.maxyear} \
       --coordprecision          ${params.coordprecision} \
       --coorduncertainty        ${params.coorduncertainty} \
       --coorduncertaintyexclude ${params.coorduncertaintyexclude} \
