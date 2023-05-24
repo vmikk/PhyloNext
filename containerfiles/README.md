@@ -152,6 +152,15 @@ A Docker image with `Biodiverse` and `Perl` for estimation of phylogenetic diver
 Docker hub: [https://hub.docker.com/r/vmikk/biodiverse/tags](https://hub.docker.com/r/vmikk/biodiverse/tags)  
 Singularity Library: [https://cloud.sylabs.io/library/vmiks/gbif/biodiverse](https://cloud.sylabs.io/library/vmiks/gbif/biodiverse)  
 
+
+### v.1.3.0 (May 23, 2023)
+
+- Biodiverse v4.3 `76fd253` (https://github.com/vmikk/biodiverse-docker/releases/tag/v.1.3.0)  
+
+Biodiverse changelog:  
+- [Version 4.3](https://github.com/shawnlaffan/biodiverse/releases/tag/r4.3)  
+- [Version 4.2](https://github.com/shawnlaffan/biodiverse/releases/tag/r4.2)  
+
 ### v.1.2.0 (Mar 15, 2023)
 
 - Biodiverse v4.1 `d70b531` (https://github.com/vmikk/biodiverse-docker/releases/tag/v.1.2.0)  
