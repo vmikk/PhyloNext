@@ -1,11 +1,11 @@
 # Singularity definition file: R environment + packages required for GBIF occurrence filtering
 
 Bootstrap: docker
-From: rocker/r-ver:4.2.2
+From: rocker/r-ver:4.3.0
 
 %labels
   Maintainer vladimir.mikryukov@ut.ee
-  R_Version 4.2.2
+  R_Version 4.3.0
 
 %runscript
   exec "$@"
@@ -18,7 +18,7 @@ From: rocker/r-ver:4.2.2
 
 ## Install the required dependencies
 %post
-  export R_VERSION=4.2.2
+  export R_VERSION=4.3.0
 
   apt-get update -qq \
   && apt-get -y --no-install-recommends install \
