@@ -165,6 +165,9 @@ Biodiverse changelog:
 
 - Biodiverse v4.1 `d70b531` (https://github.com/vmikk/biodiverse-docker/releases/tag/v.1.2.0)  
 
+Biodiverse changelog:  
+- [Version 4.1](https://github.com/shawnlaffan/biodiverse/releases/tag/r4.1)  
+
 Docker compressed image size ~ 820.3 MB  
 Docker decompressed image size ~ 2.77 GB  
 Singularity image size ~ 635.50 MB  
@@ -175,6 +178,11 @@ Singularity unique ID: `sha256.031397ea4334a40db8d94af08a3791dff9f9209990f6990be
 ### v.1.0.0 (Dec 17, 2022)
 
 - Biodiverse v4 `fe66697` (https://github.com/vmikk/biodiverse-docker/releases/tag/v.1.0.0)  
+
+Biodiverse changelog:  
+- [Version 4.0](https://github.com/shawnlaffan/biodiverse/releases/tag/r4.0)  
+- [Version r3.99_005](https://github.com/shawnlaffan/biodiverse/releases/tag/r3.99_005)  
+- [Version r3.99_004](https://github.com/shawnlaffan/biodiverse/releases/tag/r3.99_004)  
 
 Compressed Size ~ 818.57 MB  
 Decompressed Size ~ 2.76 GB  
