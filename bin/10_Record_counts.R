@@ -67,6 +67,7 @@ option_list <- list(
 
   ## Additional filters
   make_option("--minyear", action="store", default=1945, type='integer', help="Minimum year of occurrence (default, 1945)"),
+  make_option("--maxyear", action="store", default=NA,   type='integer', help="Maximum year of occurrence"),
   make_option("--noextinct", action="store", default=NA, type='character', help="Remove extinct species (provide a file with extinct specieskeys)"),
   make_option("--excludehuman", action="store", default=TRUE, type='logical', help="Exclude human records (genus Homo)"),
   make_option("--basisofrecordinclude",  action="store", default=NA, type='character', help="Basis of record to include from the data"),
@@ -136,7 +137,9 @@ LONMIN  <- as.numeric( to_na(opt$lonmin) )
 LONMAX  <- as.numeric( to_na(opt$lonmax) )
 
 MINYEAR <- as.numeric(to_na( opt$minyear) )
-EXTINCT <- to_na( opt$noextinct)
+MAXYEAR <- as.numeric(to_na( opt$maxyear) )
+
+EXTINCT      <- to_na( opt$noextinct)
 EXCLUDEHUMAN <- as.logical( opt$excludehuman )
 
 BASISINCL <- to_na( opt$basisofrecordinclude )
@@ -181,6 +184,7 @@ cat(paste("Maximum longitude: ", LONMAX,  "\n", sep = ""))
 cat(paste("Basis of record to include: ", BASISINCL, "\n", sep=""))
 cat(paste("Basis of record to exclude: ", BASISEXCL, "\n", sep=""))
 cat(paste("Minimum year of occurrence: ", MINYEAR, "\n", sep=""))
+cat(paste("Maximum year of occurrence: ", MAXYEAR, "\n", sep=""))
 cat(paste("List of extict species: ",     EXTINCT, "\n", sep=""))
 cat(paste("Exclusion of human records: ", EXCLUDEHUMAN, "\n", sep=""))
 cat(paste("Round coordinates: ",          ROUNDCOORDS, "\n", sep=""))
@@ -268,6 +272,7 @@ quiet <- function(x) {
 # LONMIN <- NA
 # LONMAX <- NA
 # MINYEAR <- 2005
+# MAXYEAR <- NA
 # EXTINCT <- NA
 # EXCLUDEHUMAN <- TRUE
 # BASISINCL <- NA
@@ -361,8 +366,12 @@ if(!is.na(BASISINCL) & !is.na(BASISEXCL)){
 
 ## Year
 if(!is.na(MINYEAR)){
-  cat("..Filtering by collection date\n")
+  cat("..Filtering by collection date (min year)\n")
   dsf <- dsf %>% filter(year >= MINYEAR)
+}
+if(!is.na(MAXYEAR)){
+  cat("..Filtering by collection date (max year)\n")
+  dsf <- dsf %>% filter(year <= MAXYEAR)
 }
 
 ## Taxonomy filters
