@@ -11,6 +11,23 @@ A Docker image with R packages required for GBIF occurrence filtering and mappin
 Docker hub: [https://hub.docker.com/r/vmikk/rarrow/tags](https://hub.docker.com/r/vmikk/rarrow/tags)  
 Singularity Library: [https://cloud.sylabs.io/library/vmiks/gbif/rarrow](https://cloud.sylabs.io/library/vmiks/gbif/rarrow)  
 
+
+### v.1.3.0 (May 23, 2023)
+
+- `R` 4.3.0
+- `GEOS` 3.10.2
+- `GDAL` 3.4.1
+- `PROJ` 8.2.1
+
+- `ape` 5.7-1
+- `arrow` 12.0.0
+- `dbscan` 1.1.11
+- `h3` 3.7.2
+- `leaflet` 2.1.2
+- `rgbif` 3.7.7
+- `rotl` 3.0.14
+- `sf` 1.0.12
+- `terra` 1.7.29
 ### v.1.2.0 (Mar 15, 2023)
 
 - removed Google Chrome
