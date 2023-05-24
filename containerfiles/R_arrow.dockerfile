@@ -1,6 +1,6 @@
 # Docker image with R packages required for GBIF occurrence filtering and mapping
 
-FROM rocker/r-ver:4.2.2
+FROM rocker/r-ver:4.3.0
 
 LABEL org.opencontainers.image.authors="vladimir.mikryukov@ut.ee"
 
@@ -16,8 +16,9 @@ RUN apt-get update -qq \
       curl git wget less \
       build-essential \
       libgeos-dev libudunits2-dev libproj-dev libgdal-dev \
-      gnupg \
- && /rocker_scripts/install_tidyverse.sh \
+      gnupg
+
+RUN /rocker_scripts/install_tidyverse.sh \
  && /rocker_scripts/install_pandoc.sh \
  && apt-get purge --auto-remove -y gnupg \
  && apt-get autoremove -y \
