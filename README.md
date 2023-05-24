@@ -56,10 +56,10 @@ Main pipeline parameters and output are desribed here:
 - [parameters](https://phylonext.github.io/parameters/)
 - [output](https://phylonext.github.io/outputs/)
 
-To show a help message, run `nextflow run vmikk/phylonext -r main --helpMsg`.
+To show a help message, run `nextflow run vmikk/phylonext -r main --help`.
 ```
 =====================================================================
-PhyloNext: GBIF phylogenetic diversity pipeline :  Version 1.0
+PhyloNext: GBIF phylogenetic diversity pipeline :  Version 1.3.0
 =====================================================================
 
 Pipeline Usage:
@@ -90,6 +90,7 @@ OPTIONAL:
     --lonmin              Minimum longitude of species occurrences (decimal degrees); e.g., 47.0
     --lonmax              Maximum longitude of species occurrences (decimal degrees); e.g., 55.5
     --minyear             Minimum year of record's occurrences; default, 1945
+    --maxyear             Maximum year of record's occurrences; default, none
     --coordprecision      Coordinate precision threshold (less than maximum allowed value; default, 0.1)
     --coorduncertainty    Maximum allowed coordinate uncertainty, meters (default, 10000)
     --coorduncertaintyexclude Black list of coordinate uncertainty values (default, "301,3036,999,9999")
@@ -128,7 +129,7 @@ Leaflet interactive visualization:
     --leaflet_color       Color scheme for continuous variables (default, "RdYlBu")
     --leaflet_palette     Color palette for continuous variables (default, "quantile")
     --leaflet_bins        Number of color bins for continuous variables (default, 5)
-    --leaflet_sescolor    Color scheme for standardized effect sizes, SES (default, "threat"; alternative - "hotspots")
+    --leaflet_sescolor    Color scheme for standardized effect sizes, SES (default, "threat"; alternative - "hotspots)
     --leaflet_redundancy  Redundancy threshold for hiding the grid cells with low number of records (default, 0 = display all grid cells)
 
 Static visualization:
