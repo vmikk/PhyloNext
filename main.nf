@@ -93,6 +93,7 @@ def helpMsg() {
         --lonmin              Minimum longitude of species occurrences (decimal degrees); e.g., 47.0
         --lonmax              Maximum longitude of species occurrences (decimal degrees); e.g., 55.5
         --minyear             Minimum year of record's occurrences; default, 1945
+        --maxyear             Maximum year of record's occurrences; default, none
         --coordprecision      Coordinate precision threshold (less than maximum allowed value; default, 0.1)
         --coorduncertainty    Maximum allowed coordinate uncertainty, meters (default, 10000)
         --coorduncertaintyexclude Black list of coordinate uncertainty values (default, "301,3036,999,9999")
