@@ -187,8 +187,13 @@
                 "minyear": {
                     "type": "integer",
                     "fa_icon": "fas fa-clock",
-                    "description": "Minimum year of record's occurrences; default, 1945",
+                    "description": "Minimum year of record's occurrences; e.g., 1945",
                     "default": 1945
+                },
+                "maxyear": {
+                    "type": "string",
+                    "default": null,
+                    "fa_icon": "fas fa-clock"
                 },
                 "basisofrecordinclude": {
                     "type": "string",
