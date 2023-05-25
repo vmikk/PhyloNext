@@ -28,6 +28,15 @@ Singularity Library: [https://cloud.sylabs.io/library/vmiks/gbif/rarrow](https:/
 - `rotl` 3.0.14
 - `sf` 1.0.12
 - `terra` 1.7.29
+
+Docker compressed image size ~ 740.81 MB  
+Docker decompressed image size ~ 2.09 GB  
+Singularity image size ~ 697.93 MB  
+
+Docker image digest: `sha256:f9d8270c4ccf921f23f8748826a4892be5b18810addc6a9fb95af44bc4478630`  
+Singularity unique ID: `sha256.9d06bb52f10bc1a38fe8552a058721324525d8b036cf6fc704496faa8ac686d9`  
+
+
 ### v.1.2.0 (Mar 15, 2023)
 
 - removed Google Chrome
