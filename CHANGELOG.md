@@ -5,6 +5,14 @@ For version numbering, we use the following convention: `MAJOR.MINOR.PATCH`.
 Each element increases numerically (e.g., `1.9.0` -> `1.10.0` -> `1.11.0`).  
 
 
+## v1.3.0 - [May 25, 2023]
+
+- Biodiverse updated to v4.3  
+    Biodiverse changelog:  
+    - [Version 4.3](https://github.com/shawnlaffan/biodiverse/releases/tag/r4.3)  
+    - [Version 4.2](https://github.com/shawnlaffan/biodiverse/releases/tag/r4.2)  
+- `Added`: `maxyear` parameter for occurrence filtering based on the upper bound of collection year  
+
 ## v1.2.0 - [Apr 11, 2023]
 
 - `Added`: spatially-constrained randomizations;  
