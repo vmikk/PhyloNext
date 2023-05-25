@@ -170,6 +170,14 @@ Biodiverse changelog:
 - [Version 4.3](https://github.com/shawnlaffan/biodiverse/releases/tag/r4.3)  
 - [Version 4.2](https://github.com/shawnlaffan/biodiverse/releases/tag/r4.2)  
 
+Docker compressed image size ~ 825.52 MB  
+Docker decompressed image size ~ 2.78 GB  
+Singularity image size ~ 636.11 MB  
+
+Docker image digest: `sha256:9ce19b4e4da42268841c9cd88619cde63739ed3f9870870a9c4fe76dfb7f4e51`  
+Singularity unique ID: `sha256.88a4ac5ac625345a8d3d87f918213b2f57d2109b597971d990ff3165a19463b3`  
+
+
 ### v.1.2.0 (Mar 15, 2023)
 
 - Biodiverse v4.1 `d70b531` (https://github.com/vmikk/biodiverse-docker/releases/tag/v.1.2.0)  
