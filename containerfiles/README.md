@@ -1,9 +1,13 @@
 # PhyloNext containers
 
 Currently, all software dependencies used by PhyloNext are grouped into 3 containers:  
-- `rarrow` - R
-- `biodiverse` - Biodiverse and Perl
-- `opentree` - Open Tree of Life and Python
+- `rarrow` - R  
+- `biodiverse` - Biodiverse and Perl  
+- `opentree` - Open Tree of Life and Python  
+
+For easy access and setup, the Docker and Singularity image archives for the PhyloNext pipeline are available on Zenodo:  
+- `v.1.3.0`: [DOI:10.5281/zenodo.7973798](https://zenodo.org/record/7973798)  
+
 
 ## `rarrow` changelog
 
