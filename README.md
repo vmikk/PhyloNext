@@ -153,7 +153,7 @@ NEXTFLOW-SPECIFIC:
 
 ## Credits
 
-PhyloNext pipeline was developed by Vladimir Mikryukov and Kessy Abarenkov.
+PhyloNext pipeline was developed by [Vladimir Mikryukov](https://github.com/vmikk) and [Kessy Abarenkov](https://github.com/kessya).
 
 [Biodiverse program](https://shawnlaffan.github.io/biodiverse/) and Perl scripts accompanying PhyloNext were written by [Shawn Laffan](https://github.com/shawnlaffan) (Laffan et al., 2010).
 
