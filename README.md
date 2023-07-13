@@ -181,7 +181,7 @@ For further information or help, don't hesitate to file an [issue on GitHub](htt
 
 ## Citations
 
-If you use PhyloNext pipeline for your analysis, please cite it using the following DOI: [10.5281/zenodo.XXXXXX](https://doi.org/10.5281/zenodo.XXXXXX)
+If you use PhyloNext pipeline for your analysis, please cite it using the following DOI: [10.5281/zenodo.7974081](https://doi.org/10.5281/zenodo.7974081)
 
 Laffan SW, Lubarsky E, Rosauer DF (2010) Biodiverse, a tool for the spatial analysis of biological and related diversity. Ecography, 33: 643-647. [DOI: 10.1111/j.1600-0587.2010.06237.x](https://onlinelibrary.wiley.com/doi/10.1111/j.1600-0587.2010.06237.x)
 
