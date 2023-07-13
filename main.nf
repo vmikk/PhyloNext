@@ -908,6 +908,9 @@ process div_to_csv {
       path "RND_rand--p_rank--SPATIAL_RESULTS.csv",   emit: spat_p
       path "RND_rand--z_scores--SPATIAL_RESULTS.csv", emit: spat_z
       path "RND_rand--CANAPE--.csv",                  emit: canape, optional: true
+      path "RND_rand--HURLBERT_ES.csv",               emit: hurl_r, optional: true
+      path "RND_rand--p_rank--HURLBERT_ES.csv",       emit: hurl_p, optional: true
+      path "RND_rand--z_scores--HURLBERT_ES.csv",     emit: hurl_z, optional: true
 
     script:
     """
