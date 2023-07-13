@@ -975,7 +975,6 @@ process plot_leaflet {
       path spat_z    // randomized indices
       path spat_r    // randomization-based p-values
       path NRECORDS  // number of raw records per grid cell
-      path canape    // CANAPE results
 
     output:
       path "Choropleth.html"
@@ -991,7 +990,6 @@ process plot_leaflet {
       --observed    ${BDOBS} \
       --sesscores   ${spat_z} \
       --sigscores   ${spat_r} \
-      --canape      ${canape} \
       --reccounts   ${NRECORDS} \
       --resolution  ${params.h3resolution} \
       --variables   ${params.leaflet_var} \
