@@ -743,7 +743,7 @@ process phylodiv {
     label "container_biodiverse"
     queue "custom_pool"
 
-    publishDir "$params.outdir/02.Biodiverse_results", mode: 'copy'
+    // publishDir "$params.outdir/02.Biodiverse_results", mode: 'copy'
     // cpus 1
 
     input:
