@@ -902,12 +902,12 @@ process div_to_csv {
       path Biodiv
 
     output:
-      path "RND_groups.csv",                          emit: RND1
-      path "RND_rand--p_rank--SPATIAL_RESULTS.csv",   emit: RND2
-      path "RND_rand--SPATIAL_RESULTS.csv",           emit: RND3
-      path "RND_rand--z_scores--SPATIAL_RESULTS.csv", emit: RND4
-      path "RND_SPATIAL_RESULTS.csv",                 emit: RND5
-      path "RND_rand--CANAPE--.csv",                  emit: RND6, optional: true
+      path "RND_groups.csv",                          emit: grp
+      path "RND_SPATIAL_RESULTS.csv",                 emit: spat
+      path "RND_rand--SPATIAL_RESULTS.csv",           emit: spat_r
+      path "RND_rand--p_rank--SPATIAL_RESULTS.csv",   emit: spat_p
+      path "RND_rand--z_scores--SPATIAL_RESULTS.csv", emit: spat_z
+      path "RND_rand--CANAPE--.csv",                  emit: canape, optional: true
 
     script:
     """
@@ -930,7 +930,7 @@ process plot_pd {
 
     input:
       path BDOBS     // observed indices
-      path RND4      // randomized indices
+      path spat_z    // randomized indices
       path world
 
     output:
@@ -943,7 +943,7 @@ process plot_pd {
     """
     14_Visualization.R \
       --observed   ${BDOBS} \
-      --zscores    ${RND4} \
+      --zscores    ${spat_z} \
       --threads    ${task.cpus} \
       --variables  ${params.plotvar} \
       --resolution ${params.h3resolution} \
@@ -969,9 +969,10 @@ process plot_leaflet {
 
     input:
       path BDOBS     // observed indices
-      path RND4      // randomized indices
-      path RND3      // randomization-based p-values
+      path spat_z    // randomized indices
+      path spat_r    // randomization-based p-values
       path NRECORDS  // number of raw records per grid cell
+      path canape    // CANAPE results
 
     output:
       path "Choropleth.html"
@@ -985,8 +986,9 @@ process plot_leaflet {
     """
     15_Leaflets.R \
       --observed    ${BDOBS} \
-      --sesscores   ${RND4} \
-      --sigscores   ${RND3} \
+      --sesscores   ${spat_z} \
+      --sigscores   ${spat_r} \
+      --canape      ${canape} \
       --reccounts   ${NRECORDS} \
       --resolution  ${params.h3resolution} \
       --variables   ${params.leaflet_var} \
@@ -1209,17 +1211,16 @@ workflow {
 
     // Plot PD indices (static map)
     plot_pd(
-        div_to_csv.out.RND5,
-        div_to_csv.out.RND4,
+        div_to_csv.out.spat,
+        div_to_csv.out.spat_z,
         world)
 
     // Plot PD indices (interactive map - Leaflet-based choropleth)
     plot_leaflet(
-        div_to_csv.out.RND5,
-        div_to_csv.out.RND4,
-        div_to_csv.out.RND3,
+        div_to_csv.out.spat,
+        div_to_csv.out.spat_z,
+        div_to_csv.out.spat_r,
         record_count.out.n_recr)
-
 
     // Prepare a channel with diversity index names
     ind_ch = Channel.value( params.leaflet_var )
