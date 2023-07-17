@@ -548,8 +548,12 @@ if(any(duplicated(species_uniq$TreeTip))){
 
 ## Export data (in long format) for Biodiverse
 cat("..Exporting trimmed occurrence data for Biodiverse\n")
+
+clz <- c("TreeTip", "H3", "specieskey", "species", "decimallatitude", "decimallongitude", "NumRecords")
+clz <- clz[ clz %in% colnames(datt) ]
+
 fwrite(
-  x = datt[, .(TreeTip, H3, specieskey, species, decimallatitude, decimallongitude)],
+  x = datt[, ..clz],
   file = file.path(OUTPUT, "Trimmed_occurrences.csv"),
   sep = ",", quote = T, row.names = FALSE, col.names = TRUE)
 
