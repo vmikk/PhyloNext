@@ -494,9 +494,18 @@ datt[ , H3 := h3::geo_to_h3(datt[, .(decimallatitude, decimallongitude)], res = 
 
 cat("..Number of H3-based gridcells: ", length(unique(datt$H3)), "\n")
 
+
+## Estimate number of records per species
+cat("Counting number of records per grid cell per species\n")
+
+datt_h3_sp <- datt[, .(
+  NumRecords = sum(n, na.rm = TRUE)
+  ), by = c("H3", "species")]
+
+
+## Estimate global count summary
 cat("Counting number of unique elements per grid cell\n")
 
-## Estimate count summary
 datt_h3 <- datt[, .(
   NumRecords = sum(n, na.rm = TRUE),
   UniqKingdoms = length(unique(kingdom)),
@@ -516,7 +525,6 @@ setnames(datt_h3, c("lat","lng"), c("decimallatitude","decimallongitude"))
 ################################################# Prepare outliers data
 
 cat("Preparing outliers data\n")
-
 
 #### Add grid cell IDs of removed samples as attributes to the resulting data
 
@@ -586,7 +594,7 @@ cat("..Total number of species in outliers: ", length(unique(OUTLIERS$species)),
 ################################################# Export data
 
 ## Export
-cat("Exporting filtered occurrence data\n")
+cat("Exporting total record counts\n")
 
 ## Main data with the number of records
 cat("..Main data in R-format\n")
@@ -606,6 +614,23 @@ fwrite(x = datt_h3,
 cat("..Outliers\n")
 fwrite(x = OUTLIERS,
   file = paste0(OUTPUT, "_Outliers.txt.gz"),
+  quote = F, sep = "\t",
+  compress = "gzip")
+
+
+
+## Per-species counts
+cat("Exporting per-species record counts\n")
+
+cat("..Main data in R-format\n")
+saveRDS(
+  object = datt_h3_sp,
+  file = paste0(OUTPUT, "_H3_PerSpecies.RData"),
+  compress = "xz")
+
+cat("..Main data in tsv-format\n")
+fwrite(x = datt_h3_sp,
+  file = paste0(OUTPUT, "_H3_PerSpecies.txt.gz"),
   quote = F, sep = "\t",
   compress = "gzip")
 
