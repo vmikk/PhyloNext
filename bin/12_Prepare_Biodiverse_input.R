@@ -19,12 +19,20 @@ cat("Script name: 12_Prepare_Biodiverse_input.R\n")
 
 ## Usage example:
 # ./12_Prepare_Biodiverse_input.R \
-#   --input "filtered_data" \
+#   --input "FilteredData" \
 #   --phytree "phy_trees/Fabaceae_Australian.nwk" \
 #   --phylabels "OTT" \
 #   --taxgroup "Rosids" \
+#   --counts "Record_counts_H3_PerSpecies.RData" \
 #   --threads 12 \
 #   --output "Biodiverse_input"
+
+## Notes:
+# If the DBSCAN feature was activated, then the files within the `FilteredData` directory 
+# should have undergone outlier filtration.
+# This means that the `Record_counts_H3_PerSpecies.RData` file 
+# might have some grid cells that are considered outliers.
+# Consequently, during the merging process, these additional outlier grid cells will be eliminated.
 
 
 ############################################## Parse input parameters
@@ -46,6 +54,7 @@ option_list <- list(
   make_option(c("-l", "--phylabels"), action="store", default="OTT", type='character', help="Type of phylogenetic tree labels (OTT or Latin)"),
 
   make_option(c("-g", "--taxgroup"), action="store", default="All life", type='character', help="Taxonomy group in OpenTree"),
+  make_option(c("-c", "--counts"),   action="store", default=NA, type='character', help="Record counts per species per grid cell"),
 
   make_option(c("-t", "--threads"), action="store", default=2L, type='integer', help="Number of CPU threads for arrow, default 4"),
   make_option(c("-o", "--output"), action="store", default=NA, type='character', help="Output directory")
@@ -60,6 +69,10 @@ if(sum(is.na(opt$input), is.na(opt$inputfile)) < 1){
 if(is.na(opt$output)){
   stop("Output directory is not specified.\n")
 }
+if(is.na(opt$counts)){
+  stop("File with record counts is not specified.\n")
+}
+
 
 ## Function to convert text "NA"s to NA
 to_na <- function(x){ 
@@ -68,13 +81,14 @@ to_na <- function(x){
 }
 
 ## Assign variables
-INPUT <- opt$input
+INPUT     <- opt$input
 INPUTFILE <- opt$inputfile
-PHYTREE <- to_na( opt$phytree )
-LABELS <- opt$phylabels
-TAXGROUP <- opt$taxgroup
+PHYTREE   <- to_na( opt$phytree )
+LABELS    <- opt$phylabels
+TAXGROUP  <- opt$taxgroup
+COUNTS    <- opt$counts
 CPUTHREADS <- as.numeric(opt$threads)
-OUTPUT <- opt$output
+OUTPUT     <- opt$output
 
 ## Modify tax group argument (no spaces are allowed in arguments)
 # if(TAXGROUP %in% "All_life"){ TAXGROUP <- "All life" }
@@ -87,6 +101,7 @@ cat(paste("Input file with paths to the filtered occurrences: ", INPUTFILE, "\n"
 cat(paste("Phylogenetic tree: ", PHYTREE, "\n", sep=""))
 cat(paste("Type of tip labels on the phylogenetic tree: ", LABELS, "\n", sep=""))
 cat(paste("Taxonomy group in OpenTree: ", TAXGROUP, "\n", sep=""))
+cat(paste("File with record counts (per species, per grid cell): ", COUNTS, "\n", sep=""))
 cat(paste("Number of CPU threads to use: ", CPUTHREADS, "\n", sep=""))
 cat(paste("Output directory: ", OUTPUT, "\n", sep=""))
 
@@ -246,7 +261,6 @@ outliers_dbscan <- laply(.data = datt, .fun = function(z){
 cat("...The number of excluded non-terrestrial gridcells: ", sum(outliers_terrestrial), "\n")
 cat("...The number of excluded DBSCAN-based gridcells-outliers: ", sum(outliers_dbscan), "\n")
 
-
 cat("..Merging filtered occurrences from different specieskeys\n")
 datt <- rbindlist(datt)
 
@@ -260,6 +274,17 @@ cat("..Total number of records: ", nrow(datt), "\n")
 cat("..Number of unique specieskeys: ", length(unique(datt$specieskey)), "\n")
 cat("..Number of unique gridcells: ", length(unique(datt$H3)), "\n")
 
+## Load record counts
+cat("..Loading record counts (per species, per grid cell)\n")
+COUNTS <- readRDS(COUNTS)
+
+## Add record counts
+cat("..Adding number of recores (per species, per grid cell)\n")
+datt <- merge(x = datt, y = COUNTS, by = c("H3", "species"), all.x = TRUE)
+
+if(any(is.na(datt$NumRecords))){
+  cat("WARNING: There are missing values in numbers of records! Check data merging.\n")
+}
 
 
 ######################################
