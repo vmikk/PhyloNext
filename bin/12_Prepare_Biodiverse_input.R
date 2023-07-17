@@ -114,6 +114,16 @@ if(!OUTPUT %in% "."){
 }
 
 
+############################################## Data for debugging
+
+# INPUT      <- "FilteredData"
+# COUNTS     <- "Record_counts_H3_PerSpecies.RData"
+# PHYTREE    <- "Birds_Gumbs,2022_imputed.nwk"
+# LABELS     <- "Latin"
+# TAXGROUP   <- "All_life"
+# CPUTHREADS <- 4
+# OUTPUT     <- "."
+
 ############################################## Load packages
 
 cat("Loading R packages...\n")
