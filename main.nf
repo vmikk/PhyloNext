@@ -1138,8 +1138,8 @@ workflow {
     // merge_occ(filtered_filelist.out.FLT)   // using inputfile (fail if there are a lot of species)
     merge_occ(
         flt_ch,
-        phytree)
-
+        phytree,
+        record_count.out.n_spr)
 
     // Prepare Biodiverse input files
     prep_biodiv(merge_occ.out.occurrences, merge_occ.out.tree)
