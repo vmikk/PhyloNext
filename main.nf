@@ -715,9 +715,10 @@ process prep_biodiv {
     00_create_bds.pl \
       --csv_file ${occurrences} \
       --out_file "occ.bds" \
-      --label_column_number   '0' \
-      --group_column_number_x '5' \
-      --group_column_number_y '4' \
+      --label_column_number     '0' \
+      --sampcount_column_number '6' \
+      --group_column_number_x   '5' \
+      --group_column_number_y   '4' \
       --cell_size_x '0' \
       --cell_size_y '0'
 
