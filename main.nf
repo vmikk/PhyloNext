@@ -539,6 +539,7 @@ process get_ott_tree {
 
 
 // Merge filtered species occurrences and prep data for Biodiverse
+// Add record counts (taking into account DBSCAN-based outliers)
 process merge_occ {
 
     label "container_r"
@@ -550,6 +551,7 @@ process merge_occ {
     input:
       path(spp, stageAs: "FilteredData/*")
       path phytree
+      path counts
 
     output:
       path "H3_GridCell_Centres.csv", emit: h3coords
@@ -564,6 +566,7 @@ process merge_occ {
       --phytree ${phytree} \
       --phylabels ${params.phylabels} \
       --taxgroup  ${params.taxgroup} \
+      --counts    ${counts} \
       --threads   ${task.cpus} \
       --output    "."
 
