@@ -13,7 +13,7 @@
 # Column 2 = H3 grid cell ID
 # Column 5 = Latitude
 # Column 6 = Longitude
-
+# Column 7 = Number of records (per species, per grid cell)
 
 use strict;
 use warnings;
@@ -38,10 +38,11 @@ my ($opt, $usage) = describe_options(
   [ 'csv_file=s',              'The input csv file',       { required => 1 } ],
   [ 'out_file|output_bd=s',    'The output basedata file', { required => 1 } ],
 
-  [ 'label_column_number:i',   'Column containing the label name [default= "0"]',    { default => 0 } ],
-# [ 'group_column_text:i',     'Column containing the group name [default= "1"]',    { default => 1 } ],
-  [ 'group_column_number_x:i', 'Column containing the x-axis values [default= "2"]', { default => 4 } ],
-  [ 'group_column_number_y:i', 'Column containing the y-axis values [default= "3"]', { default => 5 } ],
+  [ 'label_column_number:i',     'Column containing the label name [default= "0"]',    { default => 0 } ],
+  [ 'sampcount_column_number:i', 'Column containing the sample counts [default= "6"]', { default => 6 } ],
+# [ 'group_column_text:i',       'Column containing the group name [default= "1"]',    { default => 1 } ],
+  [ 'group_column_number_x:i',   'Column containing the x-axis values [default= "2"]', { default => 4 } ],
+  [ 'group_column_number_y:i',   'Column containing the y-axis values [default= "3"]', { default => 5 } ],
   
   [ 'cell_size_x:f',           'Cell size of x-axis [default= "0"]', { default => 0 } ],
   [ 'cell_size_y:f',           'Cell size of y-axis [default= "0"]', { default => 0 } ],
@@ -62,7 +63,10 @@ my $out_file              = $opt->out_file;
 
 my $label_column_number   = $opt->label_column_number;
 
-# my $group_column_text     = $opt->group_column_text;
+my $sampcount_column_number = $opt->sampcount_column_number;
+
+
+# my $group_column_text   = $opt->group_column_text;
 my $group_column_number_x = $opt->group_column_number_x;
 my $group_column_number_y = $opt->group_column_number_y;
 
@@ -82,10 +86,11 @@ my @names = (
 
 my %input_files = (
     $names[0] => {
-        input_quotes    => $double_quotes,
-        label_columns   => [$label_column_number],
-        group_columns   => [$group_column_number_x, $group_column_number_y],
-        # group_columns   => [$group_column_number_x],
+        input_quotes         => $double_quotes,
+        label_columns        => [$label_column_number],
+        group_columns        => [$group_column_number_x, $group_column_number_y],
+        # group_columns      => [$group_column_number_x],
+        sample_count_columns => [$sampcount_column_number],
     }
 );
 
