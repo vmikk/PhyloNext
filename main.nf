@@ -281,6 +281,8 @@ process record_count {
     output:
       path "Record_counts_H3.RData",  emit: n_recr
       path "Record_counts_H3.txt.gz", emit: n_rect
+      path "Record_counts_H3_PerSpecies.RData",  emit: n_spr
+      path "Record_counts_H3_PerSpecies.txt.gz", emit: n_spt
       path "Record_counts_Outliers.txt.gz", emit: n_outl, optional: true
 
     script:
