@@ -548,7 +548,7 @@ process merge_occ {
     // cpus 10
 
     input:
-      path spp
+      path(spp, stageAs: "FilteredData/*")
       path phytree
 
     output:
@@ -560,7 +560,7 @@ process merge_occ {
     script:
     """
     12_Prepare_Biodiverse_input.R \
-      --input "." \
+      --input "FilteredData" \
       --phytree ${phytree} \
       --phylabels ${params.phylabels} \
       --taxgroup  ${params.taxgroup} \
