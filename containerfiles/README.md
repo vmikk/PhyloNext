@@ -232,6 +232,10 @@ Singularity Library: [https://cloud.sylabs.io/library/vmiks/gbif/opentree](https
 
 ### v.0.0.2 (Apr 22, 2022)
 
+- `opentree` `OpenTreeOfLife/python-opentree@cdc3c2b3f2116c973decc6321b7421ef0970e079` (`itol_annot` branch)  
+- `Python` 3.10.8  
+- `DendroPy` 4.5.2  
+
 Compressed Size ~ 360.47 MB  
 Decompressed Size ~ 968 MB  
 
