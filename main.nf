@@ -1227,12 +1227,20 @@ workflow {
         div_to_csv.out.spat_z,
         world)
 
+    // Channels with optional input for Leaflets
+   ch_canape   = div_to_csv.out.canape.flatten().collect().ifEmpty(file("no_canape"))
+   ch_hurlbert = div_to_csv.out.hurl.flatten().collect().ifEmpty(file("no_hurlbert"))
+
     // Plot PD indices (interactive map - Leaflet-based choropleth)
     plot_leaflet(
         div_to_csv.out.spat,
         div_to_csv.out.spat_z,
         div_to_csv.out.spat_r,
-        record_count.out.n_recr)
+        record_count.out.n_recr,
+        ch_canape,
+        ch_hurlbert
+        )
+
 
     // Prepare a channel with diversity index names
     ind_ch = Channel.value( params.leaflet_var )
