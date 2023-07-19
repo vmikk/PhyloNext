@@ -21,6 +21,7 @@ cat("Script name: 15_Leaflets.R\n")
 # https://github.com/shawnlaffan/biodiverse/wiki/IndicesDevVersion
 
 ## For Standardized-Effect-Size-based variables, add `SES_` prefix (e.g., `SES_PD`)
+## For Hurlbert ES indices, add `ES_` prefix (e.g., `ES_50`)
 
 ## For CANAPE (categorical analysis of neo- and paleoendemism; Mishler et al., 2014), add `CANAPE` to the variables list
 # CANAPE is able to distinguish different types of centres of endemism, and can thus give insights 
