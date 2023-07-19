@@ -202,17 +202,22 @@ cat("\n")
 ############################################## Prepare data
 
 ## Parameters for debugging
-# INPUTR <- "RND_SPATIAL_RESULTS.csv"
-# INPUTS <- "RND_rand--z_scores--SPATIAL_RESULTS.csv"
-# INPUTP <- "RND_rand--SPATIAL_RESULTS.csv"    # "RND_rand--SPATIAL_RESULTS.csv"
-# NRECORDS <- "Record_counts_H3.RData"
-# VARIABLES <- "RICHNESS_ALL,PD,SES_PD,PD_P,ENDW_WE,SES_ENDW_WE,PE_WE,SES_PE_WE,CANAPE,Redundancy"
+# INPUTR    <- "RND_SPATIAL_RESULTS.csv"
+# INPUTS    <- "RND_rand--z_scores--SPATIAL_RESULTS.csv"
+# INPUTP    <- "RND_rand--SPATIAL_RESULTS.csv"    # "RND_rand--SPATIAL_RESULTS.csv"
+# CANAPE    <- "RND_rand--CANAPE--.csv"
+# HURLBERT  <- "RND_HURLBERT_ES.csv"
+# NRECORDS  <- "Record_counts_H3.RData"
+# VARIABLES <- "RICHNESS_ALL,PD,SES_PD,PD_P,ENDW_WE,SES_ENDW_WE,PE_WE,SES_PE_WE,ES_50,CANAPE,Redundancy"
 # REDUNDANCYTRSH <- 0.7
-# PALETTE <- "quantile"
-# COLOR <- "RdYlBu"
-# BINS <- 5
-# SHORTID <- TRUE
-# ANTIFIX <- TRUE
+# RESOLUTION     <- 4
+# PALETTE  <- "quantile"
+# COLOR    <- "RdYlBu"
+# COLORSES <- "threat"
+# BINS     <- 5
+# SHORTID  <- TRUE
+# ANTIFIX  <- TRUE
+# CANAPESUPER <- TRUE
 
 ## Load input data
 cat("Loading Biodiverse results\n")
