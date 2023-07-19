@@ -7,9 +7,11 @@ cat("Script name: 15_Leaflets.R\n")
 
 ## Usage example:
 # ./15_Leaflets.R \
-#   --observed "RND_SPATIAL_RESULTS.csv" \
+#   --observed  "RND_SPATIAL_RESULTS.csv" \
 #   --sesscores "RND_rand--z_scores--SPATIAL_RESULTS.csv" \
 #   --sigscores "RND_rand--SPATIAL_RESULTS.csv" \
+#   --canape    "RND_rand--CANAPE--.csv" \
+#   --hurlbert  "RND_HURLBERT_ES.csv" \
 #   --reccounts "Record_counts_H3.RData" \
 #   --variables "RICHNESS_ALL,PD,SES_PD,PD_P,ENDW_WE,SES_ENDW_WE,PE_WE,SES_PE_WE,CANAPE,Redundancy" \
 #   --palette "quantile" \
@@ -39,6 +41,7 @@ cat("Script name: 15_Leaflets.R\n")
 # - Diversity_estimates.gpkg = Polygons with diversity metrics in GeoPackage format
 
 ## TO DO:
+# - SES for Hurlbert ES indices?
 # - handle NA values (e.g., if Richness == 1)
 
 
