@@ -230,6 +230,22 @@ A Docker image with `OpenTree` and `Python` for phylogenetic tree fetching from 
 Docker hub: [https://hub.docker.com/r/vmikk/opentree/tags](https://hub.docker.com/r/vmikk/opentree/tags)  
 Singularity Library: [https://cloud.sylabs.io/library/vmiks/gbif/opentree](https://cloud.sylabs.io/library/vmiks/gbif/opentree)  
 
+
+### v.1.4.0 (Jul 19, 2023)
+
+Open Tree of Life API updates (incompatible with older versions of `python-opentree`).  
+
+- `opentree` `OpenTreeOfLife/python-opentree@69a0ea693a275eab959b62cb1935ed31221d3c7a` (`itol_annot` branch)  
+- `Python` 3.10.12  
+- `DendroPy` 4.6.1  
+
+Docker compressed Size ~ 343.81 MB  
+Docker decompressed Size ~ 944 MB  
+Singularity image size ~ 311.97 MB
+
+Docker image digest: `sha256:42b5efdae9c12a3390a6b7c5a7cd84a2cf6136f89b3719795bd015b82dfe925e`  
+Singularity unique ID: `sha256.d4be5844e639b4c0026cf14cb00f6800ea43c9600a878333d26740dc40fa6c9f`  
+
 ### v.0.0.2 (Apr 22, 2022)
 
 - `opentree` `OpenTreeOfLife/python-opentree@cdc3c2b3f2116c973decc6321b7421ef0970e079` (`itol_annot` branch)  
