@@ -2,11 +2,11 @@
 # https://github.com/McTavishLab/GBIF-Biodiverse-OpenTree
 
 Bootstrap: docker
-From: python:3.10.8-bullseye
+From: python:3.10.12-bullseye
 
 %labels
   Maintainer vladimir.mikryukov@ut.ee
-  Python_Version 3.10.8
+  Python_Version 3.10.12
 
 %runscript
   exec "$@"
