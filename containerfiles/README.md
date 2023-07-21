@@ -166,6 +166,21 @@ Docker hub: [https://hub.docker.com/r/vmikk/biodiverse/tags](https://hub.docker.
 Singularity Library: [https://cloud.sylabs.io/library/vmiks/gbif/biodiverse](https://cloud.sylabs.io/library/vmiks/gbif/biodiverse)  
 
 
+
+### v.1.4.0 (July 21, 2023)
+
+- New feature: Hurlbert's ES index  
+
+- Biodiverse v4.3 `cc7face` (https://github.com/shawnlaffan/biodiverse/commit/cc7face23cd62486d6d9a1a8161b548276da139f)  
+
+Docker compressed image size ~ 829.83 MB  
+Docker decompressed image size ~ 2.79 GB  
+Singularity image size ~ 637.09 MB  
+
+Docker image digest: `sha256:e789d6d923f57188e09c2b603c98f06c2a1103377dd243c582e6543dc08a8983`  
+Singularity unique ID: `sha256.fee9fe421361b72dec794bf10cd07e1f8429715f3b4bb62e563a79ed096b1a1a`  
+
+
 ### v.1.3.0 (May 23, 2023)
 
 - Biodiverse v4.3 `76fd253` (https://github.com/vmikk/biodiverse-docker/releases/tag/v.1.3.0)  
