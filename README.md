@@ -60,7 +60,7 @@ Main pipeline parameters and output are desribed here:
 To show a help message, run `nextflow run vmikk/phylonext -r main --help`.
 ```
 =====================================================================
-PhyloNext: GBIF phylogenetic diversity pipeline :  Version 1.3.0
+PhyloNext: GBIF phylogenetic diversity pipeline :  Version 1.4.0
 =====================================================================
 
 Pipeline Usage:
