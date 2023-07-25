@@ -26,12 +26,21 @@ Gumbs, R., Gray, C. L., Böhm, M., Burfield, I. J., Couchman, O. R., Faith, D. P
 
 ## Open Tree of Life
 
-https://github.com/McTavishLab/GBIF-Biodiverse-OpenTree
+The phylogenetic trees below were obtained from the Open Tree of Life on February 26, 2022. 
+Use these trees with caution, as they represent the synthetic approximately dated trees. 
+These trees use OTT IDs for their tip labels, so if you wish to use them in PhyloNext, 
+you should specify the parameter `--phylabels OTT`.
 
+Included in this set are trees for the following groups: 
+Amphibians, Birds, Australian Fabaceae, Gymnosperms, and Mammals:  
 
-`Amphibians.nwk`
-`Birds.nwk`
-`Fabaceae_Australian.nwk`
-`Gymnosperms.nwk`
-`Mammals.nwk`
+- `Amphibians_OpenTree_OTT-labels.nwk`  
+- `Birds_OpenTree_OTT-labels.nwk`  
+- `Fabaceae_Australia_OpenTree_OTT-labels.nwk`  
+- `Gymnosperms_OpenTree_OTT-labels.nwk`  
+- `Mammals_OpenTree_OTT-labels.nwk`  
+- `Reptiles_OpenTree_OTT-labels.nwk`  
+
+You can find additional information on how these trees were procured at the following link:  
+https://github.com/McTavishLab/GBIF-Biodiverse-OpenTree  
 
