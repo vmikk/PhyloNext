@@ -29,7 +29,7 @@ This "median" tree is identified as the one with the lowest squared distance to 
 
 
 Reference:  
-Faith DP, Forest F, Hoffmann M, Isaac NJB, Jetz W, Mace GM, Mooers AO, Safi K, Oenone Scott O, Steel M, Tucker CM, Pearse WD, Owen NR, Rosindell J (2023) The EDGE2 protocol: Advancing the prioritisation of Evolutionarily Distinct and Globally Endangered species for practical conservation action. **PLOS Biology** 21(2): e3001991. [DOI:10.1371/journal.pbio.3001991](https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3001991)  
+Gumbs R, Gray CL, Böhm M, Burfield IJ, Couchman OR, Faith DP, Forest F, Hoffmann M, Isaac NJB, Jetz W, Mace GM, Mooers AO, Safi K, Oenone Scott O, Steel M, Tucker CM, Pearse WD, Owen NR, Rosindell J (2023) The EDGE2 protocol: Advancing the prioritisation of Evolutionarily Distinct and Globally Endangered species for practical conservation action. **PLOS Biology** 21(2): e3001991. [DOI:10.1371/journal.pbio.3001991](https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3001991)  
 
 
 ## Open Tree of Life
