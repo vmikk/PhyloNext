@@ -48,6 +48,15 @@ nextflow run vmikk/phylonext -r main \
   -resume
 ```
 
+## Web GUI
+
+To facilitate easy and efficient navigation for exploring the PhyloNext pipeline, a user-friendly, web-based graphical user interface (GUI) has been developed by [Thomas Stjernegaard Jeppesen](https://github.com/thomasstjerne).  
+
+The GUI is available at [https://phylonext.gbif.org/](https://phylonext.gbif.org/).
+
+**NB!** To access the GUI, users must have a GBIF user account. To register an account, please visit https://www.gbif.org/.  
+
+
 ## Documentation
 
 The PhyloNext pipeline comes with documentation about the pipeline usage 
