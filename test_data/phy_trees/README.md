@@ -2,7 +2,7 @@
 
 ## Acacia
 
-`Acacia_Mishler,2014.nwk`
+`Acacia_Mishler,2014_Latin-labels.nwk`
 
 Mishler, B. D., Knerr, N., González-Orozco, C. E., Thornhill, A. H., Laffan, S. W., & Miller, J. T. (2014). Phylogenetic measures of biodiversity and neo- and paleo-endemism in Australian Acacia. Nature Communications, 5(1), 4473. https://doi.org/10.1038/ncomms5473
 
