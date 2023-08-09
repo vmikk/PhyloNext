@@ -160,6 +160,9 @@ NEXTFLOW-SPECIFIC:
     -c / -C               Configuration file (`-C` ignores all default values) (default, "nextflow.config")
 ```
 
+Source code for the documentation can be found at [https://github.com/PhyloNext/phylonext.github.io](https://github.com/PhyloNext/phylonext.github.io).  
+
+
 ## Credits
 
 PhyloNext pipeline was developed by [Vladimir Mikryukov](https://github.com/vmikk) and [Kessy Abarenkov](https://github.com/kessya).
