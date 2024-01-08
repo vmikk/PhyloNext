@@ -1,6 +1,6 @@
 # Docker image with R packages required for GBIF occurrence filtering and mapping
 
-FROM rocker/r-ver:4.3.0
+FROM rocker/r-ver:4.3.2
 
 LABEL org.opencontainers.image.authors="vladimir.mikryukov@ut.ee"
 
