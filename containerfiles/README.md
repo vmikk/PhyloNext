@@ -16,6 +16,27 @@ Docker hub: [https://hub.docker.com/r/vmikk/rarrow/tags](https://hub.docker.com/
 Singularity Library: [https://cloud.sylabs.io/library/vmiks/gbif/rarrow](https://cloud.sylabs.io/library/vmiks/gbif/rarrow)  
 
 
+### v.1.4.0 (January 08, 2024)
+
+- `R` 4.3.2
+- `GEOS` 3.10.2
+- `GDAL` 3.4.1
+- `PROJ` 8.2.1
+
+- `ape` 5.7.1
+- `arrow` 14.0.0.2
+- `dbscan` 1.1.12
+- `h3` 3.7.2
+- `leaflet` 2.2.1
+- `rgbif` 3.7.8
+- `rotl` 3.0.15
+- `sf` 1.0.15
+- `terra` 1.7.65
+
+Docker compressed image size ~ 754.29 MB
+Docker decompressed image size ~ 2.13 GB
+Docker image digest: `sha256:fe89587080532983c93d5d8e581e9ae9308651796ff1a3492d1f5fca9d2d829b`
+
 ### v.1.3.0 (May 23, 2023)
 
 - `R` 4.3.0
