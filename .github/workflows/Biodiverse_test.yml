@@ -6,8 +6,8 @@ jobs:
   biodiverse-tests:
     name: Run Biodiverse tests
     runs-on: ubuntu-latest
-    container: 
-      image: vmikk/biodiverse:1.3.0
+    container:
+      image: vmikk/biodiverse:1.4.0
       volumes:
         - ${{ github.workspace }}:/biodiverse
     steps:
