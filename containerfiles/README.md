@@ -35,7 +35,11 @@ Singularity Library: [https://cloud.sylabs.io/library/vmiks/gbif/rarrow](https:/
 
 Docker compressed image size ~ 754.29 MB
 Docker decompressed image size ~ 2.13 GB
+Singularity image size ~ 637.09 MB
+
 Docker image digest: `sha256:fe89587080532983c93d5d8e581e9ae9308651796ff1a3492d1f5fca9d2d829b`
+Singularity unique ID: `sha256.bc5385dd315a8a8876877b620c4e7b5235225b85fb665499ce3febce157f3d33`
+
 
 ### v.1.3.0 (May 23, 2023)
 
