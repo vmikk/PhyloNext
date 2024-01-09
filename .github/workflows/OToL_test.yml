@@ -7,7 +7,7 @@ jobs:
     name: Run OToL tests
     runs-on: ubuntu-latest
     container: 
-      image: vmikk/opentree:0.0.2
+      image: vmikk/opentree:1.4.0
       volumes:
         - ${{ github.workspace }}:/ott
     steps:
