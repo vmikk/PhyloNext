@@ -4,7 +4,6 @@
 ========================================================================================
     PhyloNext: GBIF phylogenetic diversity pipeline
 ========================================================================================
-    Version: 1.4.0
     License: MIT
     Github : https://github.com/vmikk/phylonext
     Website: https://phylonext.github.io/
@@ -14,9 +13,6 @@
 
 // Enable DSL2 syntax
 nextflow.enable.dsl = 2
-
-// Pipeline version
-version = '1.4.0'
 
 // Parameters are defined in the `conf/params.config` file
 
@@ -62,7 +58,7 @@ polygon            = params.polygon            ? file(params.polygon)           
 def helpMsg() {
     log.info"""
     =====================================================================
-    PhyloNext: GBIF phylogenetic diversity pipeline :  Version ${version}
+    PhyloNext: GBIF phylogenetic diversity pipeline :  Version ${workflow.manifest.version}
     =====================================================================
 
     Pipeline Usage:
@@ -172,7 +168,7 @@ if (params.input == null) {
 // Print the parameters to the console and to the log
 log.info """
         ====================================================================
-        PhyloNext: GBIF phylogenetic diversity pipeline, Version ${version}
+        PhyloNext: GBIF phylogenetic diversity pipeline, Version ${workflow.manifest.version}
         ====================================================================
         GBIF occurrence dump:     ${params.input}
         Output path:              ${params.outdir}
