@@ -658,29 +658,29 @@ process derived_datasets {
 
 // // Split dataset based on spatial constraints
 // process split_by_polygons {
-// 
+//
 //     label "container_r"
 //     queue "custom_pool"
-// 
+//
 //     publishDir "$params.outdir/02.Biodiverse_input", mode: 'copy'
 //     // cpus 2
-// 
+//
 //     input:
 //       path occurrences
 //       path polygons
-// 
+//
 //     output:
 //       path "SpatConstrained_*.csv",  emit: occsplit
-// 
+//
 //     script:
 //     """
-// 
+//
 //     12_Split_dataset_SpatialConstraints.R \
 //       --input ${occurrences} \
 //       --randconstrain ${polygons} \
 //       --threads ${task.cpus} \
 //       --output "SpatConstrained_"
-// 
+//
 //     """
 // }
 
@@ -845,9 +845,9 @@ process rand_filelist {
 
     input:
       path(randfiles)
-      
+
       //// To avoid name collisions if analysis was done for multiple datasets
-      // path(randfiles, stageAs: "?/*")   
+      // path(randfiles, stageAs: "?/*")
 
     output:
       path "randomization_results.txt", emit: RND
@@ -910,7 +910,7 @@ process div_to_csv {
       path "RND_rand--p_rank--SPATIAL_RESULTS.csv",   emit: spat_p
       path "RND_rand--z_scores--SPATIAL_RESULTS.csv", emit: spat_z
       path "RND_rand--CANAPE--.csv",                  emit: canape, optional: true
-      path "RND_HURLBERT_ES.csv",                     emit: hurl,   optional: true 
+      path "RND_HURLBERT_ES.csv",                     emit: hurl,   optional: true
       path "RND_rand--HURLBERT_ES.csv",               emit: hurl_r, optional: true
       path "RND_rand--p_rank--HURLBERT_ES.csv",       emit: hurl_p, optional: true
       path "RND_rand--z_scores--HURLBERT_ES.csv",     emit: hurl_z, optional: true
@@ -1189,7 +1189,7 @@ workflow {
       aggregate_rnds_biodiv(
           rand_filelist.out.RND,
           phylodiv_constrianed.out.BDArand.collect())
-    
+
     } // end of randomizations
 
 
