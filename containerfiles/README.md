@@ -188,6 +188,24 @@ Docker hub: [https://hub.docker.com/r/vmikk/biodiverse/tags](https://hub.docker.
 Singularity Library: [https://cloud.sylabs.io/library/vmiks/gbif/biodiverse](https://cloud.sylabs.io/library/vmiks/gbif/biodiverse)
 
 
+### v.1.5.0 (March 22, 2024)
+
+- Biodiverse v4.99_2, which includes multiple improvements:  
+  - The phylogenetic and range-weighted turnover indices are now faster  
+  - Added indices for the Hurlbert species richness estimator  
+  - Shapefile imports are faster  
+  - ([see the full changelog](https://github.com/shawnlaffan/biodiverse/releases/tag/r4.99_002))  
+
+The image is based on the Biodiverse commit [`ddc901f`](https://github.com/shawnlaffan/biodiverse/commit/ddc901f14b006c0727a881d69f88da5e32f35c3a)  
+
+
+Docker compressed image size ~ 671.69 MB  
+Docker decompressed image size ~ 2.07 GB  
+Singularity image size ~ 596.69 MB  
+
+Docker image digest: `sha256:f71d86f3312c3c0b0e1ec6459f665b97aedfc0ac3352db2d9f48b972433e1778`  
+Singularity unique ID: `sha256.26f56a7efc85a1cf0ebb75e8632697ca55c7824f1d864721d9ee8cfcd38a185f`  
+
 
 
 ### v.1.4.0 (July 21, 2023)
