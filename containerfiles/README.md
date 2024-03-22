@@ -5,9 +5,6 @@ Currently, all software dependencies used by PhyloNext are grouped into 3 contai
 - `biodiverse` - Biodiverse and Perl  
 - `opentree` - Open Tree of Life and Python  
 
-For easy access and setup, the Docker and Singularity image archives for the PhyloNext pipeline are available on Zenodo:  
-- `v.1.3.0`: [DOI:10.5281/zenodo.7973798](https://zenodo.org/record/7973798)  
-
 
 ## `rarrow` changelog
 
@@ -33,12 +30,12 @@ Singularity Library: [https://cloud.sylabs.io/library/vmiks/gbif/rarrow](https:/
 - `sf` 1.0.15
 - `terra` 1.7.65
 
-Docker compressed image size ~ 754.29 MB
-Docker decompressed image size ~ 2.13 GB
-Singularity image size ~ 637.09 MB
+Docker compressed image size ~ 754.29 MB  
+Docker decompressed image size ~ 2.13 GB  
+Singularity image size ~ 637.09 MB  
 
-Docker image digest: `sha256:fe89587080532983c93d5d8e581e9ae9308651796ff1a3492d1f5fca9d2d829b`
-Singularity unique ID: `sha256.bc5385dd315a8a8876877b620c4e7b5235225b85fb665499ce3febce157f3d33`
+Docker image digest: `sha256:fe89587080532983c93d5d8e581e9ae9308651796ff1a3492d1f5fca9d2d829b`  
+Singularity unique ID: `sha256.bc5385dd315a8a8876877b620c4e7b5235225b85fb665499ce3febce157f3d33`  
 
 
 ### v.1.3.0 (May 23, 2023)
@@ -95,7 +92,7 @@ Singularity unique ID: `sha256.73c7e453f4f306b1ce5b6bc607a82f407b769252b0edc7e6b
 
 ### v.1.1.0 (Feb 01, 2023)
 
-- added Google Chrome and `chromote` package (for `webshot2` package)  
+- added Google Chrome and `chromote` package (for `webshot2` package)
 
 - `R` 4.2.2
 - `GEOS` 3.10.2
@@ -119,7 +116,7 @@ Docker image digest: `sha256:9f5662b5f9b6c450b0dd24f60e026670b72ccfda1276995f0aa
 
 ### v.1.0.0 (Jan 20, 2023)
 
-- added `pandoc`, `R.utils`, `tinytest`, `covr`  
+- added `pandoc`, `R.utils`, `tinytest`, `covr`
 
 - `R` 4.2.2
 - `GEOS` 3.10.2
@@ -144,7 +141,7 @@ Singularity unique ID: `sha256.35985310c3c455d02586064b5e7e09165350ea2ec4bbbfc70
 
 ### v.0.0.2 (Jul 08, 2022)
 
-- added leaflet with dependencies  
+- added leaflet with dependencies
 
 - `R` 4.2.1
 - `GEOS` 3.8.0
@@ -186,9 +183,10 @@ Decompressed Size ~ 2.64 GB
 
 ## `biodiverse` changelog
 
-A Docker image with `Biodiverse` and `Perl` for estimation of phylogenetic diversity.  
-Docker hub: [https://hub.docker.com/r/vmikk/biodiverse/tags](https://hub.docker.com/r/vmikk/biodiverse/tags)  
-Singularity Library: [https://cloud.sylabs.io/library/vmiks/gbif/biodiverse](https://cloud.sylabs.io/library/vmiks/gbif/biodiverse)  
+A Docker image with `Biodiverse` and `Perl` for estimation of phylogenetic diversity.
+Docker hub: [https://hub.docker.com/r/vmikk/biodiverse/tags](https://hub.docker.com/r/vmikk/biodiverse/tags)
+Singularity Library: [https://cloud.sylabs.io/library/vmiks/gbif/biodiverse](https://cloud.sylabs.io/library/vmiks/gbif/biodiverse)
+
 
 
 
@@ -226,7 +224,7 @@ Singularity unique ID: `sha256.88a4ac5ac625345a8d3d87f918213b2f57d2109b597971d99
 
 - Biodiverse v4.1 `d70b531` (https://github.com/vmikk/biodiverse-docker/releases/tag/v.1.2.0)  
 
-Biodiverse changelog:  
+Biodiverse changelog:
 - [Version 4.1](https://github.com/shawnlaffan/biodiverse/releases/tag/r4.1)  
 
 Docker compressed image size ~ 820.3 MB  
@@ -255,20 +253,20 @@ Singularity unique ID: `sha256.3c9edf889a2339fa3d1d51ddff54a8dd7a9b969e9da4d1a65
 
 - Biodiverse v.3.99_003 `c06bbad`  
 - Remove `perlbrew` as a dependency.  
-https://github.com/vmikk/biodiverse-docker/releases/tag/v.0.0.2
+https://github.com/vmikk/biodiverse-docker/releases/tag/v.0.0.2  
 
 ### v.0.0.1 (Apr 22, 2022)
 
 - Biodiverse v.3.99_002 `d20a9ce`  
-https://github.com/vmikk/biodiverse-docker/releases/tag/v.0.0.1
+https://github.com/vmikk/biodiverse-docker/releases/tag/v.0.0.1  
 
 
 
 ## `OpenTree` changelog
 
-A Docker image with `OpenTree` and `Python` for phylogenetic tree fetching from Open Tree of Life.  
-Docker hub: [https://hub.docker.com/r/vmikk/opentree/tags](https://hub.docker.com/r/vmikk/opentree/tags)  
-Singularity Library: [https://cloud.sylabs.io/library/vmiks/gbif/opentree](https://cloud.sylabs.io/library/vmiks/gbif/opentree)  
+A Docker image with `OpenTree` and `Python` for phylogenetic tree fetching from Open Tree of Life.
+Docker hub: [https://hub.docker.com/r/vmikk/opentree/tags](https://hub.docker.com/r/vmikk/opentree/tags)
+Singularity Library: [https://cloud.sylabs.io/library/vmiks/gbif/opentree](https://cloud.sylabs.io/library/vmiks/gbif/opentree)
 
 
 ### v.1.4.0 (Jul 19, 2023)
@@ -281,7 +279,7 @@ Open Tree of Life API updates (incompatible with older versions of `python-opent
 
 Docker compressed Size ~ 343.81 MB  
 Docker decompressed Size ~ 944 MB  
-Singularity image size ~ 311.97 MB
+Singularity image size ~ 311.97 MB  
 
 Docker image digest: `sha256:42b5efdae9c12a3390a6b7c5a7cd84a2cf6136f89b3719795bd015b82dfe925e`  
 Singularity unique ID: `sha256.d4be5844e639b4c0026cf14cb00f6800ea43c9600a878333d26740dc40fa6c9f`  
@@ -297,3 +295,10 @@ Decompressed Size ~ 968 MB
 
 Docker image digest: `sha256:8b1dba9bd654e4fe5768f42e09b3444aa5a190c9bb622692eb19438171a9a85a`  
 Singularity unique ID: `sha256.b41dd6c6ec3a2b6da41d594b30e16d035477ef218ebd89c907106024166003b5`  
+
+
+## Archive
+
+For easy access and setup, the Docker and Singularity image archives for the PhyloNext pipeline are available on Zenodo:  
+- `v.1.3.0`: [DOI:10.5281/zenodo.7973798](https://zenodo.org/record/7973798)  
+
