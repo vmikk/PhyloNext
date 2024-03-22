@@ -101,7 +101,7 @@ jobs:
         run: |
           echo "Looks good, all expected output files are in place!"
           exit 0
-      
+
       - name: File is missing
         if: steps.check_files.outputs.files_exists == 'false'
         run: |
