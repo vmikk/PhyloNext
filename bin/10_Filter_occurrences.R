@@ -212,7 +212,7 @@ if(!is.na(EXTINCT)){
 ## Load user-supplied specieskeys
 if(!is.na(SPECIESKEYS)){
   SPECIESKEYS <- fread(file = SPECIESKEYS, sep = "\t")
-  colnames(SPECIESKEYS) <- "specieskey"
+  colnames(SPECIESKEYS)[1] <- "specieskey"
   SPECIESKEYS <- unique(na.omit(SPECIESKEYS))
   cat("Specieskey list loaded. Number of records: ", nrow(SPECIESKEYS), "\n")
 }
