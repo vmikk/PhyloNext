@@ -30,10 +30,10 @@
                 "phytree": {
                     "type": "string",
                     "fa_icon": "fas fa-tree",
-                    "description": "Custom phylogenetic tree in Newick format",
+                    "description": "Custom phylogenetic tree in the Newick of Nexus format",
                     "format": "file-path",
                     "mimetype": "text/x-nh",
-                    "pattern": ".nwk$|.{n,N}ewick$|.tre$|.tree$",
+                    "pattern": ".nwk$|.{n,N}ewick$|.tre$|.tree$|.nex$|.{n,N}exus$|.nxs$",
                     "help_text": "Tips should be labeled either with Latin binomials (e.g., \"Homo_sapiens\"), or with Open Tree IDs (e.g, \"ott359899\"). Please adjust the `--phylabels` parameter correspondingly."
                 }
             }
