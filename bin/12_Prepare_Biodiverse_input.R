@@ -28,9 +28,9 @@ cat("Script name: 12_Prepare_Biodiverse_input.R\n")
 #   --output "Biodiverse_input"
 
 ## Notes:
-# If the DBSCAN feature was activated, then the files within the `FilteredData` directory 
+# If the DBSCAN feature was activated, then the files within the `FilteredData` directory
 # should have undergone outlier filtration.
-# This means that the `Record_counts_H3_PerSpecies.RData` file 
+# This means that the `Record_counts_H3_PerSpecies.RData` file
 # might have some grid cells that are considered outliers.
 # Consequently, during the merging process, these additional outlier grid cells will be eliminated.
 
@@ -49,8 +49,8 @@ suppressPackageStartupMessages(require(optparse))
 option_list <- list(
   make_option(c("-i", "--input"), action="store", default=NA, type='character', help="Path to the directory with filtered data"),
   make_option(c("-f", "--inputfile"), action="store", default=NA, type='character', help="Text file with paths to the filtered data"),
-  
-  make_option(c("-p", "--phytree"), action="store", default=NA, type='character', help="Phylogenetic tree (pre-computed in Newick format or get it from API)"),
+
+  make_option(c("-p", "--phytree"), action="store", default=NA, type='character', help="Phylogenetic tree (pre-computed in Newick or Nexus format) or get it from API"),
   make_option(c("-l", "--phylabels"), action="store", default="OTT", type='character', help="Type of phylogenetic tree labels (OTT or Latin)"),
 
   make_option(c("-g", "--taxgroup"), action="store", default="All life", type='character', help="Taxonomy group in OpenTree"),
@@ -75,7 +75,7 @@ if(is.na(opt$counts)){
 
 
 ## Function to convert text "NA"s to NA
-to_na <- function(x){ 
+to_na <- function(x){
   if(x %in% c("NA", "null", "Null")){ x <- NA }
   return(x)
 }
@@ -163,7 +163,9 @@ if(CPUTHREADS > 1){
 
 ## Load phylogenetic tree
 if(!is.na(PHYTREE)){
-  
+
+  cat("Loading pre-computed phylogenetic tree\n")
+
   ## Function to extract file extension
   file_extension <- function(x){
     pos <- regexpr("\\.([[:alnum:]]+)$", x)
@@ -173,12 +175,20 @@ if(!is.na(PHYTREE)){
   if(file_extension(PHYTREE) %in% c("nwk", "newick", "Newick", "tre", "tree")){
 
     ## Load Newick tree
-    cat("Loading pre-computed phylogenetic tree\n")
+    cat("..Based on the file extension, the Newick format detected\n")
     TREE <- ape::read.tree(PHYTREE)
-  
+
+  } else if (file_extension(PHYTREE) %in% c("nex", "nexus", "nxs", "Nexus")) {
+
+    ## Load Nexus tree
+    cat("..Based on the file extension, the Nexus format detected\n")
+    TREE <- ape::read.nexus(PHYTREE, force.multi = FALSE)
   } else {
 
-    stop("Unknown tree option is specified. Please check `--phytree` argument.\n")
+    cat("ERROR: phylogenetic tree should be in: \n")
+    cat(" - Newick format (file extensions: nwk, newick, Newick, tre, tree)\n")
+    cat(" - Nexus format (file extensions: nex, nexus, Nexus, nxs)\n")
+    stop("Unknown tree format is specified to the `--phytree` argument.\n")
 
   }
 }
@@ -313,7 +323,7 @@ get_ott_ids <- function(x, fuzzy = FALSE, group = "All life", progr = "text"){
     .data = x,
     .margins = 1,
     .fun = function(sp){
-      
+
       rz <- rotl::tnrs_match_names(
         names = sp,
         context_name = group,
@@ -344,21 +354,21 @@ get_ott_ids <- function(x, fuzzy = FALSE, group = "All life", progr = "text"){
 #
 ## as of rotl v.3.0.12 these contexts are available
 # Possible contexts:
-#    Animals 
-#       Birds, Tetrapods, Mammals, Amphibians, Vertebrates 
-#       Arthropods, Molluscs, Nematodes, Platyhelminthes, Annelids 
-#       Cnidarians, Arachnids, Insects 
-#    Fungi 
-#       Basidiomycetes, Ascomycetes 
-#    All life 
-#    Bacteria 
-#       SAR group, Archaea, Excavata, Amoebozoa, Centrohelida 
-#       Haptophyta, Apusozoa, Diatoms, Ciliates, Forams 
-#    Land plants 
-#       Hornworts, Mosses, Liverworts, Vascular plants, Club mosses 
-#       Ferns, Seed plants, Flowering plants, Monocots, Eudicots 
-#       Rosids, Asterids, Asterales, Asteraceae, Aster 
-#       Symphyotrichum, Campanulaceae, Lobelia 
+#    Animals
+#       Birds, Tetrapods, Mammals, Amphibians, Vertebrates
+#       Arthropods, Molluscs, Nematodes, Platyhelminthes, Annelids
+#       Cnidarians, Arachnids, Insects
+#    Fungi
+#       Basidiomycetes, Ascomycetes
+#    All life
+#    Bacteria
+#       SAR group, Archaea, Excavata, Amoebozoa, Centrohelida
+#       Haptophyta, Apusozoa, Diatoms, Ciliates, Forams
+#    Land plants
+#       Hornworts, Mosses, Liverworts, Vascular plants, Club mosses
+#       Ferns, Seed plants, Flowering plants, Monocots, Eudicots
+#       Rosids, Asterids, Asterales, Asteraceae, Aster
+#       Symphyotrichum, Campanulaceae, Lobelia
 
 cat("Matching species names to the Open Tree Taxonomy with `rotl` package\n")
 
