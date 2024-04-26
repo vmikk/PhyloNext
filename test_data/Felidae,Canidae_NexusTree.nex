@@ -1,0 +1,33 @@
+#NEXUS
+[Felidae & Canidae - test tree]
+
+BEGIN TAXA;
+	DIMENSIONS NTAX = 10;
+	TAXLABELS
+		Canis_lupus
+		Canis_aureus
+		Nyctereutes_procyonoides
+		Vulpes_lagopus
+		Vulpes_vulpes
+		Urocyon_cinereoargenteus
+		Felis_silvestris
+		Felis_catus
+		Puma_concolor
+		Lynx_lynx
+	;
+END;
+BEGIN TREES;
+	TRANSLATE
+		1	Canis_lupus,
+		2	Canis_aureus,
+		3	Nyctereutes_procyonoides,
+		4	Vulpes_lagopus,
+		5	Vulpes_vulpes,
+		6	Urocyon_cinereoargenteus,
+		7	Felis_silvestris,
+		8	Felis_catus,
+		9	Puma_concolor,
+		10	Lynx_lynx
+	;
+	TREE * UNTITLED = [&R] ((((((((((((((((((1:1.32381)mrcaott47497ott3612500:1.32381)mrcaott47497ott684074:1.323809,((2:1.32381)mrcaott247331ott621168:1.32381)mrcaott247331ott3612509:1.323809)mrcaott47497ott247331:1.32381)mrcaott47497ott3612503:1.32381)mrcaott47497ott3612501:1.323809)mrcaott47497ott3612579:1.32381)mrcaott47497ott110766:14.223129,(((3:7.916667)ott534964:7.916667,(((((4:2.218471)mrcaott609054ott610095:0.056529)mrcaott297455ott609054:3.226167,((5:1.717749)mrcaott419501ott815800:2.892421)mrcaott419501ott523960:0.890996)mrcaott297455ott419501:0.958327)mrcaott297455ott315465:1.244831)mrcaott297455ott821968:8.129007)mrcaott77889ott297455:3.828231,((6:1.821433)ott264179:8.920065)mrcaott685113ott821973:8.920066)mrcaott77889ott685113:3.828232)mrcaott47497ott77889:3.828232)mrcaott47497ott3612592:3.828232)mrcaott47497ott3612591:3.828232)mrcaott47497ott3612589:3.828232)mrcaott47497ott3612516:3.828232)mrcaott47497ott3612596:3.828232)mrcaott47497ott3612529:3.828232)mrcaott47497ott3612617:3.828232)ott770319:3.828232)ott827263:53.056118,((((((((((((((7:1.866667,8:1.866667)mrcaott54737ott563166:1.4075)mrcaott54737ott983177:1.00375)mrcaott54737ott983179:1.00375)ott563165:6.485)mrcaott54737ott86166:0.1,((9:3.483333)ott86161:3.483333)mrcaott86162ott752759:4.9)mrcaott54737ott86162:0.1,(((10:1.980833)mrcaott442049ott886829:1.980833)mrcaott442049ott507549:3.023889)ott886828:4.981111)mrcaott54737ott442049:1.405454)mrcaott54737ott86175:0.91519)mrcaott54737ott86170:0.91519)mrcaott54737ott660452:2.849072)ott563159:14.270014)mrcaott19397ott194349:14.270013)mrcaott6940ott19397:1.853886)ott827259:62.554516)mrcaott4697ott6940:1;
+END;
