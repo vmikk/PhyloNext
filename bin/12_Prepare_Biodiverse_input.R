@@ -183,6 +183,12 @@ if(!is.na(PHYTREE)){
     ## Load Nexus tree
     cat("..Based on the file extension, the Nexus format detected\n")
     TREE <- ape::read.nexus(PHYTREE, force.multi = FALSE)
+
+    if("multiPhylo" %in% class(TREE)){
+      cat("WARNING: The supplied file contains multiple phylogenetic trees, only the first one will be used!\n")
+      TREE <- TREE[[1]]
+    }
+
   } else {
 
     cat("ERROR: phylogenetic tree should be in: \n")
