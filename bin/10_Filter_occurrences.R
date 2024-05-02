@@ -6,7 +6,7 @@ cat("Filtering GBIF species occurrence data\n")
 cat("Script name: 10_Filter_occurrences.R\n")
 
 ## Input data could be located in the cloud.
-## E.g., to query GBIF AWS snapshot use: 
+## E.g., to query GBIF AWS snapshot use:
 ##  --input "s3://gbif-open-data-eu-central-1/occurrence/2022-01-01/occurrence.parquet"
 
 ## Usage:
@@ -44,7 +44,7 @@ suppressPackageStartupMessages(require(optparse))
 ## Parse arguments
 option_list <- list(
   make_option(c("-i", "--input"), action="store", default=NA, type='character', help="Path to the directory with GBIF snapshot of occurrence records in Parquet format"),
-  
+
   ## Taxonomy filters
   make_option("--phylum", action="store", default=NA, type='character', help="Comma-separated list of phyla to select"),
   make_option("--class", action="store", default=NA, type='character', help="Comma-separated list of classes to select"),
@@ -52,7 +52,7 @@ option_list <- list(
   make_option("--family", action="store", default=NA, type='character', help="Comma-separated list of families to select"),
   make_option("--genus", action="store", default=NA, type='character', help="Comma-separated list of genera to select"),
   make_option("--specieskeys", action="store", default=NA, type='character', help="File with user-supplied GBIF specieskeys"),
-  
+
   ## Spatial filters
   make_option("--country", action="store", default=NA, type='character', help="Comma-separated list of country codes (e.g., AU,CA)"),
   make_option("--latmin", action="store", default=NA, type='double', help="Minimum latitude"),
@@ -97,7 +97,7 @@ if(is.na(opt$output)){
 }
 
 ## Function to convert text "NA"s to NA
-to_na <- function(x){ 
+to_na <- function(x){
   if(x %in% c("NA", "null", "Null")){ x <- NA }
   return(x)
 }
@@ -235,8 +235,8 @@ dsf <- ds %>%
   filter(taxonrank %in% c("SPECIES", "SUBSPECIES", "VARIETY", "FORM")) %>%
   filter(occurrencestatus == "PRESENT") %>%
   filter(!establishmentmeans %in% c("MANAGED", "INTRODUCED", "INVASIVE", "NATURALISED")) %>%
-  filter(!is.na(decimallongitude)) %>% 
-  filter(!is.na(decimallatitude)) %>% 
+  filter(!is.na(decimallongitude)) %>%
+  filter(!is.na(decimallatitude)) %>%
   filter(!decimallatitude == 0 | !decimallongitude == 0) %>%
   filter(decimallatitude != decimallongitude)
 
@@ -272,7 +272,7 @@ if(!is.na(BASISINCL) & !is.na(BASISEXCL)){
     stop("Mutually exclusive basis of record selected!\n")
   }
 
-  dsf <- dsf %>% 
+  dsf <- dsf %>%
     filter( (!basisofrecord %in% BASISEXCL) & (basisofrecord %in% BASISINCL) )
 
 } else if (!is.na(BASISINCL) & is.na(BASISEXCL)){
@@ -457,9 +457,9 @@ dsf <- dsf %>%
 ## Count number of records by species
 cat("Counting number of records per species\n")
 sp_counts <- dsf %>%
-  count(specieskey) %>% 
-  collect() %>% 
-  mutate(Partition = case_when(n <= OCCURRENCES ~ "low", 
+  count(specieskey) %>%
+  collect() %>%
+  mutate(Partition = case_when(n <= OCCURRENCES ~ "low",
                               n > OCCURRENCES ~ "high"))
 
 smr <- table(sp_counts$Partition)
@@ -483,7 +483,7 @@ fwrite(x = sp_counts,
 
 
 ## Add partition ID to the dataset
-dsf <- dsf %>% 
+dsf <- dsf %>%
   left_join(sp_counts[, c("specieskey", "Partition")]) %>%
   group_by(Partition)
 
