@@ -5,12 +5,10 @@
 [![run with docker](https://img.shields.io/badge/run%20with-docker-0db7ed?labelColor=000000&logo=docker)](https://www.docker.com/)
 [![run with singularity](https://img.shields.io/badge/run%20with-singularity-blue?style=flat&logo=singularity)](https://sylabs.io/docs/)
 [![GitHub license](https://img.shields.io/github/license/vmikk/PhyloNext)](https://github.com/vmikk/PhyloNext/blob/main/LICENSE)
-
 CI/CD status:
 [![Nextflow (full pipeline)](https://github.com/vmikk/PhyloNext/actions/workflows/Nextflow_test.yml/badge.svg)](https://github.com/vmikk/PhyloNext/actions/workflows/Nextflow_test.yml)
 [![OToL](https://github.com/vmikk/PhyloNext/actions/workflows/OToL_test.yml/badge.svg)](https://github.com/vmikk/PhyloNext/actions/workflows/OToL_test.yml)
 [![Biodiverse](https://github.com/vmikk/PhyloNext/actions/workflows/Biodiverse_test.yml/badge.svg)](https://github.com/vmikk/PhyloNext/actions/workflows/Biodiverse_test.yml)  
-
 [![DOI - 10.1186/s12862-024-02256-9](https://img.shields.io/badge/DOI-10.1186%2Fs12862--024--02256--9-24B064)](https://bmcecolevol.biomedcentral.com/articles/10.1186/s12862-024-02256-9)
 [![DOI](https://zenodo.org/badge/457327826.svg)](https://zenodo.org/badge/latestdoi/457327826)
 
