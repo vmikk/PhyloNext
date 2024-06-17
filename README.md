@@ -4,12 +4,15 @@
 [![Nextflow](https://img.shields.io/badge/Nextflow%20DSL2-%E2%89%A522.10.0-23aa62.svg?labelColor=000000)](https://www.nextflow.io/)
 [![run with docker](https://img.shields.io/badge/run%20with-docker-0db7ed?labelColor=000000&logo=docker)](https://www.docker.com/)
 [![run with singularity](https://img.shields.io/badge/run%20with-singularity-blue?style=flat&logo=singularity)](https://sylabs.io/docs/)
-[![GitHub license](https://img.shields.io/github/license/vmikk/PhyloNext)](https://github.com/vmikk/PhyloNext/blob/main/LICENSE)  
-CI/CD status: 
+[![GitHub license](https://img.shields.io/github/license/vmikk/PhyloNext)](https://github.com/vmikk/PhyloNext/blob/main/LICENSE)
+
+CI/CD status:
 [![Nextflow (full pipeline)](https://github.com/vmikk/PhyloNext/actions/workflows/Nextflow_test.yml/badge.svg)](https://github.com/vmikk/PhyloNext/actions/workflows/Nextflow_test.yml)
 [![OToL](https://github.com/vmikk/PhyloNext/actions/workflows/OToL_test.yml/badge.svg)](https://github.com/vmikk/PhyloNext/actions/workflows/OToL_test.yml)
 [![Biodiverse](https://github.com/vmikk/PhyloNext/actions/workflows/Biodiverse_test.yml/badge.svg)](https://github.com/vmikk/PhyloNext/actions/workflows/Biodiverse_test.yml)  
-[![DOI](https://zenodo.org/badge/457327826.svg)](https://zenodo.org/badge/latestdoi/457327826)  
+
+[![DOI - 10.1186/s12862-024-02256-9](https://img.shields.io/badge/DOI-10.1186%2Fs12862--024--02256--9-24B064)](https://bmcecolevol.biomedcentral.com/articles/10.1186/s12862-024-02256-9)
+[![DOI](https://zenodo.org/badge/457327826.svg)](https://zenodo.org/badge/latestdoi/457327826)
 
 
 PhyloNext is the automated pipeline for the analysis of phylogenetic diversity using [GBIF occurrence data](https://www.gbif.org/occurrence/search?occurrence_status=present), species phylogenies from [Open Tree of Life](https://tree.opentreeoflife.org), and [Biodiverse software](https://shawnlaffan.github.io/biodiverse/).
