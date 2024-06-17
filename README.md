@@ -50,17 +50,17 @@ nextflow run vmikk/phylonext -r main \
 
 ## Web GUI
 
-To facilitate easy and efficient navigation for exploring the PhyloNext pipeline, a user-friendly, web-based graphical user interface (GUI) has been developed by [Thomas Stjernegaard Jeppesen](https://github.com/thomasstjerne).  
+To facilitate easy and efficient navigation for exploring the PhyloNext pipeline, a user-friendly, web-based graphical user interface (GUI) has been developed by [Thomas Stjernegaard Jeppesen](https://github.com/thomasstjerne).
 
 The GUI is available at [https://phylonext.gbif.org/](https://phylonext.gbif.org/).
 
-**NB!** To access the GUI, users must have a GBIF user account. To register an account, please visit https://www.gbif.org/.  
+**NB!** To access the GUI, users must have a GBIF user account. To register an account, please visit https://www.gbif.org/.
 
 
 ## Documentation
 
-The PhyloNext pipeline comes with documentation about the pipeline usage 
-at [https://phylonext.github.io/](https://phylonext.github.io/).  
+The PhyloNext pipeline comes with documentation about the pipeline usage
+at [https://phylonext.github.io/](https://phylonext.github.io/).
 
 Main pipeline parameters and output are desribed here:
 - [parameters](https://phylonext.github.io/parameters/)
@@ -160,7 +160,7 @@ NEXTFLOW-SPECIFIC:
     -c / -C               Configuration file (`-C` ignores all default values) (default, "nextflow.config")
 ```
 
-Source code for the documentation can be found at [https://github.com/PhyloNext/phylonext.github.io](https://github.com/PhyloNext/phylonext.github.io).  
+Source code for the documentation can be found at [https://github.com/PhyloNext/phylonext.github.io](https://github.com/PhyloNext/phylonext.github.io).
 
 
 ## Credits
@@ -193,7 +193,9 @@ For further information or help, don't hesitate to file an [issue on GitHub](htt
 
 ## Citations
 
-If you use PhyloNext pipeline for your analysis, please cite it using the following DOI: [10.5281/zenodo.7974081](https://doi.org/10.5281/zenodo.7974081)
+If you use PhyloNext pipeline for your analysis, please cite it as:
+
+Mikryukov V, Abarenkov K, Laffan S, Robertson T, McTavish EJ, Jeppesen TS, Waller J, Blissett M, Kõljalg U, Miller JT (2024). PhyloNext: A pipeline for phylogenetic diversity analysis of GBIF-mediated data. BMC Ecology and Evolution, 24(1), 76. [DOI:10.1186/s12862-024-02256-9](https://bmcecolevol.biomedcentral.com/articles/10.1186/s12862-024-02256-9)
 
 Laffan SW, Lubarsky E, Rosauer DF (2010) Biodiverse, a tool for the spatial analysis of biological and related diversity. Ecography, 33: 643-647. [DOI: 10.1111/j.1600-0587.2010.06237.x](https://onlinelibrary.wiley.com/doi/10.1111/j.1600-0587.2010.06237.x)
 
