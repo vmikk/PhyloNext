@@ -8,9 +8,9 @@ Currently, all software dependencies used by PhyloNext are grouped into 3 contai
 
 ## `rarrow` changelog
 
-A Docker image with R packages required for GBIF occurrence filtering and mapping.  
-Docker hub: [https://hub.docker.com/r/vmikk/rarrow/tags](https://hub.docker.com/r/vmikk/rarrow/tags)  
-Singularity Library: [https://cloud.sylabs.io/library/vmiks/gbif/rarrow](https://cloud.sylabs.io/library/vmiks/gbif/rarrow)  
+A Docker image with R packages required for GBIF occurrence filtering and mapping.
+Docker hub: [https://hub.docker.com/r/vmikk/rarrow/tags](https://hub.docker.com/r/vmikk/rarrow/tags)
+Singularity Library: [https://cloud.sylabs.io/library/vmiks/gbif/rarrow](https://cloud.sylabs.io/library/vmiks/gbif/rarrow)
 
 
 ### v.1.4.0 (January 08, 2024)
