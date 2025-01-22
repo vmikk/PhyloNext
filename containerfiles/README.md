@@ -188,6 +188,15 @@ Docker hub: [https://hub.docker.com/r/vmikk/biodiverse/tags](https://hub.docker.
 Singularity Library: [https://cloud.sylabs.io/library/vmiks/gbif/biodiverse](https://cloud.sylabs.io/library/vmiks/gbif/biodiverse)
 
 
+### v.1.6.0 (January 22, 2025)
+
+- Update Biodiverse (6baabdf, Nov 25, 2024)
+- Update Biodiverse Utils to [1.11](https://github.com/shawnlaffan/biodiverse-utils/releases/tag/v1.11)
+- Update base image to Ubuntu 24.04
+- Update multiple Perl dependencies
+
+The image is based on the Biodiverse commit [`6baabdf`](https://github.com/shawnlaffan/biodiverse/commit/ddc901f14b006c0727a881d69f88da5e32f35c3a)
+
 ### v.1.5.0 (March 22, 2024)
 
 - Biodiverse v4.99_2, which includes multiple improvements:  
