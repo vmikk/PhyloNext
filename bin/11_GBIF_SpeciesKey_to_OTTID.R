@@ -140,7 +140,7 @@ spnames <- alply(.data = datt$specieskey, .margins = 1, .fun = function(x){
  return(res)
 }, .parallel = parall)
 
-spnames <- rbindlist(spnames)
+spnames <- rbindlist(spnames, fill = TRUE)
 
 
 cat("..Number of species found: ", length(na.omit(unique(spnames$species))), "\n")
